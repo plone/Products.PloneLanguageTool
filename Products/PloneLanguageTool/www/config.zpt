@@ -35,7 +35,7 @@
         <p><input type="checkbox" name="setUseCombinedLanguageCodes" value="1" tal:attributes="checked here/use_combined_language_codes| nothing" /> Allow combined language codes like de_DE or en_UK.
         </p>
         
-        <p><input type="checkbox" name="displayFlags" value="1" tal:attributes="checked here/display_flags| nothing" /> Display flags in the selector list</p>
+        <p><input type="checkbox" name="displayFlags" value="1" tal:attributes="checked here/display_flags| nothing" /> Display flags for language selection. </p>
         		
         <h2>Negotiation Scheme</h2>
         <p>Check the language negotiation schemes that apply to this site</p>
