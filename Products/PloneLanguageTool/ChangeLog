@@ -1,3 +1,12 @@
+2004-05-13 15:14  longsleep
+
+	* LanguageTool.py: added future warnings for the todeprecate
+	methods
+
+2004-05-12 10:35  fobmagog
+
+	* ChangeLog: updated changelog
+
 2004-04-30 04:53  limi
 
 	* skins/LanguageTool/portlet_languages.pt: Fixed the portlet to use
@@ -468,14 +477,21 @@
 
 2003-09-23 20:33  elvix
 
-	* skins/LanguageTool/: addSupportedLanguage.py, langConfig.pt,
-	languageSelectorMacro.pt: made new skins-directory with clearer
-	name to avoid confusion.
+	* skins/: LanguageTool/addSupportedLanguage.py,
+	LanguageTool/langConfig.pt, LanguageTool/languageSelectorMacro.pt,
+	language/addSupportedLanguage.py, language/langConfig.pt,
+	language/languageSelectorMacro.pt: made new skins-directory with
+	clearer name to avoid confusion.
+
+2003-09-23 20:25  elvix
+
+	* skins/language/cvs/: Entries, Repository, Root: [no log message]
 
 2003-09-23 12:59  elvix
 
-	* LanguageTool.py, availablelanguages.py: factored out
-	lanugage-list into a new module, added sorting by value, macros
+	* LanguageTool.py, availablelanguages.py,
+	skins/language/languageSelectorMacro.pt: factored out lanugage-list
+	into a new module, added sorting by value, macros
 
 2003-09-14 01:02  elvix
 
@@ -494,5 +510,8 @@
 2003-09-13 17:37  batlogg
 
 	* LanguageTool.py, refresh.txt, tool.gif, version.txt,
-	Extensions/Install.py, www/config.zpt: Initial revision
+	Extensions/Install.py, skins/language/addSupportedLanguage.py,
+	skins/language/langConfig.pt, skins/language/cvs/Entries,
+	skins/language/cvs/Repository, skins/language/cvs/Root,
+	www/config.zpt: Initial revision
 
