@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.29 2003/10/02 15:09:19 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.30 2003/10/02 15:43:20 longsleep Exp $ (Author: $Author: longsleep $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -36,7 +36,6 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
     AVAILABLE_LANGUAGES = availablelanguages.languages
     supported_langs = ['en']
-    default_lang = 'en'
 
     # copy global available_langs to class variable
 
@@ -134,10 +133,18 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         return self.AVAILABLE_LANGUAGES.keys()
 
     def getDefaultLanguage(self):
-        return self.default_lang
+        portal_properties=getToolByName(self, 'portal_properties')
+        portal=getToolByName(self, 'portal_url').getPortalObject()
+        if portal_properties.site_properties.hasProperty('default_language'): return portal_properties.site_properties.getProperty('default_language')
+        if portal.hasProperty('default_language'): return portal.getProperty('default_language')
+        return getattr(self, 'default_lang', 'en')
 
     security.declareProtected(ManagePortal, 'setDefaultLanguage')
     def setDefaultLanguage(self, langCode):
+        portal_properties=getToolByName(self, 'portal_properties')
+        portal=getToolByName(self, 'portal_url').getPortalObject()
+        if portal_properties.site_properties.hasProperty('default_language'): return portal_properties.site_properties._updateProperty('default_language', langCode)
+        if portal.hasProperty('default_language'): return portal._updateProperty('default_language', langCode)
         self.default_lang = langCode
     
     security.declareProtected(ManagePortal, 'addLanguage')
