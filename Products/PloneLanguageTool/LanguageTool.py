@@ -134,15 +134,23 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
     # some methods that should be user-available
     security.declareProtected(View, 'setPreferredLanguageCookie')
-    def setPreferredLanguageCookie(self,lang=None, REQUEST=None):
+    def setPreferredLanguageCookie(self,lang=None, REQUEST=None,noredir=None):
         ''' sets a cookie for overriding language negotiation '''
         if lang:
             if lang in self.supported_langs:  
                 portal_url = getToolByName(self, 'portal_url')()
-                self.REQUEST.RESPONSE.setCookie('I18N_CONTENT_LANGUAGE',lang,path='/')  
-        if REQUEST:
-            REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
+                self.REQUEST.RESPONSE.setCookie('I18N_CONTENT_LANGUAGE',lang,path='/')
 
+                # set session language as well. this is a hack before we talk well with PTS
+                sdm = getattr(self, 'session_data_manager', None)
+                if sdm:
+                    sd=sdm.getSessionData(create=1)
+                    sd.set('preferred_languages', lang)
+
+        if noredir is None:                
+            if REQUEST:
+                REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
+                
     security.declareProtected(View, 'getPreferredLanguage')
     def getPreferredLanguage(self):
         ''' calculate the preferred language for a user'''

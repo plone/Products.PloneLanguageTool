@@ -20,8 +20,12 @@ portal_url = getToolByName(context, 'portal_url')()
 
 if not available_languages: available_languages=languageTool.getSupportedLanguages()
 if lang:
-    if lang in available_languages:
-        context.REQUEST.RESPONSE.setCookie('I18N_CONTENT_LANGUAGE',lang,path='/')
+    #if lang in available_languages:
+    #    context.REQUEST.RESPONSE.setCookie('I18N_CONTENT_LANGUAGE',lang,path='/')
+    languageTool.setPreferredLanguageCookie(lang, REQUEST=REQUEST,noredir=1)
+
+
+
 
 redirect=layer_url
 try: referrer=REQUEST.environ['HTTP_REFERER']
