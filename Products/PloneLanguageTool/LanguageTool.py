@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.40 2004/03/08 16:18:27 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.41 2004/03/08 20:40:39 longsleep Exp $ (Author: $Author: longsleep $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -291,10 +291,12 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         '''
         if not hasattr(self, 'REQUEST'): return []
         items = self.REQUEST.get('TraversalRequestNameStack')
-        for item in items:
-            if len(item) == 2:
-                if item in self.getSupportedLanguages():
-                    return item
+        try:
+            for item in items:
+                if len(item) == 2:
+                    if item in self.getSupportedLanguages():
+                        return item
+        except: pass
         return None
  
     security.declareProtected(View, 'getRequestLanguages')        
