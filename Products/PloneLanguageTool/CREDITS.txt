@@ -6,3 +6,6 @@ Simon Eisenmann, Struktur AG        http://www.strukturag.com
 Geir Bækholt, Plone Solutions AS    http://www.plonesolutions.com
 
 Parts of development sponsored by Learning Lab Denmark. 
+
+Flags by Jakub Steiner from the GNOME project:
+         http://jimmac.musichall.cz/ikony.php3
