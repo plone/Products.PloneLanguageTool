@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.36 2003/10/21 10:03:27 tesdal Exp $ (Author: $Author: tesdal $)
+# $Id: LanguageTool.py,v 1.37 2004/02/26 13:54:57 longsleep Exp $ (Author: $Author: longsleep $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -12,7 +12,6 @@ from Products.CMFCore.ActionProviderBase import ActionProviderBase
 from Products.CMFCore.utils import UniqueObject, getToolByName
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Acquisition import aq_base
-from Products.Archetypes.debug import log
 from ZPublisher import BeforeTraverse
 from ZPublisher.HTTPRequest import HTTPRequest
 
@@ -73,8 +72,6 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         self.force_language_urls = 1
         self.allow_content_language_fallback = 0
         
-        log('init')
-
 
     def __call__(self, container, req):
         '''The __before_publishing_traverse__ hook.'''
