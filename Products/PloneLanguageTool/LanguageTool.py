@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.24 2003/09/30 11:33:07 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.25 2003/10/01 20:12:06 elvix Exp $ (Author: $Author: elvix $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -85,10 +85,11 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     def manage_setLanguageSettings(self, defaultLanguage, supportedLanguages, setCookieN=None, setRequestN=None, REQUEST=None):
         ''' stores the tool settings '''
 
-        self.default_lang=defaultLanguage
+        self.setDefaultLanguage(defaultLanguage)
 
         if supportedLanguages and type(supportedLanguages) == type([]):
             self.supported_langs=supportedLanguages
+  
         if setCookieN:
             self.use_cookie_negotiation  = 1
         else:
@@ -100,13 +101,6 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         if REQUEST:
             REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
 
-    def sortedDictItems(self,dict):
-        # XXX: dont leave me a member of the class
-        items = list(dict.items())
-        items.sort(lambda x, y: cmp(x[1], y[1]))
-        return items
-
-
     def listSupportedLanguages(self):
         r = []
         for i in self.supported_langs:
@@ -117,11 +111,12 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         return self.supported_langs
 
     def listAvailableLanguages(self):
-        return self.sortedDictItems(self.AVAILABLE_LANGUAGES)
-    
+        items = list(self.AVAILABLE_LANGUAGES.items())
+        items.sort(lambda x, y: cmp(x[1], y[1]))
+        return items
+
     def getAvailableLanguages(self):
-        # XXX: this method is not working
-        return self.available_langs.keys()
+        return self.AVAILABLE_LANGUAGES.keys()
 
     def getDefaultLanguage(self):
         return self.default_lang
@@ -138,23 +133,20 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     def getNameForLanguageCode(self, langCode):
         return self.AVAILABLE_LANGUAGES.get(langCode, langCode)
     
-    def deleteLanguage(self, langCode):
-        # FIXME: to implement
-        # XXX: this is not persistent
-        self.AVAILABLE_LANGUAGES.remove(langCode)
-       
     # some convenience functions to improve the UI:
     security.declareProtected(ManagePortal, 'addSupportedLanguage')
     def addSupportedLanguage(self, langCode):
         if (langCode in self.AVAILABLE_LANGUAGES.keys()) and not langCode in self.supported_langs:
-            # XXX: this is not persistent
-            self.supported_langs.append(langCode)
+            alist = self.supported_langs[:]
+            alist.append(langCode) 
+            self.supported_langs = alist
             
     security.declareProtected(ManagePortal, 'removeSupportedLanguages')
     def removeSupportedLanguages(self, langCodes):
         for i in LangCodes:
-            # XXX: this is not persistent
-            self.supported_langs.remove(i)
+            alist =  self.supported_langs[:]
+            alist.remove(i)
+            self.supported_langs = alist
 
     # some methods that should be user-available
     security.declareProtected(View, 'setLanguageCookie')
@@ -162,8 +154,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         ''' sets a cookie for overriding language negotiation '''
         portal_url = getToolByName(self, 'portal_url')()
         cur = self.getLanguageCookie()
-        # XXX: use get method to get the supported langs
-        if lang and lang in self.supported_langs and lang != cur:   
+        if lang and lang in self.getSupportedLanguages() and lang != cur:   
             self.REQUEST.RESPONSE.setCookie('I18N_LANGUAGE',lang,path='/') 
         if noredir is None:                
             if REQUEST:
@@ -174,8 +165,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         ''' get the preferred cookie language '''
         if not hasattr(self, 'REQUEST'): return None
         langCookie = self.REQUEST.cookies.get('I18N_LANGUAGE')
-        # XXX: use get method to get the supported langs
-        if langCookie is not None and langCookie in self.supported_langs:
+        if langCookie is not None and langCookie in self.getSupportedLanguages():
             return langCookie
         else:
             return None
@@ -240,8 +230,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
                     quality=float(length-i)
                                                                                 
                 language=l[0]
-                # XXX: use get method to get the supported langs
-                if language in self.supported_langs:
+                if language in self.getSupportedLanguages():
                     # if allowed the add language
                     langs.append((quality, language))
                 i=i+1
