@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.31 2003/10/06 15:34:25 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.32 2003/10/07 11:19:59 elvix Exp $ (Author: $Author: elvix $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -37,6 +37,11 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     AVAILABLE_LANGUAGES = availablelanguages.languages
     supported_langs = ['en']
 
+    
+    use_path_negotiation    = 1
+    use_cookie_negotiation  = 1
+    use_request_negotiation = 1
+
     # copy global available_langs to class variable
 
     _actions = [ActionInformation(
@@ -62,6 +67,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     def __init__(self):
         self.id = 'portal_languages'
 
+        self.use_path_negotiation = 1
         self.use_cookie_negotiation  = 1
         self.use_request_negotiation = 1
         self.force_language_urls = 1
@@ -84,7 +90,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
 
     security.declareProtected(ManagePortal, 'manage_setLanguageSettings')
-    def manage_setLanguageSettings(self, defaultLanguage, supportedLanguages, setCookieN=None, setRequestN=None, setForcelanguageUrls=None, setAllowContentLanguageFallback=None, REQUEST=None):
+    def manage_setLanguageSettings(self, defaultLanguage, supportedLanguages, setCookieN=None, setRequestN=None,setPathN=None,  setForcelanguageUrls=None, setAllowContentLanguageFallback=None, REQUEST=None):
         ''' stores the tool settings '''
 
         self.setDefaultLanguage(defaultLanguage)
@@ -101,6 +107,11 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             self.use_request_negotiation = 1
         else:
             self.use_request_negotiation = 0
+
+        if setPathN:
+            self.use_path_negotiation = 1
+        else:
+            self.use_path_negotiation = 0
             
         if setForcelanguageUrls:
             self.force_language_urls = 1
@@ -217,7 +228,16 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             nc = BeforeTraverse.NameCaller(self.getId())
             BeforeTraverse.registerBeforeTraverse(container, nc, handle)
 
-
+    def getPathLanguage(self):
+        """ check if a language is part of the current path"""
+        if not hasattr(self, 'REQUEST'): return []
+        items = self.REQUEST.get('TraversalRequestNameStack')
+        for item in items:
+            if len(item) == 2:
+                if item in self.getSupportedLanguages():
+                    return item
+        return None
+ 
     security.declareProtected(View, 'getRequestLanguages')        
     def getRequestLanguages(self):
         ''' parse the request and return language list '''
@@ -273,7 +293,8 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     security.declareProtected(View, 'setLanguageBindings')
     def setLanguageBindings(self):
         # setup the current language stuff  
-        
+
+        usePath = self.use_path_negotiation
         useCookie=self.use_cookie_negotiation
         useRequest=self.use_request_negotiation
         useDefault=1 # this should never be disabled
@@ -286,7 +307,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             binding=LanguageBinding(self)
        
         # bind languages
-        lang = binding.setLanguageBindings(useCookie, useRequest, useDefault)
+        lang = binding.setLanguageBindings(usePath, useCookie, useRequest, useDefault)
         
         # set LANGUAGE to request
         self.REQUEST['LANGUAGE']=lang
@@ -322,11 +343,17 @@ class LanguageBinding:
     def __init__(self, tool):
         self.tool=tool
         
-    def setLanguageBindings(self, useCookie=1, useRequest=1, useDefault=1):
+    def setLanguageBindings(self, usePath=1, useCookie=1, useRequest=1, useDefault=1):
         # setup the current language stuff
         
         
         langs=[]
+
+        
+        if usePath:
+            # this one is set if there is an allowed language in the current path        
+            langsPath = [self.tool.getPathLanguage()]
+        else:langsPath = []
                
         if useCookie:
             # if we are using the cookie stuff we provide the setter here 
@@ -344,7 +371,7 @@ class LanguageBinding:
         else: langsDefault=[]
               
         # build list
-        langs = langsCookie+langsRequest+langsDefault
+        langs = langsPath+langsCookie+langsRequest+langsDefault
         
         # filter None languages
         langs = filter(lambda x: x is not None, langs)
