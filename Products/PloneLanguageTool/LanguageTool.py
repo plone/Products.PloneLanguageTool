@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.41 2004/03/08 20:40:39 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.42 2004/03/09 10:53:44 longsleep Exp $ (Author: $Author: longsleep $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -205,13 +205,9 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     security.declareProtected(View, 'getNameForLanguageCode')
     def getNameForLanguageCode(self, langCode):
         '''
-        return name for languge code
+        return name for language code
         '''
-        try:
-            from Products.PlacelessTranslationService import getLanguageName
-            return getLanguageName(langCode)
-        except:    
-            return self.getAvailableLanguages().get(langCode, langCode)
+        return self.getAvailableLanguages().get(langCode, langCode)
     
     # some convenience functions to improve the UI:
     security.declareProtected(ManagePortal, 'addSupportedLanguage')
