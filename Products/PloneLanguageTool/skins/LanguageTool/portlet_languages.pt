@@ -42,15 +42,23 @@
                  tal:condition="python:len(served_languages) <= 8"
                  tal:repeat="lang served_languages">
 
-                <strong tal:omit-tag="python:prefLang != lang[0]">
+                <strong tal:omit-tag="python:prefLang != lang[0]"
+                        tal:define="code python:lang[0]">
 
+                    <img width="15" 
+                         height="12" 
+                         alt=""
+                         tal:attributes="src string:${portal_url}/flag-${code}.gif;
+                                         title python: lang[1]" 
+                                         />
+                        
                     <a href=""
-                       tal:define="code python:lang[0]"
                        tal:attributes="href string:${here/absolute_url}/switchLanguage?set_language=${code}"
                        tal:content="python:here.portal_languages.getNameForLanguageCode(lang[0]) or lang[1]">Language</a>
 
                 </strong>
 
+                
             </div>
 
         </div>
