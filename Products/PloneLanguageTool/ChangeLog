@@ -1,3 +1,7 @@
+2004-04-21 10:50  batlogg
+
+	* availableLanguages.py: added 'zh-hk':'Mandarin+Chinese (HongKong)'
+
 2004-03-09 11:53  longsleep
 
 	* LanguageTool.py: only the language tool is guranteed to know the
