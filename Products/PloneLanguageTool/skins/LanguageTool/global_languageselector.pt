@@ -27,7 +27,8 @@
                                  alt=""
         						 tal:condition="here/portal_languages/showFlags | nothing"
                                  tal:attributes="src string:${portal_url}/flag-${code}.gif;
-                                                 title python: lang[1]" 
+                                                 title python: lang[1];
+                                                 class python: test(prefLang == lang[0], 'currentItem', None);" 
                                                  />
                         </a>
     
