@@ -4,7 +4,7 @@ languages = {
 'ab':'Abkhazian',  
 'af':'Afrikaans',  
 'am':'አማርኛ', # Amharic 
-'ar':'አማርኛ', # Arabic
+'ar':'العربي', # Arabic
 'as':'Assamese',  
 'ay':'Aymara',  
 'az':'Azəri Türkçəsi', # Azerbaijani 
