@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.39 2004/03/06 10:28:43 dtremea Exp $ (Author: $Author: dtremea $)
+# $Id: LanguageTool.py,v 1.40 2004/03/08 16:18:27 longsleep Exp $ (Author: $Author: longsleep $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -459,6 +459,8 @@ class LanguageBinding:
     '''
     helper which holding language infos in request
     '''
+    security = ClassSecurityInfo()
+    __allow_access_to_unprotected_subobjects__=1
     
     DEFAULT_LANGUAGE = None
     LANGUAGE = None
@@ -467,6 +469,7 @@ class LanguageBinding:
     def __init__(self, tool):
         self.tool=tool
         
+    security.declarePrivate("setLanguageBindings")
     def setLanguageBindings(self, usePath=1, useCookie=1, useRequest=1, useDefault=1):
         # setup the current language stuff
         
@@ -510,6 +513,7 @@ class LanguageBinding:
         
         return self.LANGUAGE
     
+    security.declarePublic("getLanguageBindings")
     def getLanguageBindings(self):
         # return bound languages
         # (language, default_language, languages_list)
