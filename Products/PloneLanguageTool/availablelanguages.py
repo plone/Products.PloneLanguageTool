@@ -1,29 +1,33 @@
 # -*- coding: UTF-8 -*-
+
+# List by Alexander Limi, Plone Solutions - http://www.plonesolutions.com
+# Please contact me if you have any corrections or additions.
+
 languages = {
-'aa':'Afar',  
-'ab':'Abkhazian',  
+'aa':'магIарул мацI', # Afar
+'ab':'бызшәа', # Abkhazian
 'af':'Afrikaans',  
 'am':'አማርኛ', # Amharic 
-'ar':'العربي', # Arabic
-'as':'Assamese',  
+'ar':'العربية', # Arabic
+'as':'অসমিয়া', # Assamese
 'ay':'Aymara',  
 'az':'Azəri Türkçəsi', # Azerbaijani 
 'ba':'Bashkir',  
-'be':'Беларуская мова', # Belarusian
+'be':'Беларускі', # Belarusian
 'bg':'Български', # Bulgarian
 'bh':'Bihari',  
 'bi':'Bislama',  
 'bn':'বাংলা', # Bengali
-'bo':'Tibetan',  
+'bo':'བོད་སྐད་', # Tibetan
 'bs':'Bosanski', # Bosnian
 'br':'Brezhoneg', # Breton
-'ca':'Català',
-'co':'Corsican',  
+'ca':'Català', # Catalan
+'co':'Corsu', # Corsican
 'cs':'Čeština',  # Czech
 'cy':'Cymraeg',  # Welsh
 'da':'Dansk',  # Danish
 'de':'Deutsch', # German
-'dz':'Bhutani',  
+'dz':'Bhutani', # Indian Bhutani 
 'el':'Ελληνικά', # Greek
 'en':'English',  
 'eo':'Esperanto',  
@@ -33,83 +37,83 @@ languages = {
 'fa':'فارسی', # Persian
 'fi':'Suomi', # Finnish
 'fj':'Fiji',  
-'fo':'Faroese',  
+'fo':'Føroyska', # Faroese
 'fr':'Français', # French
-'fy':'Frisian',  
-'ga':'Gaeilge', #Irish (Irish Gaelic)
-'gd':'Scots Gaelic', # (Scottish Gaelic)
+'fy':'Frysk', # Frisian
+'ga':'Gaeilge', # Irish Gaelic
+'gd':'Gàidhlig', # Scottish Gaelic
 'gl':'Galego', # Galician
 'gn':'Guarani',  
 'gu':'ગુજરાતી', # Gujarati
-'gv':'Manx Gaelic',   
-'ha':'Hausa',  
+'gv':'Gaelg',  # Manx Gaelic
+'ha':'هَوُس',  # Hausa
 'he':'עברית', # Hebrew
 'hi':'हिंदी', # Hindi
 'hr':'Hrvatski', # Croatian
 'hu':'Magyar', # Hungarian
-'hy':'Armenian',  
+'hy':'Հայերէն', # Armenian
 'ia':'Interlingua',  
 'id':'Bahasa Indonesia', # Indonesian
 'ie':'Interlingue',  
 'ik':'Inupiak',  
 'is':'Íslenska', # Icelandic
 'it':'Italiano', # Italian
-'iu':'Inuktitut',  
+'iu':'ᐃᓄᒃᑎᑐᑦ', # Inuktitut
 'ja':'日本語', # Japanese
 'jw':'Javanese',  
-'ka':'Georgian',  
-'kk':'Kazakh',  
+'ka':'ქართული', # Georgian
+'kk':'ﻗﺎﺯﺍﻗﺸﺎ', # Kazakh
 'kl':'Greenlandic',  
 'km':'ខ្មែរ', # Cambodian/Khmer
 'kn':'ಕನ್ನಡ', # Kannada
-'ko':'한국말',  # Korean
-'ks':'Kashmiri',  
-'ku':'Kurdish',  
-'kw':'Cornish',  
-'ky':'Kirghiz',  
+'ko':'한국어',  # Korean
+'ks':'काऽशुर', # Kashmiri
+'ku':'Kurdí', # Kurdish
+'kw':'Kernewek', # Cornish
+'ky':'Кыргыз', # Kyrgyz
 'la':'Latin',  
-'lb':'Luxemburgish', 
+'lb':'Lëtzebuergesch', # Luxemburgish
 'li':'Limburgs', # Limburgish
 'ln':'Lingala',
-'lo':'Laotian',
+'lo':'ພາສາລາວ', # Laotian
 'lt':'Lietuviskai', # Lithuanian
 'lv':'Latviešu', # Latvian
-'mg':'Malagasy',  
+'mg':'Malagasy', # Madagascarian 
 'mi':'Maori',  
-'mk':'Macedonian',  
+'mk':'Македонски', # Macedonian
 'ml':'മലയാളം', # Malayalam
 'mn':'Монгол', # Mongolian
 'mo':'Moldavian',  
-'mr':'Marathi',  
+'mr':'मराठी', # Marathi
 'ms':'Bahasa Melayu', # Malay
-'mt':'Maltese',  
+'mt':'Malti', # Maltese
 'my':'Burmese',  
-'na':'Nauru',  
-'ne':'Nepali',  
+'na':'Nauru', # Nauruan  
+'ne':'नेपाली', # Nepali
 'nl':'Nederlands', # Dutch
 'no':'Norsk', # Norwegian
 'nn':'Nynorsk', # Norwegian Nynorsk
 'oc':'Occitan',  
 'om':'Oromo',  
-'or':'Oriya',  
-'pa':'Punjabi',  
+'or':'ଓଡ଼ିଆ', # Oriya
+'pa':'ਪੰਜਾਬੀ', # Punjabi
 'pl':'Polski', # Polish
-'ps':'Pashto',  
+'ps':'پښتو', # Pashto
 'pt':'Português', # Portuguese
 'qu':'Quechua',  
 'rm':'Rhaeto-Romance',  
 'rn':'Kirundi',  
-'ro':'Româna', # Romanian
+'ro':'Română', # Romanian
 'ru':'Русский', # Russian
 'rw':'Kiyarwanda',  
-'sa':'Sanskrit',  
+'sa':'संस्कृत', # Sanskrit 
 'sd':'Sindhi',  
 'se':'Northern Sámi',  
 'sg':'Sangho',  
 'sh':'Serbo-Croatian',
 'si':'Singhalese',  
 'sk':'Slovenčina', # Slovak
-'sl':'Slovenscina', # Slovenian
+'sl':'Slovenščina', # Slovenian
 'sm':'Samoan',  
 'sn':'Shona',  
 'so':'Somali',  
@@ -121,32 +125,32 @@ languages = {
 'sv':'Svenska', # Swedish
 'sw':'Swahili',  
 'ta':'தமிழ', # Tamil
-'te':'Telugu',  
-'tg':'Tajik',  
+'te':'తెలుగు', # Telugu 
+'tg':'Тоҷики', # Tadjik
 'th':'ไทย', # Thai
-'ti':'Tigrinya',  
-'tk':'Turkmen',  
+'ti':'ትግርኛ', # Tigrinya
+'tk':'түркmенче', # Turkmen
 'tl':'Tagalog',  
 'tn':'Setswana',  
 'to':'Tonga',  
 'tr':'Türkçe', # Turkish
 'ts':'Tsonga',  
-'tt':'Tatar',  
+'tt':'татарча', # Tatar
 'tw':'Twi',  
 'ug':'Uigur',  
 'uk':'Українська', # Ukrainian 
-'ur':'Urdu',  
-'uz':'Uzbek',  
+'ur':'اردو', # Urdu
+'uz':'Ўзбекча', # Uzbek
 'vi':'Tiếng Việt', # Vietnamese
 'vo':'Volapük',
 'wa':'Walon', # Walloon
 'wo':'Wolof',  
-'xh':'Xhosa',  
-'yi':'ייִדיש', # Yiddish
-'yo':'Yorouba',  
+'xh':'isiXhosa', # Xhosa
+'yi':'ײִדיש', # Yiddish
+'yo':'Yorùbá', # Yorouba
 'za':'Zhuang',  
 'zh':'简体中文', # Chinese 
-'zu':'Zulu', 
+'zu':'isiZulu', # Zulu
 }
 
 combined = {
