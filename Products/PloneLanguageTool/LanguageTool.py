@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.23 2003/09/30 08:20:59 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.24 2003/09/30 11:33:07 longsleep Exp $ (Author: $Author: longsleep $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -286,9 +286,8 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     def getLanguageBindings(self):
         # return the bound languages
         # (language, default_language, languages_list)
-        
-        if not hasattr(self, 'REQUEST'): return (None, self.tool.getDefaultLanguage(), []) # cant do anything
-        
+       
+        if not hasattr(self, 'REQUEST'): return (None, self.getDefaultLanguage(), []) # cant do anything
         binding = self.REQUEST.get('LANGUAGE_TOOL', None)
         if not isinstance(binding, LanguageBinding):
             # not bound -> bind
@@ -297,7 +296,6 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             
         return binding.getLanguageBindings()
        
-        
         
 
 class LanguageBinding:
