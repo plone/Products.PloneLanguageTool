@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.27 2003/10/01 21:31:14 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.28 2003/10/02 11:12:40 longsleep Exp $ (Author: $Author: longsleep $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -153,13 +153,16 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     security.declareProtected(View, 'setLanguageCookie')
     def setLanguageCookie(self,lang=None, REQUEST=None,noredir=None):
         ''' sets a cookie for overriding language negotiation '''
+        res=None
         portal_url = getToolByName(self, 'portal_url')()
         cur = self.getLanguageCookie()
-        if lang and lang in self.getSupportedLanguages() and lang != cur:   
-            self.REQUEST.RESPONSE.setCookie('I18N_LANGUAGE',lang,path='/') 
+        if lang and lang in self.getSupportedLanguages():
+            if lang != cur: self.REQUEST.RESPONSE.setCookie('I18N_LANGUAGE',lang,path='/')
+            res=lang
         if noredir is None:                
             if REQUEST:
                 REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
+        return res
                 
     security.declareProtected(View, 'getLanguageCookie')
     def getLanguageCookie(self):
@@ -307,9 +310,8 @@ class LanguageBinding:
         if useCookie:
             # if we are using the cookie stuff we provide the setter here 
             set_language = self.tool.REQUEST.get('set_language', None)
-            if set_language: self.tool.setLanguageCookie(set_language)
-            # get from cookie
-            langsCookie=[self.tool.getLanguageCookie(),]
+            if set_language: langsCookie=[self.tool.setLanguageCookie(set_language),]
+            else: langsCookie=[self.tool.getLanguageCookie(),] # get from cookie
         else: langsCookie=[]
         
         # get langs from request    
