@@ -22,7 +22,7 @@ if not available_languages: available_languages=languageTool.getSupportedLanguag
 if lang:
     #if lang in available_languages:
     #    context.REQUEST.RESPONSE.setCookie('I18N_CONTENT_LANGUAGE',lang,path='/')
-    languageTool.setPreferredLanguageCookie(lang, REQUEST=REQUEST,noredir=1)
+    languageTool.setLanguageCookie(lang, REQUEST=REQUEST,noredir=1)
 
 
 
