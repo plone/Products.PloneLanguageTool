@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.46 2004/05/28 21:27:05 elvix Exp $ (Author: $Author: elvix $)
+# $Id: LanguageTool.py,v 1.47 2004/06/29 09:22:34 longsleep Exp $ (Author: $Author: longsleep $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -605,7 +605,7 @@ class PrefsForPTS:
             return []
     
 if _hasPTS is not None:
-    registerLangPrefsMethod({'klass':PrefsForPTS, 'priority':30 })
+    registerLangPrefsMethod({'klass':PrefsForPTS, 'priority':100 })
 
     
 InitializeClass(LanguageTool)
