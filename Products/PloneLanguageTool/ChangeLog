@@ -1,11 +1,36 @@
-2004-03-06 06:10  deo
+2004-03-09 11:53  longsleep
 
-	* LanguageTool.py: Standardized indentation and changed 
-    getNameForLanguageCode to looks for language name at PTS.
+	* LanguageTool.py: only the language tool is guranteed to know the
+	language name .. use PTS from the template if it should be used to
+	lookup a language name
 
-	* skins/LanguageTool/languageSelectorMacro.pt,
-	skins/LanguageTool/portlet_language.pt:	Standardized indentation
+2004-03-08 21:40  longsleep
+
+	* LanguageTool.py: catch error
+
+2004-03-08 17:18  longsleep
+
+	* LanguageTool.py: fixed security context of the request instance
+
+2004-03-06 11:31  dtremea
+
+	* ChangeLog, skins/LanguageTool/languageSelectorMacro.pt,
+	skins/LanguageTool/portlet_language.pt: Standardized indentation
 	and changed to display language name already translated.
+
+2004-03-06 11:28  dtremea
+
+	* LanguageTool.py: Standardized indentation and changed
+	getNameForLanguageCode to looks for language name at PTS.
+
+2004-03-03 21:43  dtremea
+
+	* availablelanguages.py: Changed language codes to lower case. It's
+	a PlacelessTranslationService requirement.
+
+2004-03-01 12:22  longsleep
+
+	* ChangeLog: added changelog
 
 2004-03-01 11:19  longsleep
 
