@@ -17,8 +17,12 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from StringIO import StringIO
 from Acquisition import aq_base
 from ComputedAttribute import ComputedAttribute
-import availablelanguages
 from Products.Archetypes.debug import log
+
+import availablelanguages
+
+from ZPublisher import BeforeTraverse
+from ZPublisher.HTTPRequest import HTTPRequest
 
 try:
     from Products.PlacelessTranslationService.Negotiator import registerLangPrefsMethod
@@ -65,6 +69,16 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         log('init')
 
 
+    def __call__(self, container, req):
+        '''The __before_publishing_traverse__ hook.'''
+        if req.__class__ is not HTTPRequest:
+            return None
+        if not req[ 'REQUEST_METHOD' ] in ( 'HEAD', 'GET', 'PUT', 'POST' ):
+            return None
+        if req.environ.has_key( 'WEBDAV_SOURCE_PORT' ):
+            return None
+        req.set('LANGUAGE_TOOL', self)
+        
     security.declareProtected(ManagePortal, 'manage_setLanguageSettings')
     def manage_setLanguageSettings(self, defaultLanguage, fallbackLanguage, supportedLanguages, REQUEST=None):
         ''' stores the languages (default, fallback, supported) '''
@@ -139,17 +153,9 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     security.declareProtected(View, 'setPreferredLanguageCookie')
     def setPreferredLanguageCookie(self,lang=None, REQUEST=None,noredir=None):
         ''' sets a cookie for overriding language negotiation '''
-        if lang:
-            if lang in self.supported_langs:  
-                portal_url = getToolByName(self, 'portal_url')()
-                self.REQUEST.RESPONSE.setCookie('I18N_CONTENT_LANGUAGE',lang,path='/')
-
-                # set session language as well. this is a hack before we talk well with PTS
-                sdm = getattr(self, 'session_data_manager', None)
-                if sdm:
-                    sd=sdm.getSessionData(create=1)
-                    sd.set('preferred_languages', lang)
-
+        portal_url = getToolByName(self, 'portal_url')()
+        if lang and lang in self.supported_langs:  
+            self.REQUEST.RESPONSE.setCookie('I18N_CONTENT_LANGUAGE',lang,path='/') 
         if noredir is None:                
             if REQUEST:
                 REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
@@ -157,34 +163,55 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     security.declareProtected(View, 'getPreferredLanguage')
     def getPreferredLanguage(self):
         ''' calculate the preferred language for a user'''
-        #should take HTTP_ACCEPT_LANGUAGE into consideration, but for now , we just use the cookie or the fallback,
-        pref = self.fallback_lang or 'en'
+        #we leave handling of  HTTP_ACCEPT_LANGUAGE to PTS
         if self.REQUEST is not None:
             langCookie = self.REQUEST.cookies.get('I18N_CONTENT_LANGUAGE')
-            if langCookie in self.supported_langs:
+            if langCookie is not None and langCookie in self.supported_langs:
                 pref = langCookie
+            else:
+                pref = self.fallback_lang
         return pref
+    
+    def manage_beforeDelete(self, item, container):
+        if item is self:
+            handle = self.meta_type + '/' + self.getId()
+            BeforeTraverse.unregisterBeforeTraverse(container, handle)
+
+    def manage_afterAdd(self, item, container):
+        if item is self:
+            handle = self.meta_type + '/' + self.getId()
+            container = container.this()
+            nc = BeforeTraverse.NameCaller(self.getId())
+            BeforeTraverse.registerBeforeTraverse(container, nc, handle)
             
 
 class PrefsForPTS:
     """ this one should hook into pts"""
     def __init__(self, here):
         self._env = here
-
-        # argh cannot get at the language tool here. That kinda hurts        
-        #LanguageTool = here.portal_languages #getToolByName(here, 'portal_languages')
-        #if not hasattr(LanguageTool, 'REQUEST'):
-                #LanguageTool=LanguageTool.__of__(RequestContainer(REQUEST=here))
-        #self.pref = LanguageTool.getPreferredLanguage()
-        #self.languages = [self.pref]
+        self.languages = []
+        LanguageTool = here.get('LANGUAGE_TOOL')
+        if LanguageTool is None:
+            return None
+        if not hasattr(LanguageTool, 'REQUEST'):
+            LanguageTool=LanguageTool.__of__(RequestContainer(REQUEST=here))
+        self.pref = LanguageTool.getPreferredLanguage()
+        if self.pref is None:
+            pass
+        else:
+            self.languages.append(self.pref)
+        self.languages.append(LanguageTool.getFallbackLanguage())
+        #raise(str(self.languages))
         return None
  
     def getPreferredLanguages(self):
-        """ hardcoded for testing"""
-        langCookie =self._env.cookies.get('I18N_CONTENT_LANGUAGE','en')
-        return [langCookie,'en']
+        """ language override for pts"""
+        try:
+            return self.languages
+        except:
+            return []
     
 if _hasPTS is not None:
-    registerLangPrefsMethod({'klass':PrefsForPTS,'priority':20 })
+    registerLangPrefsMethod({'klass':PrefsForPTS,'priority':15 })
 
 InitializeClass(LanguageTool)
