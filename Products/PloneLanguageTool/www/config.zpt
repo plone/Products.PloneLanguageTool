@@ -7,7 +7,7 @@
         <p>if you create new content, this is the default language<br />
             <select name="defaultLanguage">
                 <option value="en"
-                        tal:repeat="lang here/listAllowedLanguages"
+                        tal:repeat="lang here/listSupportedLanguages"
                         tal:attributes="value python: lang[0];
                                         selected python: test(lang[0]==here.getDefaultLanguage(), 'selected', '')"
                         tal:content="python: lang[1]">
@@ -21,7 +21,7 @@
            the user preferred, content will be presented in the fallback language<br />
            <select name="fallbackLanguage">
                 <option value="en"
-                        tal:repeat="lang here/listAllowedLanguages"
+                        tal:repeat="lang here/listSupportedLanguages"
                         tal:attributes="value python: lang[0];
                                         selected python: test(lang[0]==here.getFallbackLanguage(), 'selected', '')"
                         tal:content="python: lang[1]">
@@ -37,7 +37,7 @@
                 <option value="en"
                         tal:repeat="lang here/listAvailableLanguages"
                         tal:attributes="value python: lang[0];
-                                        selected python: test(lang[0] in here.getSupportedLanguages(), 'selected', '')"
+                                        selected python: test(lang[0] in here.getSupportedLanguages()[0], 'selected', '')"
                         tal:content="python: lang[1]">
                     English
                 </option>

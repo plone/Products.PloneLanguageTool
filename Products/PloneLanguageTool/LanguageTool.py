@@ -223,8 +223,9 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     def listAvailableLanguages(self):
         return self.available_langs
 
-    def listAllowedLanguages(self):
-        return self.allowed_langs
+    def listSupportedLanguages(self):
+        #FIXME: return supported languages
+        return self.available_langs
 
     def getSupportedLanguages(self):
         #FIXME: return supported languages
