@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.50 2004/10/08 17:00:40 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.51 2005/01/21 09:57:28 tesdal Exp $ (Author: $Author: tesdal $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -14,7 +14,10 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Acquisition import aq_base
 from ZPublisher import BeforeTraverse
 from ZPublisher.HTTPRequest import HTTPRequest
-from interfaces import ITranslatable
+try:
+    from Products.CMFPlone.interfaces.Translatable import ITranslatable
+except ImportError:
+    from interfaces import ITranslatable
 
 try:
     from Products.PlacelessTranslationService.Negotiator import registerLangPrefsMethod
