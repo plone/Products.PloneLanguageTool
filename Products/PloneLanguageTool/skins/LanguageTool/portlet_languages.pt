@@ -73,7 +73,7 @@
                 <a href=""
                    class="portletMore"
                    tal:attributes="href string: ${portal_url}/portal_languages/prefs_languages">
-                Language setup&#8230;
+                Language settings&#8230;
                 </a>
             
             </div>
