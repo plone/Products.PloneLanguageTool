@@ -31,7 +31,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
     security = ClassSecurityInfo()
 
-    available_langs = availablelanguages.languages
+    AVAILABLE_LANGUAGES = availablelanguages.languages
     supported_langs = availablelanguages.languages.keys()
     default_lang = 'en'
     fallback_lang = 'en'
@@ -96,7 +96,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         return self.supported_langs
 
     def listAvailableLanguages(self):
-        return self.sortedDictItems(self.available_langs)
+        return self.sortedDictItems(self.AVAILABLE_LANGUAGES)
     
     def getAvailableLanguages(self):
         return self.available_langs.keys()
@@ -115,11 +115,11 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
     security.declareProtected(ManagePortal, 'addLanguage')
     def addLanguage(self, langCode, langDescription):
-        self.available_langs.append((langCode, langDescription))
+        self.AVAILABLE_LANGUAGES.append((langCode, langDescription))
 
     def deleteLanguage(self, langCode):
         # FIXME: to implement
-        self.available_langs.remove(langCode)
+        self.AVAILABLE_LANGUAGES.remove(langCode)
 
 
     # the some methods that should be user-available
