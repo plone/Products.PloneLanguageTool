@@ -12,7 +12,7 @@
       
     <div class="body">     
     <div class="content">     
-    <form tal:attributes="action string:switchLanguage" method="post"
+    <form action="switchLanguage" method="post"
      tal:define="served_languages here/portal_languages/listSupportedLanguages;
                  prefLang here/portal_languages/getPreferredLanguage"
                  tal:condition="served_languages|nothing"
@@ -23,10 +23,12 @@
             
         
     </form>
-    </div>  
-    <div class="content even" tal:condition="python:here.portal_membership.checkPermission('Modify portal content', here.retrieveI18NContentLayerOb()) or here.portal_membership.checkPermission('Add portal content', here.retrieveI18NContentLayerOb())">
+    </div> 
+    <div class="content even" tal:condition="here/insideI18NLayer| nothing"> 
+    <div tal:condition="python:here.portal_membership.checkPermission('Modify portal content', here.retrieveI18NContentLayerOb()) or here.portal_membership.checkPermission('Add portal content', here.retrieveI18NContentLayerOb())">
               <a href="#" tal:attributes="href string:${here/retrieveI18NContentLayerURL}/i18nlayer_languages_form">Translate</a>
     </div>  
+    </div>
     </div>
 </div>
 </body>

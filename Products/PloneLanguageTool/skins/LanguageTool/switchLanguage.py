@@ -6,31 +6,34 @@
 ##bind subpath=traverse_subpath
 ##parameters=lang,here_url=None,layer_url=None,available_languages=None,cookie=0
 ##title=
-##
-## Warnings:
-##  Prints, but never reads 'printed' variable.
-##
-if not here_url: here_url=context.absolute_url()
-if not layer_url: layer_url=context.retrieveI18NContentLayerURL()
-if not available_languages: available_languages=context.portal_languages.getSupportedLanguages()
 
+from Products.CMFCore.utils import getToolByName
 REQUEST=context.REQUEST
-if cookie:
-    REQUEST.RESPONSE.setCookie('I18N_CONTENT_LANGUAGE',lang, path='/')
-elif REQUEST.cookies.get('I18N_CONTENT_LANGUAGE',None):
-    REQUEST.RESPONSE.expireCookie('I18N_CONTENT_LANGUAGE', path='/')
+if not here_url: here_url=context.absolute_url()
+try:
+    if not layer_url: layer_url=context.retrieveI18NContentLayerURL()
+except AttributeError:
+    layer_url = None
+
+languageTool = getToolByName(context,'portal_languages')
+portal_url = getToolByName(context, 'portal_url')()
+
+if not available_languages: available_languages=languageTool.getSupportedLanguages()
+if lang:
+    if lang in available_languages:
+        context.REQUEST.RESPONSE.setCookie('I18N_CONTENT_LANGUAGE',lang,path='/')
 
 redirect=layer_url
-
 try: referrer=REQUEST.environ['HTTP_REFERER']
 except: referrer=hereurl
 
-print "lang", lang
-print "layer_url", layer_url
-print "referrer", referrer[:len(layer_url)]
+##print "lang", lang
+##print "layer_url", layer_url
+##print "referrer", referrer[:len(layer_url)]
 
+if layer_url is None:
+    return REQUEST.RESPONSE.redirect(referrer)
 
-# i18nlayer url-fixing. Thanks Simon
 if referrer[:len(layer_url)] == layer_url:
     try: rest=referrer[len(layer_url):]
     except: rest=None
@@ -66,7 +69,6 @@ if referrer[:len(layer_url)] == layer_url:
             elif r and len(rest)>1: rest[1]=r
             elif not r and len(rest)>1: del rest[1]
         redirect=layer_url+'/'.join(rest)
-
 query={}
 # parse current query
 s = redirect.find('?')
@@ -77,17 +79,14 @@ if s >= 0:
         if e:
             k,v = e.split("=")
             query[k]=v
-
 print "query", query
-
 if lang:
     # no cookie support
     query['cl']=lang
-
 qst="?"
 for k, v in query.items():
     qst=qst+"%s=%s&" % (k, v)
-
-redirect=redirect+qst[:-1]
+redirect=redirect #+qst[:-1]
 print "redirect", redirect
 REQUEST.RESPONSE.redirect(redirect)
+
