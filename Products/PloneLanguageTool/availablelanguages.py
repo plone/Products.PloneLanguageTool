@@ -369,6 +369,7 @@ combined = {
 'ur-in':'Urdu (India)',
 'ur-pk':'Urdu (Pakistan)',
 'zh-cn':'Mandarin+Chinese (China)',
+'zh-hk':'Mandarin+Chinese (Hongkong)',
 'zh-sg':'Mandarin+Chinese (Singapore)',
 'zh-tw':'Mandarin+Chinese (Taiwan)',
 }
