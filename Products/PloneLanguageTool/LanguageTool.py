@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.33 2003/10/07 18:41:40 tesdal Exp $ (Author: $Author: tesdal $)
+# $Id: LanguageTool.py,v 1.34 2003/10/09 12:02:58 tesdal Exp $ (Author: $Author: tesdal $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -331,15 +331,6 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             
         return binding.getLanguageBindings()
 
-    # Convenience methods used by workflow scripts
-    security.declareProtected(ModifyPortalContent, 'setSameOwnerAsParent')
-    def setSameOwnerAsParent(self, obj):
-        """ Set the owner to the same as the parent if the parent is i18nLayer """
-        parent = obj.aq_inner.aq_parent
-        if parent and parent.meta_type == "I18NLayer":
-            obj.changeOwnership(obj.aq_inner.aq_parent.getOwner())
-
-        
 
 class LanguageBinding:
     """ helper which holding language infos in request """
