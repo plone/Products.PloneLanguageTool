@@ -3,145 +3,149 @@ languages = {
 'aa':'Afar',  
 'ab':'Abkhazian',  
 'af':'Afrikaans',  
-'am':'Amharic',  
-'ar':'Arabic',  
+'am':'አማርኛ', # Amharic 
+'ar':'አማርኛ', # Arabic
 'as':'Assamese',  
 'ay':'Aymara',  
-'az':'Azerbaijani',  
+'az':'Azəri Türkçəsi', # Azerbaijani 
 'ba':'Bashkir',  
-'be':'Byelorussian (Belarussian)',
-'bg':'Bulgarian',  
+'be':'Беларуская мова', # Belarusian
+'bg':'Български', # Bulgarian
 'bh':'Bihari',  
 'bi':'Bislama',  
-'bn':'Bengali',  
+'bn':'বাংলা', # Bengali
 'bo':'Tibetan',  
-'br':'Breton',  
-'ca':'Catalan',
+'bs':'Bosanski', # Bosnian
+'br':'Brezhoneg', # Breton
+'ca':'Català',
 'co':'Corsican',  
-'cs':'Czech',  
-'cy':'Welsh',  
-'da':'Danish',  
-'de':'German',  
+'cs':'Čeština',  # Czech
+'cy':'Cymraeg',  # Welsh
+'da':'Dansk',  # Danish
+'de':'Deutsch', # German
 'dz':'Bhutani',  
-'el':'Greek',  
+'el':'Ελληνικά', # Greek
 'en':'English',  
 'eo':'Esperanto',  
-'es':'Spanish',  
-'et':'Estonian',  
-'eu':'Basque',  
-'fa':'Persian',  
-'fi':'Finnish',  
+'es':'Español', # Spanish
+'et':'Eesti', # Estonian
+'eu':'Euskara', # Basque
+'fa':'فارسی', # Persian
+'fi':'Suomi', # Finnish
 'fj':'Fiji',  
 'fo':'Faroese',  
-'fr':'French',  
+'fr':'Français', # French
 'fy':'Frisian',  
-'ga':'Irish (Irish Gaelic)',
-'gd':'Scots Gaelic (Scottish Gaelic)', 
-'gl':'Galician',  
+'ga':'Gaeilge', #Irish (Irish Gaelic)
+'gd':'Scots Gaelic', # (Scottish Gaelic)
+'gl':'Galego', # Galician
 'gn':'Guarani',  
-'gu':'Gujarati',  
+'gu':'ગુજરાતી', # Gujarati
 'gv':'Manx Gaelic',   
 'ha':'Hausa',  
-'he':'Hebrew',
-'hi':'Hindi',  
-'hr':'Croatian',  
-'hu':'Hungarian',  
+'he':'עברית', # Hebrew
+'hi':'हिंदी', # Hindi
+'hr':'Hrvatski', # Croatian
+'hu':'Magyar', # Hungarian
 'hy':'Armenian',  
 'ia':'Interlingua',  
-'id':'Indonesian',  
+'id':'Bahasa Indonesia', # Indonesian
 'ie':'Interlingue',  
 'ik':'Inupiak',  
-'is':'Icelandic',  
-'it':'Italian',  
+'is':'Íslenska', # Icelandic
+'it':'Italiano', # Italian
 'iu':'Inuktitut',  
-'ja':'日本語',
+'ja':'日本語', # Japanese
 'jw':'Javanese',  
 'ka':'Georgian',  
 'kk':'Kazakh',  
 'kl':'Greenlandic',  
-'km':'Cambodian',  
-'kn':'Kannada',  
-'ko':'Korean',  
+'km':'ខ្មែរ', # Cambodian/Khmer
+'kn':'ಕನ್ನಡ', # Kannada
+'ko':'한국말',  # Korean
 'ks':'Kashmiri',  
 'ku':'Kurdish',  
 'kw':'Cornish',  
 'ky':'Kirghiz',  
 'la':'Latin',  
-'lb':'Luxemburgish',  
-'ln':'Lingala',  
-'lo':'Laotian',  
-'lt':'Lithuanian',  
-'lv':'Latvian Lettish',   
+'lb':'Luxemburgish', 
+'li':'Limburgs', # Limburgish
+'ln':'Lingala',
+'lo':'Laotian',
+'lt':'Lietuviskai', # Lithuanian
+'lv':'Latviešu', # Latvian
 'mg':'Malagasy',  
 'mi':'Maori',  
 'mk':'Macedonian',  
-'ml':'Malayalam',  
-'mn':'Mongolian',  
+'ml':'മലയാളം', # Malayalam
+'mn':'Монгол', # Mongolian
 'mo':'Moldavian',  
 'mr':'Marathi',  
-'ms':'Malay',  
+'ms':'Bahasa Melayu', # Malay
 'mt':'Maltese',  
 'my':'Burmese',  
 'na':'Nauru',  
 'ne':'Nepali',  
-'nl':'Dutch',  
-'no':'Norwegian',  
+'nl':'Nederlands', # Dutch
+'no':'Norsk', # Norwegian
+'nn':'Nynorsk', # Norwegian Nynorsk
 'oc':'Occitan',  
 'om':'Oromo',  
 'or':'Oriya',  
 'pa':'Punjabi',  
-'pl':'Polish',  
+'pl':'Polski', # Polish
 'ps':'Pashto',  
-'pt':'Portuguese',  
+'pt':'Português', # Portuguese
 'qu':'Quechua',  
 'rm':'Rhaeto-Romance',  
 'rn':'Kirundi',  
-'ro':'Romanian',  
-'ru':'Russian',  
+'ro':'Româna', # Romanian
+'ru':'Русский', # Russian
 'rw':'Kiyarwanda',  
 'sa':'Sanskrit',  
 'sd':'Sindhi',  
-#'se':'Northern Sámi',  
+'se':'Northern Sámi',  
 'sg':'Sangho',  
 'sh':'Serbo-Croatian',
 'si':'Singhalese',  
-'sk':'Slovak',  
-'sl':'Slovenian',  
+'sk':'Slovenčina', # Slovak
+'sl':'Slovenscina', # Slovenian
 'sm':'Samoan',  
 'sn':'Shona',  
 'so':'Somali',  
-'sq':'Albanian',  
-'sr':'Serbian',  
+'sq':'Shqip', # Albanian
+'sr':'српски', # Serbian
 'ss':'Siswati',  
 'st':'Sesotho',  
 'su':'Sudanese',  
-'sv':'Swedish',  
+'sv':'Svenska', # Swedish
 'sw':'Swahili',  
-'ta':'Tamil',  
+'ta':'தமிழ', # Tamil
 'te':'Telugu',  
 'tg':'Tajik',  
-'th':'Thai',  
+'th':'ไทย', # Thai
 'ti':'Tigrinya',  
 'tk':'Turkmen',  
 'tl':'Tagalog',  
 'tn':'Setswana',  
 'to':'Tonga',  
-'tr':'Turkish',  
+'tr':'Türkçe', # Turkish
 'ts':'Tsonga',  
 'tt':'Tatar',  
 'tw':'Twi',  
 'ug':'Uigur',  
-'uk':'Ukrainian',  
+'uk':'Українська', # Ukrainian 
 'ur':'Urdu',  
 'uz':'Uzbek',  
-'vi':'Vietnamese',  
-#'vo':'Volapük',
+'vi':'Tiếng Việt', # Vietnamese
+'vo':'Volapük',
+'wa':'Walon', # Walloon
 'wo':'Wolof',  
 'xh':'Xhosa',  
-'yi':'Yiddish',  
+'yi':'ייִדיש', # Yiddish
 'yo':'Yorouba',  
 'za':'Zhuang',  
-'zh':'Chinese',  
+'zh':'简体中文', # Chinese 
 'zu':'Zulu', 
 }
 
