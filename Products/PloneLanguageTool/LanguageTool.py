@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.48 2004/09/02 11:19:46 shh42 Exp $ (Author: $Author: shh42 $)
+# $Id: LanguageTool.py,v 1.49 2004/10/08 14:52:22 longsleep Exp $ (Author: $Author: longsleep $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -147,6 +147,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         """ show flags in language listings or not"""
         return self.display_flags
 
+    security.declareProtected(View, 'listSupportedLanguages')
     def listSupportedLanguages(self):
         '''
         return a list of supported language names
@@ -156,12 +157,14 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             r.append((i,self.getAvailableLanguages()[i]))
         return r
 
+    security.declareProtected(View, 'getSupportedLanguages')
     def getSupportedLanguages(self):
         '''
         return a list of supported language codes
         '''
         return self.supported_langs
 
+    security.declarePublic('listAvailableLanguages')
     def listAvailableLanguages(self):
         '''
         return sorted list of available languages (code, name)
@@ -170,6 +173,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         items.sort(lambda x, y: cmp(x[1], y[1]))
         return items
 
+    security.declarePublic('getAvailableLanguages')
     def getAvailableLanguages(self):
         '''
         return dictionary of available languages
@@ -182,6 +186,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             langs.update(self.local_available_langs)
         return langs
 
+    security.declareProtected(View, 'getDefaultLanguage')
     def getDefaultLanguage(self):
         '''
         return our default language
@@ -294,6 +299,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             nc = BeforeTraverse.NameCaller(self.getId())
             BeforeTraverse.registerBeforeTraverse(container, nc, handle)
 
+    security.declarePublic('getPathLanguage')
     def getPathLanguage(self):
         '''
         check if a language is part of the current path
@@ -407,79 +413,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     def isTranslatable(self, obj):
         return ITranslatable.isImplementedBy(obj)
 
-    def i18nContentTypes(self):
-        '''
-        List type info objects for types which can be added in
-        I18NLayers.
-        '''
-        # XXX: please make me a python script in the skin
-        import warnings
-        warnings.warn("i18nContentTypes will go away in the next release", FutureWarning)
-
-        result = []
-        portal_types = getToolByName(self, 'portal_types')
-        myType = portal_types.getTypeInfo('I18NLayer')
-
-        if myType is not None:
-            for contentType in portal_types.listTypeInfo(self):
-                if myType.allowType(contentType.getId()):
-                    result.append(contentType)
-        else:
-            result = portal_types.listTypeInfo()
-
-        return filter(lambda typ, container=self:
-                      typ.isConstructionAllowed(container), result)
-                     
-    def i18nContentTypeNames(self):
-        '''
-        List type info objects for types which can be added in
-        I18NLayers.
-        '''
-        # XXX: please make me a python script in the skin
-        import warnings
-        warnings.warn("i18nContentTypeNames will go away in the next release", FutureWarning)
-
-        return [t.getId() for t in self.i18nContentTypes()]
-
-    security.declareProtected(View, 'canI18nifyObject')
-    def canI18nifyObject(self, object):
-        '''
-        tests wether i can i18nify an object (no folders, or if an object is already i18nified)
-        '''
-        # XXX: please make me a python script in the skin
-        import warnings
-        warnings.warn("canI18nifyObject will go away in the next release", FutureWarning)
-
-        return self.portal_membership.checkPermission(ModifyPortalContent, object)\
-            and self.portal_quickinstaller.isProductInstalled('I18NLayer') and \
-            not object.insideI18NLayer() and \
-            self.portal_types.getTypeInfo(object).getId() in self.i18nContentTypeNames()
-            
-    security.declareProtected(ModifyPortalContent, 'i18nifyObject')
-    def i18nifyObject(self, object, lang=None):
-        ''' 
-        wraps an I18NLayer around an existing Content Object -> returns 
-        the wrapper object (the I18NLayer instance)
-        '''
-        # XXX: please make me a python script in the skin
-        import warnings
-        warnings.warn("i18nifyObject will go away in the next release", FutureWarning)
-        if not lang:
-            lang = self.getPreferredLanguage()
-            
-        temp_id = 'tm_'  # only ids with 2 or three chars are allowed by I18NLayer
-        id = object.getId()
-
-        folder = object.aq_parent
-        folder.manage_renameObject(id,temp_id) #rename before cut
-
-        copydata = folder.manage_cutObjects([temp_id])
-        folder.invokeFactory('I18NLayer',id)   #create wrapper with same id
-        wrapper = getattr(folder,id)
-        wrapper.manage_pasteObjects(copydata)
-        wrapper.manage_renameObject(temp_id,lang)
-        return wrapper
-
+    security.declarePublic('getAvailableCountries')
     def getAvailableCountries(self):
         '''
         return dictionary of available countries
@@ -489,6 +423,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             countries.update(self.local_available_countries)
         return countries
 
+    security.declarePublic('listAvailableCountries')
     def listAvailableCountries(self):
         '''
         return sorted list of available countries (code, name)
