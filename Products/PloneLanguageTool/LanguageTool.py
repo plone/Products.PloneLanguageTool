@@ -299,7 +299,7 @@ class LanguageBinding:
         
         langs=[]
                
-        if useCookie: langsDefault=[self.tool.getPreferredLanguage(),]
+        if useCookie: langsCookie=[self.tool.getPreferredLanguage(),]
         else: langsCookie=[]
             
         if useRequest: langsRequest=self.tool.getRequestLanguages()
@@ -307,9 +307,9 @@ class LanguageBinding:
          
         if useDefault: langsDefault=[self.tool.getDefaultLanguage(),]
         else: langsDefault=[]
-        
+              
         # build list
-        langs = langsDefault+langsRequest+langsDefault
+        langs = langsCookie+langsRequest+langsDefault
         
         # filter None languages
         langs = filter(lambda x: x is not None, langs)
