@@ -17,10 +17,13 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from StringIO import StringIO
 from Acquisition import aq_base
 from ComputedAttribute import ComputedAttribute
-
 import availablelanguages
-
 from Products.Archetypes.debug import log
+
+try:
+    from Products.PlacelessTranslationService.Negotiator import registerLangPrefsMethod
+    _hasPTS=1
+except: _hasPTS=None
 
 
 class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
@@ -163,5 +166,25 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         return pref
             
 
+class PrefsForPTS:
+    """ this one should hook into pts"""
+    def __init__(self, here):
+        self._env = here
+
+        # argh cannot get at the language tool here. That kinda hurts        
+        #LanguageTool = here.portal_languages #getToolByName(here, 'portal_languages')
+        #if not hasattr(LanguageTool, 'REQUEST'):
+                #LanguageTool=LanguageTool.__of__(RequestContainer(REQUEST=here))
+        #self.pref = LanguageTool.getPreferredLanguage()
+        #self.languages = [self.pref]
+        return None
+ 
+    def getPreferredLanguages(self):
+        """ hardcoded for testing"""
+        langCookie =self._env.cookies.get('I18N_CONTENT_LANGUAGE','en')
+        return [langCookie,'en']
+    
+if _hasPTS is not None:
+    registerLangPrefsMethod({'klass':PrefsForPTS,'priority':20 })
 
 InitializeClass(LanguageTool)
