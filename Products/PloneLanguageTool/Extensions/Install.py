@@ -61,7 +61,8 @@ def install(self):
     install_actions(self, out)
     install_subskin(self, out, lang_globals)
     addConfiglets(self, out)
-    addLanguageSelectorSlot(self,out)
+# Re-enable this if you want the language portlet. Superceded by the language selector.
+#    addLanguageSelectorSlot(self,out)
     return out.getvalue()
 
 #
