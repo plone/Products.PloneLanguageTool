@@ -63,7 +63,6 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
 
     security.declareProtected(ManagePortal, 'manage_setLanguageSettings')
-    
     def manage_setLanguageSettings(self, defaultLanguage, fallbackLanguage, supportedLanguages, REQUEST=None):
         ''' stores the languages (default, fallback, supported) '''
         self.default_lang=defaultLanguage
@@ -78,7 +77,6 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         
         if REQUEST:
             REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
-
 
     def sortedDictItems(self,dict):
         items = list(dict.items())
@@ -104,15 +102,17 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     def getDefaultLanguage(self):
         return self.default_lang
 
+    security.declareProtected(ManagePortal, 'setDefaultLanguage')
     def setDefaultLanguage(self, langCode):
         self.default_lang = langCode
 
     def getFallbackLanguage(self):
         return self.fallback_lang
-
+    
+    security.declareProtected(ManagePortal, 'setFallbackLanguage')
     def setFallbackLanguage(self, langCode):
         self.fallback_lang = langCode
-
+    
     security.declareProtected(ManagePortal, 'addLanguage')
     def addLanguage(self, langCode, langDescription):
         self.AVAILABLE_LANGUAGES.append((langCode, langDescription))
@@ -121,10 +121,28 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         # FIXME: to implement
         self.AVAILABLE_LANGUAGES.remove(langCode)
 
+    # some convenience functions to improve the UI:
+    security.declareProtected(ManagePortal, 'addSupportedLanguage')
+    def addSupportedLanguage(self, langCode):
+        if (langCode in self.AVAILABLE_LANGUAGES.keys()) and not langCode in self.supported_langs:
+            self.supported_langs.append(langCode)
+            
+    security.declareProtected(ManagePortal, 'removeSupportedLanguages')
+    def removeSupportedLanguages(self, langCodes):
+        for i in LangCodes:
+            self.supported_langs.remove(i)
 
-    # the some methods that should be user-available
-    def setPreferredLanguageCookie(preferredlanguage=None):
-        if preferredlanguage:
-            self.REQUEST.RESPONSE.setCookie('languagePreference',preferredlanguage)
+            
+    # some methods that should be user-available
+    security.declareProtected(ManagePortal, 'View')
+    def setPreferredLanguageCookie(self,lang=None, REQUEST=None):
+        ''' sets a cookie for overriding language negotiation '''
+        if lang:
+            if lang in self.supported_langs:  
+                portal_url = getToolByName(self, 'portal_url')()
+                self.REQUEST.RESPONSE.setCookie('languagePreference',lang,path='/')  
+        if REQUEST:
+            REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
+
 
 InitializeClass(LanguageTool)
