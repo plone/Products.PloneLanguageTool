@@ -58,7 +58,7 @@
         </ol>   
 
         <h2>Content Control Settings</h2>
-        <p>Check the settings which that apply to multilingual content</p>
+        <p>Check the settings that apply to multilingual content</p>
         <ol>
             <li><p><input type="checkbox" name="setForcelanguageUrls" value="1" tal:attributes="checked here/force_language_urls| nothing" /> Force different urls for each language (redirect).</p></li>        
             <li><p><input type="checkbox" name="setAllowContentLanguageFallback" value="1" tal:attributes="checked here/allow_content_language_fallback| nothing" /> Allow content language fallback.</p></li>        
