@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.34 2003/10/09 12:02:58 tesdal Exp $ (Author: $Author: tesdal $)
+# $Id: LanguageTool.py,v 1.35 2003/10/13 02:46:57 zworkb Exp $ (Author: $Author: zworkb $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -331,7 +331,62 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             
         return binding.getLanguageBindings()
 
+    def i18nContentTypes( self ):
+        """
+            List type info objects for types which can be added in
+            I18NLayers.
+        """
+        result = []
+        portal_types = getToolByName(self, 'portal_types')
+        myType = portal_types.getTypeInfo('I18NLayer')
 
+        if myType is not None:
+            for contentType in portal_types.listTypeInfo(self):
+                if myType.allowType( contentType.getId() ):
+                    result.append( contentType )
+        else:
+            result = portal_types.listTypeInfo()
+
+        return filter( lambda typ, container=self:
+                          typ.isConstructionAllowed( container )
+                     , result )
+                     
+    def i18nContentTypeNames( self ):
+        """
+            List type info objects for types which can be added in
+            I18NLayers.
+        """
+        return [t.getId() for t in self.i18nContentTypes()]
+
+    security.declareProtected(ModifyPortalContent,'canI18nifyObject')
+    def canI18nifyObject(self,object):
+        ''' tests wether i can i18nify an object (no folders, or if an object is already i18nified)
+        '''
+        return self.portal_quickinstaller.isProductInstalled('I18NLayer') and \
+            not object.insideI18NLayer() and \
+            self.portal_types.getTypeInfo(object).getId() in self.i18nContentTypeNames()
+            
+    security.declareProtected(ModifyPortalContent,'i18nifyObject')
+    def i18nifyObject(self,object,lang=None):
+        ''' wraps an I18NLayer around an existing Content Object -> returns 
+            the wrapper object (the I18NLayer instance)
+        '''
+        if not lang:
+            lang=self.getPreferredLanguage()
+            
+        temp_id='tm_'  # only ids with 2 or three chars are allowed by I18NLayer
+        id=object.getId()
+
+        folder=object.aq_parent
+        folder.manage_renameObject(id,temp_id) #rename before cut
+
+        copydata=folder.manage_cutObjects([temp_id])
+        folder.invokeFactory('I18NLayer',id)   #create wrapper with same id
+        wrapper=getattr(folder,id)
+        wrapper.manage_pasteObjects(copydata)
+        wrapper.manage_renameObject(temp_id,lang)
+        return wrapper
+    
 class LanguageBinding:
     """ helper which holding language infos in request """
     

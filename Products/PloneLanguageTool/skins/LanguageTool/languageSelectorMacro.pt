@@ -33,10 +33,17 @@
     
     </div> 
     <div class="content odd" tal:condition="here/insideI18NLayer| nothing"> 
-    <div tal:condition="python:here.portal_membership.checkPermission('Modify portal content', here.retrieveI18NContentLayerOb()) or here.portal_membership.checkPermission('Add portal content', here.retrieveI18NContentLayerOb())">
+        <div tal:condition="python:here.portal_membership.checkPermission('Modify portal content', here.retrieveI18NContentLayerOb()) or here.portal_membership.checkPermission('Add portal content', here.retrieveI18NContentLayerOb())">
               <a href="#" tal:attributes="href string:${here/retrieveI18NContentLayerURL}/i18nlayer_languages_form">Translate</a>
-    </div>  
+        </div>  
     </div>
+
+    <div class="content odd" tal:condition="not:here/insideI18NLayer| nothing"> 
+        <div tal:condition="python:here.portal_membership.checkPermission('Modify portal content', here) and here.portal_languages.canI18nifyObject(here)">
+              <a href="#" tal:attributes="href string:${here/absolute_url}/lt_i18nifyObject">Internationalize</a>
+        </div>  
+    </div>
+
     </div>
 </div>
 </body>
