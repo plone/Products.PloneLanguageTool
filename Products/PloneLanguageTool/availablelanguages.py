@@ -54,7 +54,7 @@ languages = {
 'is':'Icelandic',  
 'it':'Italian',  
 'iu':'Inuktitut',  
-'ja':'Japanese',  
+'ja':'Japanese',  # 日本語
 'jw':'Javanese',  
 'ka':'Georgian',  
 'kk':'Kazakh',  
