@@ -137,10 +137,14 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     def addLanguage(self, langCode, langDescription):
         self.AVAILABLE_LANGUAGES.append((langCode, langDescription))
 
+    security.declareProtected(View, 'getNameForLanguageCode')
+    def getNameForLanguageCode(self, langCode):
+        return self.AVAILABLE_LANGUAGES.get(langCode,'')
+    
     def deleteLanguage(self, langCode):
         # FIXME: to implement
         self.AVAILABLE_LANGUAGES.remove(langCode)
-
+       
     # some convenience functions to improve the UI:
     security.declareProtected(ManagePortal, 'addSupportedLanguage')
     def addSupportedLanguage(self, langCode):
