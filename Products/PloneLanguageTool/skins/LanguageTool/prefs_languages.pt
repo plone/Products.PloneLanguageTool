@@ -19,9 +19,9 @@
            the user preferred, content will be presented in the fallback language.</p>
         <select name="defaultLanguage">
             <option value="en"
-                    tal:repeat="lang here/listSupportedLanguages"
+                    tal:repeat="lang here/portal_languages/listSupportedLanguages"
                     tal:attributes="value python:lang[0];
-                                    selected python:lang[0]==here.getDefaultLanguage()"
+                                    selected python:lang[0]==here.portal_languages.getDefaultLanguage()"
                     tal:content="python: lang[1]">
                 English
             </option>
@@ -33,9 +33,9 @@
         </p>
         <select name="supportedLanguages:list" size="10" multiple>
             <option value="en"
-                    tal:repeat="lang here/listAvailableLanguages"
+                    tal:repeat="lang here/portal_languages/listAvailableLanguages"
                     tal:attributes="value python: lang[0];
-                                    selected python:lang[0] in here.getSupportedLanguages()"
+                                    selected python:lang[0] in here.portal_languages.getSupportedLanguages()"
                     tal:content="python: lang[1]+'  ('+lang[0]+')'">
                 English
             </option>
