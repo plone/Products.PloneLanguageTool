@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.22 2003/09/29 22:47:40 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.23 2003/09/30 08:20:59 longsleep Exp $ (Author: $Author: longsleep $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -136,7 +136,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
     security.declareProtected(View, 'getNameForLanguageCode')
     def getNameForLanguageCode(self, langCode):
-        return self.AVAILABLE_LANGUAGES.get(langCode,'')
+        return self.AVAILABLE_LANGUAGES.get(langCode, langCode)
     
     def deleteLanguage(self, langCode):
         # FIXME: to implement
