@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.49 2004/10/08 14:52:22 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.50 2004/10/08 17:00:40 longsleep Exp $ (Author: $Author: longsleep $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -74,6 +74,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         self.use_request_negotiation = 1
         self.force_language_urls = 1
         self.allow_content_language_fallback = 0
+        self.display_flags = 1
 
     def __call__(self, container, req):
         '''
