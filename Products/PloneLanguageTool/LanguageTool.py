@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.44 2004/04/27 19:21:16 tesdal Exp $ (Author: $Author: tesdal $)
+# $Id: LanguageTool.py,v 1.45 2004/05/13 13:14:02 longsleep Exp $ (Author: $Author: longsleep $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -43,7 +43,6 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     use_request_negotiation = 1
     use_combined_language_codes = 0
 
-    # copy global available_langs to class variable
 
     _actions = [ActionInformation(
         id='languages'
@@ -402,6 +401,9 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         I18NLayers.
         '''
         # XXX: please make me a python script in the skin
+        import warnings
+        warnings.warn("i18nContentTypes will go away in the next release", FutureWarning)
+
         result = []
         portal_types = getToolByName(self, 'portal_types')
         myType = portal_types.getTypeInfo('I18NLayer')
@@ -422,6 +424,9 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         I18NLayers.
         '''
         # XXX: please make me a python script in the skin
+        import warnings
+        warnings.warn("i18nContentTypeNames will go away in the next release", FutureWarning)
+
         return [t.getId() for t in self.i18nContentTypes()]
 
     security.declareProtected(View, 'canI18nifyObject')
@@ -430,6 +435,9 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         tests wether i can i18nify an object (no folders, or if an object is already i18nified)
         '''
         # XXX: please make me a python script in the skin
+        import warnings
+        warnings.warn("canI18nifyObject will go away in the next release", FutureWarning)
+
         return self.portal_membership.checkPermission(ModifyPortalContent, object)\
             and self.portal_quickinstaller.isProductInstalled('I18NLayer') and \
             not object.insideI18NLayer() and \
@@ -442,6 +450,8 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         the wrapper object (the I18NLayer instance)
         '''
         # XXX: please make me a python script in the skin
+        import warnings
+        warnings.warn("i18nifyObject will go away in the next release", FutureWarning)
         if not lang:
             lang = self.getPreferredLanguage()
             
@@ -489,6 +499,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         '''
         self.local_available_countries[countryCode] = countryDescription
         self._p_changed = 1
+
 
 class LanguageBinding:
     '''
