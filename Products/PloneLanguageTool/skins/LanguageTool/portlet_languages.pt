@@ -20,7 +20,7 @@
 
         <div class="portletBody">
 
-            <div class="portletContent even"
+            <div class="portletContent odd"
                  tal:condition="python:len(served_languages) > 8">
 
                 <form action="switchLanguage"
@@ -38,7 +38,7 @@
 
             </div>
 
-            <div class="portletContent even"
+            <div class="portletContent odd"
                  tal:condition="python:len(served_languages) <= 8"
                  tal:repeat="lang served_languages">
 
