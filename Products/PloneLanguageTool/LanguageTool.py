@@ -334,7 +334,7 @@ class PrefsForPTS:
         self._env = context
         self.languages = []
 
-        binding = here.get('LANGUAGE_TOOL')
+        binding = context.get('LANGUAGE_TOOL')
         if not isinstance(binding, LanguageBinding):
             return None
 
