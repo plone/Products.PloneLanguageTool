@@ -33,6 +33,20 @@ def install_subskin(self, out, skin_name=SKIN_NAME, globals=lang_globals):
         path = ','.join(path)
         skinstool.addSkinSelection( skinName, path)
 
+def addLanguageSelectorSlot(self,out):
+    # add language selector portlet
+    slot = "here/languageSelectorMacro/macros/globalLanguageSelector"
+
+    left_slots=getattr(self,'left_slots', None)
+    right_slots=getattr(self, 'right_slots', ())
+
+    if left_slots != None:
+        if slot not in left_slots and slot not in right_slots:
+            left_slots=list(left_slots)+[slot,]
+            self.left_slots=left_slots
+            print >> out, 'Added Language selector portlet to left_slots property.\n'
+
+
 def install(self):
     out = StringIO()
     print >>out, "Installing PloneLanguageTool"
@@ -40,6 +54,7 @@ def install(self):
     install_tools(self, out)
     install_actions(self, out)
     install_subskin(self, out)
+    addLanguageSelectorSlot(self,out)
     return out.getvalue()
 
 
