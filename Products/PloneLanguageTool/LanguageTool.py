@@ -18,155 +18,9 @@ from StringIO import StringIO
 from Acquisition import aq_base
 from ComputedAttribute import ComputedAttribute
 
+import availablelanguages
+
 from Products.Archetypes.debug import log
-
-availableLanguages = {
-'aa':'Afar',  
-'ab':'Abkhazian',  
-'af':'Afrikaans',  
-'am':'Amharic',  
-'ar':'Arabic',  
-'as':'Assamese',  
-'ay':'Aymara',  
-'az':'Azerbaijani',  
-'ba':'Bashkir',  
-'be':'Byelorussian (Belarussian)',
-'bg':'Bulgarian',  
-'bh':'Bihari',  
-'bi':'Bislama',  
-'bn':'Bengali',  
-'bo':'Tibetan',  
-'br':'Breton',  
-'ca':'Catalan',  
-'co':'Corsican',  
-'cs':'Czech',  
-'cy':'Welsh',  
-'da':'Danish',  
-'de':'German',  
-'dz':'Bhutani',  
-'el':'Greek',  
-'en':'English',  
-'eo':'Esperanto',  
-'es':'Spanish',  
-'et':'Estonian',  
-'eu':'Basque',  
-'fa':'Persian',  
-'fi':'Finnish',  
-'fj':'Fiji',  
-'fo':'Faroese',  
-'fr':'French',  
-'fy':'Frisian',  
-'ga':'Irish (Irish Gaelic)',
-'gd':'Scots Gaelic (Scottish Gaelic)', 
-'gl':'Galician',  
-'gn':'Guarani',  
-'gu':'Gujarati',  
-'gv':'Manx Gaelic',   
-'ha':'Hausa',  
-'he':'Hebrew',
-'hi':'Hindi',  
-'hr':'Croatian',  
-'hu':'Hungarian',  
-'hy':'Armenian',  
-'ia':'Interlingua',  
-'id':'Indonesian',  
-'ie':'Interlingue',  
-'ik':'Inupiak',  
-'is':'Icelandic',  
-'it':'Italian',  
-'iu':'Inuktitut',  
-'ja':'Japanese',  
-'jw':'Javanese',  
-'ka':'Georgian',  
-'kk':'Kazakh',  
-'kl':'Greenlandic',  
-'km':'Cambodian',  
-'kn':'Kannada',  
-'ko':'Korean',  
-'ks':'Kashmiri',  
-'ku':'Kurdish',  
-'kw':'Cornish',  
-'ky':'Kirghiz',  
-'la':'Latin',  
-'lb':'Luxemburgish',  
-'ln':'Lingala',  
-'lo':'Laotian',  
-'lt':'Lithuanian',  
-'lv':'Latvian Lettish',   
-'mg':'Malagasy',  
-'mi':'Maori',  
-'mk':'Macedonian',  
-'ml':'Malayalam',  
-'mn':'Mongolian',  
-'mo':'Moldavian',  
-'mr':'Marathi',  
-'ms':'Malay',  
-'mt':'Maltese',  
-'my':'Burmese',  
-'na':'Nauru',  
-'ne':'Nepali',  
-'nl':'Dutch',  
-'no':'Norwegian',  
-'oc':'Occitan',  
-'om':'Oromo',  
-'or':'Oriya',  
-'pa':'Punjabi',  
-'pl':'Polish',  
-'ps':'Pashto',  
-'pt':'Portuguese',  
-'qu':'Quechua',  
-'rm':'Rhaeto-Romance',  
-'rn':'Kirundi',  
-'ro':'Romanian',  
-'ru':'Russian',  
-'rw':'Kiyarwanda',  
-'sa':'Sanskrit',  
-'sd':'Sindhi',  
-'se':'Northern Sámi',  
-'sg':'Sangho',  
-'sh':'Serbo-Croatian',
-'si':'Singhalese',  
-'sk':'Slovak',  
-'sl':'Slovenian',  
-'sm':'Samoan',  
-'sn':'Shona',  
-'so':'Somali',  
-'sq':'Albanian',  
-'sr':'Serbian',  
-'ss':'Siswati',  
-'st':'Sesotho',  
-'su':'Sudanese',  
-'sv':'Swedish',  
-'sw':'Swahili',  
-'ta':'Tamil',  
-'te':'Telugu',  
-'tg':'Tajik',  
-'th':'Thai',  
-'ti':'Tigrinya',  
-'tk':'Turkmen',  
-'tl':'Tagalog',  
-'tn':'Setswana',  
-'to':'Tonga',  
-'tr':'Turkish',  
-'ts':'Tsonga',  
-'tt':'Tatar',  
-'tw':'Twi',  
-'ug':'Uigur',  
-'uk':'Ukrainian',  
-'ur':'Urdu',  
-'uz':'Uzbek',  
-'vi':'Vietnamese',  
-'vo':'Volapük',
-'wo':'Wolof',  
-'xh':'Xhosa',  
-'yi':'Yiddish',  
-'yo':'Yorouba',  
-'za':'Zhuang',  
-'zh':'Chinese',  
-'zu':'Zulu', 
-}
-
-# Changed the available languiages to a dict for flexibility. Updated methods to match - Geir
 
 
 class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
@@ -177,8 +31,8 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
     security = ClassSecurityInfo()
 
-    available_langs = availableLanguages
-    supported_langs = availableLanguages.keys()
+    available_langs = availablelanguages.languages
+    supported_langs = availablelanguages.languages.keys()
     default_lang = 'en'
     fallback_lang = 'en'
     # copy global available_langs to class variable
@@ -209,6 +63,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
 
     security.declareProtected(ManagePortal, 'manage_setLanguageSettings')
+    
     def manage_setLanguageSettings(self, defaultLanguage, fallbackLanguage, supportedLanguages, REQUEST=None):
         ''' stores the languages (default, fallback, supported) '''
         self.default_lang=defaultLanguage
@@ -225,6 +80,12 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
 
 
+    def sortedDictItems(self,dict):
+        items = list(dict.items())
+        items.sort(lambda x, y: cmp(x[1], y[1]))
+        return items
+
+
     def listSupportedLanguages(self):
         r = []
         for i in self.supported_langs:
@@ -235,7 +96,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         return self.supported_langs
 
     def listAvailableLanguages(self):
-        return self.available_langs.items()
+        return self.sortedDictItems(self.available_langs)
     
     def getAvailableLanguages(self):
         return self.available_langs.keys()
@@ -259,5 +120,11 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     def deleteLanguage(self, langCode):
         # FIXME: to implement
         self.available_langs.remove(langCode)
+
+
+    # the some methods that should be user-available
+    def setPreferredLanguageCookie(preferredlanguage=None):
+        if preferredlanguage:
+            self.REQUEST.RESPONSE.setCookie('languagePreference',preferredlanguage)
 
 InitializeClass(LanguageTool)

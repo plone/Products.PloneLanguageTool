@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US">
+
+<body>
+
+
+
+<div class="box" id="portlet-global-language-selector" metal:define-macro="globalLanguageSelector">
+         
+    <h5>Languages</h5>  
+      
+    <div class="body">          
+    <form action="" method="post" 
+     tal:define="served_languages here/portal_languages/listSupportedLanguages;
+                 master_language here/portal_languages/getDefaultLanguage"
+                 tal:condition="served_languages|nothing"
+                 > 
+            
+            
+            <select name="languageChoice">
+                <option tal:repeat="lang served_languages" tal:attributes="value python:lang[0]" tal:content="python:lang[1]"></option>
+            </select>
+    </form>
+    </div>
+</div>
+</body>
+</html>
