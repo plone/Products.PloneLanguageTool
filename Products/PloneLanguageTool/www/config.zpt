@@ -8,8 +8,8 @@
             <select name="defaultLanguage">
                 <option value="en"
                         tal:repeat="lang here/listSupportedLanguages"
-                        tal:attributes="value python: lang[0];
-                                        selected python: test(lang[0]==here.getDefaultLanguage(), 'selected', '')"
+                        tal:attributes="value python:lang[0];
+                                        selected python:lang[0]==here.getDefaultLanguage()"
                         tal:content="python: lang[1]">
                     English
                 </option>
@@ -23,7 +23,7 @@
                 <option value="en"
                         tal:repeat="lang here/listSupportedLanguages"
                         tal:attributes="value python: lang[0];
-                                        selected python: test(lang[0]==here.getFallbackLanguage(), 'selected', '')"
+                                        selected python:lang[0]==here.getFallbackLanguage()"
                         tal:content="python: lang[1]">
                     English
                 </option>
@@ -33,11 +33,11 @@
         <h2>Allowed languages </h2>
         <p>please narrow the range of languages that can be added in your portal<br />
            <i>use the CTRL key to select / deselect single items</i><br />
-            <select name="supportedLanguages" size="10" multiple>
+            <select name="supportedLanguages:list" size="10" multiple>
                 <option value="en"
                         tal:repeat="lang here/listAvailableLanguages"
                         tal:attributes="value python: lang[0];
-                                        selected python: test(lang[0] in here.getSupportedLanguages()[0], 'selected', '')"
+                                        selected python:lang[0] in here.getSupportedLanguages()"
                         tal:content="python: lang[1]">
                     English
                 </option>

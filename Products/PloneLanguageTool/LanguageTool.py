@@ -20,151 +20,153 @@ from ComputedAttribute import ComputedAttribute
 
 from Products.Archetypes.debug import log
 
-availableLanguages =  (
-            ('aa', 'Afar'),
-            ('ab', 'Abkhazian'),
-            ('af', 'Afrikaans'),
-            ('am', 'Amharic'),
-            ('ar', 'Arabic'),
-            ('as', 'Assamese'),
-            ('ay', 'Aymara'),
-            ('az', 'Azerbaijani'),
-            ('ba', 'Bashkir'),
-            ('be', 'Byelorussian (Belarussian)'),
-            ('bg', 'Bulgarian'),
-            ('bh', 'Bihari'),
-            ('bi', 'Bislama'),
-            ('bn', 'Bengali'),
-            ('bo', 'Tibetan'),
-            ('br', 'Breton'),
-            ('ca', 'Catalan'),
-            ('co', 'Corsican'),
-            ('cs', 'Czech'),
-            ('cy', 'Welsh'),
-            ('da', 'Danish'),
-            ('de', 'German'),
-            ('dz', 'Bhutani'),
-            ('el', 'Greek'),
-            ('en', 'English'),
-            ('eo', 'Esperanto'),
-            ('es', 'Spanish'),
-            ('et', 'Estonian'),
-            ('eu', 'Basque'),
-            ('fa', 'Persian'),
-            ('fi', 'Finnish'),
-            ('fj', 'Fiji'),
-            ('fo', 'Faroese'),
-            ('fr', 'French'),
-            ('fy', 'Frisian'),
-            ('ga', 'Irish (Irish Gaelic)'),
-            ('gd', 'Scots Gaelic (Scottish Gaelic)'),
-            ('gl', 'Galician'),
-            ('gn', 'Guarani'),
-            ('gu', 'Gujarati'),
-            ('gv', 'Manx Gaelic'),
-            ('ha', 'Hausa'),
-            ('he', 'Hebrew'),
-            ('hi', 'Hindi'),
-            ('hr', 'Croatian'),
-            ('hu', 'Hungarian'),
-            ('hy', 'Armenian'),
-            ('ia', 'Interlingua'),
-            ('id', 'Indonesian'),
-            ('ie', 'Interlingue'),
-            ('ik', 'Inupiak'),
-            ('is', 'Icelandic'),
-            ('it', 'Italian'),
-            ('iu', 'Inuktitut'),
-            ('ja', 'Japanese'),
-            ('jw', 'Javanese'),
-            ('ka', 'Georgian'),
-            ('kk', 'Kazakh'),
-            ('kl', 'Greenlandic'),
-            ('km', 'Cambodian'),
-            ('kn', 'Kannada'),
-            ('ko', 'Korean'),
-            ('ks', 'Kashmiri'),
-            ('ku', 'Kurdish'),
-            ('kw', 'Cornish'),
-            ('ky', 'Kirghiz'),
-            ('la', 'Latin'),
-            ('lb', 'Luxemburgish'),
-            ('ln', 'Lingala'),
-            ('lo', 'Laotian'),
-            ('lt', 'Lithuanian'),
-            ('lv', 'Latvian Lettish'),
-            ('mg', 'Malagasy'),
-            ('mi', 'Maori'),
-            ('mk', 'Macedonian'),
-            ('ml', 'Malayalam'),
-            ('mn', 'Mongolian'),
-            ('mo', 'Moldavian'),
-            ('mr', 'Marathi'),
-            ('ms', 'Malay'),
-            ('mt', 'Maltese'),
-            ('my', 'Burmese'),
-            ('na', 'Nauru'),
-            ('ne', 'Nepali'),
-            ('nl', 'Dutch'),
-            ('no', 'Norwegian'),
-            ('oc', 'Occitan'),
-            ('om', 'Oromo'),
-            ('or', 'Oriya'),
-            ('pa', 'Punjabi'),
-            ('pl', 'Polish'),
-            ('ps', 'Pashto'),
-            ('pt', 'Portuguese'),
-            ('qu', 'Quechua'),
-            ('rm', 'Rhaeto-Romance'),
-            ('rn', 'Kirundi'),
-            ('ro', 'Romanian'),
-            ('ru', 'Russian'),
-            ('rw', 'Kiyarwanda'),
-            ('sa', 'Sanskrit'),
-            ('sd', 'Sindhi'),
-            ('se', 'Northern S&aacute;mi'),
-            ('sg', 'Sangho'),
-            ('sh', 'Serbo-Croatian'),
-            ('si', 'Singhalese'),
-            ('sk', 'Slovak'),
-            ('sl', 'Slovenian'),
-            ('sm', 'Samoan'),
-            ('sn', 'Shona'),
-            ('so', 'Somali'),
-            ('sq', 'Albanian'),
-            ('sr', 'Serbian'),
-            ('ss', 'Siswati'),
-            ('st', 'Sesotho'),
-            ('su', 'Sudanese'),
-            ('sv', 'Swedish'),
-            ('sw', 'Swahili'),
-            ('ta', 'Tamil'),
-            ('te', 'Telugu'),
-            ('tg', 'Tajik'),
-            ('th', 'Thai'),
-            ('ti', 'Tigrinya'),
-            ('tk', 'Turkmen'),
-            ('tl', 'Tagalog'),
-            ('tn', 'Setswana'),
-            ('to', 'Tonga'),
-            ('tr', 'Turkish'),
-            ('ts', 'Tsonga'),
-            ('tt', 'Tatar'),
-            ('tw', 'Twi'),
-            ('ug', 'Uigur'),
-            ('uk', 'Ukrainian'),
-            ('ur', 'Urdu'),
-            ('uz', 'Uzbek'),
-            ('vi', 'Vietnamese'),
-            ('vo', 'Volap&uuml;k'),
-            ('wo', 'Wolof'),
-            ('xh', 'Xhosa'),
-            ('yi', 'Yiddish'),
-            ('yo', 'Yorouba'),
-            ('za', 'Zhuang'),
-            ('zh', 'Chinese'),
-            ('zu', 'Zulu')
-        )
+availableLanguages = {
+'aa':'Afar',  
+'ab':'Abkhazian',  
+'af':'Afrikaans',  
+'am':'Amharic',  
+'ar':'Arabic',  
+'as':'Assamese',  
+'ay':'Aymara',  
+'az':'Azerbaijani',  
+'ba':'Bashkir',  
+'be':'Byelorussian (Belarussian)',
+'bg':'Bulgarian',  
+'bh':'Bihari',  
+'bi':'Bislama',  
+'bn':'Bengali',  
+'bo':'Tibetan',  
+'br':'Breton',  
+'ca':'Catalan',  
+'co':'Corsican',  
+'cs':'Czech',  
+'cy':'Welsh',  
+'da':'Danish',  
+'de':'German',  
+'dz':'Bhutani',  
+'el':'Greek',  
+'en':'English',  
+'eo':'Esperanto',  
+'es':'Spanish',  
+'et':'Estonian',  
+'eu':'Basque',  
+'fa':'Persian',  
+'fi':'Finnish',  
+'fj':'Fiji',  
+'fo':'Faroese',  
+'fr':'French',  
+'fy':'Frisian',  
+'ga':'Irish (Irish Gaelic)',
+'gd':'Scots Gaelic (Scottish Gaelic)', 
+'gl':'Galician',  
+'gn':'Guarani',  
+'gu':'Gujarati',  
+'gv':'Manx Gaelic',   
+'ha':'Hausa',  
+'he':'Hebrew',
+'hi':'Hindi',  
+'hr':'Croatian',  
+'hu':'Hungarian',  
+'hy':'Armenian',  
+'ia':'Interlingua',  
+'id':'Indonesian',  
+'ie':'Interlingue',  
+'ik':'Inupiak',  
+'is':'Icelandic',  
+'it':'Italian',  
+'iu':'Inuktitut',  
+'ja':'Japanese',  
+'jw':'Javanese',  
+'ka':'Georgian',  
+'kk':'Kazakh',  
+'kl':'Greenlandic',  
+'km':'Cambodian',  
+'kn':'Kannada',  
+'ko':'Korean',  
+'ks':'Kashmiri',  
+'ku':'Kurdish',  
+'kw':'Cornish',  
+'ky':'Kirghiz',  
+'la':'Latin',  
+'lb':'Luxemburgish',  
+'ln':'Lingala',  
+'lo':'Laotian',  
+'lt':'Lithuanian',  
+'lv':'Latvian Lettish',   
+'mg':'Malagasy',  
+'mi':'Maori',  
+'mk':'Macedonian',  
+'ml':'Malayalam',  
+'mn':'Mongolian',  
+'mo':'Moldavian',  
+'mr':'Marathi',  
+'ms':'Malay',  
+'mt':'Maltese',  
+'my':'Burmese',  
+'na':'Nauru',  
+'ne':'Nepali',  
+'nl':'Dutch',  
+'no':'Norwegian',  
+'oc':'Occitan',  
+'om':'Oromo',  
+'or':'Oriya',  
+'pa':'Punjabi',  
+'pl':'Polish',  
+'ps':'Pashto',  
+'pt':'Portuguese',  
+'qu':'Quechua',  
+'rm':'Rhaeto-Romance',  
+'rn':'Kirundi',  
+'ro':'Romanian',  
+'ru':'Russian',  
+'rw':'Kiyarwanda',  
+'sa':'Sanskrit',  
+'sd':'Sindhi',  
+'se':'Northern Sámi',  
+'sg':'Sangho',  
+'sh':'Serbo-Croatian',
+'si':'Singhalese',  
+'sk':'Slovak',  
+'sl':'Slovenian',  
+'sm':'Samoan',  
+'sn':'Shona',  
+'so':'Somali',  
+'sq':'Albanian',  
+'sr':'Serbian',  
+'ss':'Siswati',  
+'st':'Sesotho',  
+'su':'Sudanese',  
+'sv':'Swedish',  
+'sw':'Swahili',  
+'ta':'Tamil',  
+'te':'Telugu',  
+'tg':'Tajik',  
+'th':'Thai',  
+'ti':'Tigrinya',  
+'tk':'Turkmen',  
+'tl':'Tagalog',  
+'tn':'Setswana',  
+'to':'Tonga',  
+'tr':'Turkish',  
+'ts':'Tsonga',  
+'tt':'Tatar',  
+'tw':'Twi',  
+'ug':'Uigur',  
+'uk':'Ukrainian',  
+'ur':'Urdu',  
+'uz':'Uzbek',  
+'vi':'Vietnamese',  
+'vo':'Volapük',
+'wo':'Wolof',  
+'xh':'Xhosa',  
+'yi':'Yiddish',  
+'yo':'Yorouba',  
+'za':'Zhuang',  
+'zh':'Chinese',  
+'zu':'Zulu', 
+}
+
+# Changed the available languiages to a dict for flexibility. Updated methods to match - Geir
 
 
 class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
@@ -175,12 +177,11 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
     security = ClassSecurityInfo()
 
-    supported_langs = []
+    available_langs = availableLanguages
+    supported_langs = availableLanguages.keys()
     default_lang = 'en'
     fallback_lang = 'en'
     # copy global available_langs to class variable
-    available_langs = list(availableLanguages)
-    supported_langs = [l[0] for l in available_langs]
 
     _actions = [ActionInformation(
         id='languages'
@@ -206,33 +207,38 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         self.id = 'portal_languages'
         log('init')
 
+
     security.declareProtected(ManagePortal, 'manage_setLanguageSettings')
     def manage_setLanguageSettings(self, defaultLanguage, fallbackLanguage, supportedLanguages, REQUEST=None):
         ''' stores the languages (default, fallback, supported) '''
         self.default_lang=defaultLanguage
         self.fallback_lang=fallbackLanguage
-        if type(supportedLanguages) == type([]):
+
+        if supportedLanguages and type(supportedLanguages) == type([]):
             self.supported_langs=supportedLanguages
-        else:
-            self.supported_langs=[supportedLanguages]
-
-
+        #else:
+        #    self.supported_langs=[supportedLanguages]
+        # removed this one because it makes for unpredictable behavior
+        # added :list to the zmi forms instead so editing always returns a list.
+        
         if REQUEST:
-	    REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
+            REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
 
-    def listAvailableLanguages(self):
-        return self.available_langs
 
     def listSupportedLanguages(self):
-        #FIXME: return supported languages
-        return self.available_langs
+        r = []
+        for i in self.supported_langs:
+            r.append((i,self.available_langs[i]))
+        return r
 
     def getSupportedLanguages(self):
-        #FIXME: return supported languages
-        return self.available_langs
+        return self.supported_langs
 
+    def listAvailableLanguages(self):
+        return self.available_langs.items()
+    
     def getAvailableLanguages(self):
-        return self.available_langs
+        return self.available_langs.keys()
 
     def getDefaultLanguage(self):
         return self.default_lang
