@@ -1,3 +1,290 @@
+2004-10-08 18:43  longsleep
+
+	* availablelanguages.py: added list of english language names to
+	allow software to translate language names
+
+2004-10-08 17:06  longsleep
+
+	* version.txt, Extensions/Install.py: check if we have i18nlayer
+	and then use old portlet
+
+2004-10-08 16:52  longsleep
+
+	* LanguageTool.py, skins/LanguageTool/lt_i18nifyObject.py: removed
+	methods marked as deprecated added security declarations to methods
+	which missed them
+
+2004-09-13 15:00  tesdal
+
+	* skins/LanguageTool/global_languageselector.pt: Avoid nested
+	forms.
+
+2004-09-06 06:03  dtremea
+
+	* availablelanguages.py: Translated portuguese languages. Cleaned
+	up whitespaces.
+
+2004-09-06 06:02  dtremea
+
+	* skins/LanguageToolFlags/flag-ca.gif: Added Catalan flag.
+
+2004-09-06 00:32  limi
+
+	* skins/LanguageToolFlags/: README.txt, flag-ar.gif: Added generic
+	Arabic flag.
+
+2004-09-02 13:19  shh42
+
+	* LanguageTool.py: Add a descriptive title to the tool.
+
+2004-07-08 12:09  shh42
+
+	* skins/LanguageTool/prefs_languages.pt: Fix a typo.
+
+2004-07-03 18:47  limi
+
+	* Extensions/Install.py, skins/LanguageToolFlags/flag-af.gif: PLT
+	doesn't install the portlet by default anymore, but uses the
+	content language switch macro instead. Portlet is still included
+	and easy to enable, if needed.
+	
+	Added South-African flag.
+
+2004-07-03 18:22  limi
+
+	* tool.gif, skins/LanguageToolFlags/flag-plone.gif: New flag.
+
+2004-07-03 17:46  limi
+
+	* skins/LanguageTool/global_languageselector.pt: Added highlighting
+	of current language (flag). Requires Plone 2.0.4 or a recent SVN
+	checkout to be visible.
+
+2004-07-03 16:12  limi
+
+	* skins/LanguageTool/portlet_languages.pt: Wording change.
+
+2004-07-03 02:21  limi
+
+	* tool.gif, version.txt, Extensions/Install.py,
+	skins/LanguageTool/portlet_languages.pt,
+	skins/LanguageTool/prefs_languages.pt,
+	skins/LanguageToolFlags/flag-plone.gif: Added Language Control
+	Panel, and added links in the language portlet for it.
+
+2004-06-29 11:22  longsleep
+
+	* LanguageTool.py: use higher prio in negotiator chain of PTS
+
+2004-06-04 16:05  limi
+
+	* skins/LanguageToolFlags/: README.txt, flag-fa.gif, flag-fo.gif,
+	flag-ko.gif, flag-zh.gif: Added Korean, Chinese, Færøyene, Persian.
+
+2004-06-03 18:01  limi
+
+	* availablelanguages.py: Most of the languages should now be in
+	their native form.
+
+2004-06-03 12:50  godchap
+
+	* skins/LanguageToolFlags/flag-km.gif: add Cambodian flag for Khmer
+	language
+
+2004-06-03 12:35  godchap
+
+	* skins/LanguageToolFlags/flag-unident(km).gif: remove old Comoros
+	flag
+
+2004-06-03 11:13  limi
+
+	* skins/LanguageToolFlags/flag-eo.gif: Re-worked the Esperanto
+	"flag".
+
+2004-06-03 11:00  limi
+
+	* skins/LanguageToolFlags/: flag-ar-dz.gif, flag-ar-eg.gif,
+	flag-ar-iq.gif, flag-ar-jo.gif, flag-ar-qa.gif, flag-ar-sy.gif,
+	flag-ar-ye.gif, flag-dz.gif, flag-eg.gif, flag-en-us.gif,
+	flag-es-mx.gif, flag-es-uy.gif, flag-ge.gif, flag-iq.gif,
+	flag-jo.gif, flag-ka.gif, flag-mx.gif, flag-qa.gif, flag-sr.gif,
+	flag-sy.gif, flag-ua.gif, flag-us.gif, flag-uy.gif, flag-ye.gif,
+	flag-yu.gif: Fixed Algerian, Egyptian, Iraqi, Jordanian, Quatar,
+	Syrian, Yemen, USA, Mexico, Uruguay, Serbian, Georgian.
+
+2004-06-03 10:34  limi
+
+	* skins/LanguageToolFlags/: flag-cu.gif, flag-es-cu.gif,
+	flag-fr-qc.gif, flag-qc.gif: Fixed French/Quebec and Cuban.
+
+2004-06-03 10:26  limi
+
+	* skins/LanguageToolFlags/: flag-ar-bh.gif, flag-be.gif,
+	flag-bh.gif, flag-by.gif: Fixed Belarusian, Bahrain.
+
+2004-06-03 10:04  limi
+
+	* availablelanguages.py: Fixed Arabic display.
+
+2004-06-03 09:53  limi
+
+	* skins/LanguageToolFlags/: flag-km.gif, flag-unident(km).gif: km
+	moved to unidentified. If anyone can tell me what this flag is, I
+	appreciate it. :)
+
+2004-06-03 09:49  limi
+
+	* skins/LanguageToolFlags/: flag-ar-ly.gif, flag-ly.gif: Fixed
+	Libyan.
+
+2004-06-03 09:31  limi
+
+	* skins/LanguageToolFlags/: flag-ar-ps.gif, flag-ar-sa.gif,
+	flag-be.gif, flag-fr-be.gif, flag-ps.gif, flag-sa.gif: Fixed
+	Palestinian, Saudi Arabian and Belgian.
+
+2004-06-03 09:19  limi
+
+	* skins/LanguageToolFlags/: flag-ar-om.gif, flag-om.gif: Fixed
+	Oman.
+
+2004-06-03 09:12  limi
+
+	* skins/LanguageToolFlags/: flag-dj.gif, flag-fr-dj.gif: Fixed
+	Djibouti.
+
+2004-06-03 09:10  limi
+
+	* skins/LanguageToolFlags/: flag-ar-lb.gif, flag-lb.gif: Fixed
+	Lebanese.
+
+2004-06-03 09:06  limi
+
+	* skins/LanguageToolFlags/: flag-lo.gif, flag-la.gif: Corrected
+	Laotian.
+
+2004-06-03 09:01  limi
+
+	* skins/LanguageToolFlags/: flag-ar-kw.gif, flag-kw.gif: Fixed
+	Kuwait/Cornish.
+
+2004-06-03 08:29  limi
+
+	* skins/LanguageToolFlags/: flag-ar-ma.gif, flag-ma.gif: Fixing
+	Moroccan flags/codes.
+
+2004-06-03 08:16  limi
+
+	* skins/LanguageToolFlags/: flag-am.gif, flag-ar.gif,
+	flag-es-ar.gif, flag-hy.gif: Fixing Armenian and Argentinian
+	flags/codes.
+
+2004-06-03 08:08  limi
+
+	* skins/LanguageToolFlags/: flag-si.gif, flag-sl.gif: Fixing
+	Slovakian flag/code.
+
+2004-06-03 08:05  limi
+
+	* CREDITS.txt, README.txt: Replacing CREDITS.txt with a proper
+	README file.
+
+2004-06-03 08:01  limi
+
+	* skins/LanguageToolFlags/: flag-ee.gif, flag-et.gif: Fixing
+	Estonian flag/code.
+
+2004-06-03 07:48  limi
+
+	* skins/LanguageToolFlags/: flag-da.gif, flag-dk.gif: Corrected
+	Danish flag/code.
+
+2004-06-03 07:44  limi
+
+	* skins/LanguageToolFlags/: flag-cs.gif, flag-cz.gif: Corrected
+	Czech flag/code
+
+2004-06-03 07:36  limi
+
+	* skins/LanguageToolFlags/: flag-ar-tn.gif, flag-tn.gif: Corrected
+	Tunisian flag/code
+
+2004-06-03 07:32  limi
+
+	* skins/LanguageToolFlags/: flag-el.gif, flag-gr.gif, flag-he.gif,
+	flag-il.gif: Changed Hebrew and Greek language codes and flags.
+
+2004-06-03 07:24  limi
+
+	* skins/LanguageToolFlags/: flag-vi.gif, flag-vn.gif: changed
+	VIetnamese to correct language code
+
+2004-06-03 07:20  limi
+
+	* skins/LanguageToolFlags/flag-nn.gif: Adding Norwegian flag for
+	Nynorsk.
+
+2004-06-03 07:17  limi
+
+	* skins/LanguageToolFlags/: flag-ca.gif, flag-fr-ca.gif: Catalan !=
+	Canada ;)
+
+2004-06-03 07:16  limi
+
+	* availablelanguages.py: Updating all the language names to their
+	native language.
+
+2004-06-02 17:29  limi
+
+	* availablelanguages.py: Adding Japanese in the native name, the
+	rest to follow after I've done some testing. :)
+
+2004-06-02 17:15  longsleep
+
+	* availablelanguages.py: test checking of native lang code
+
+2004-06-02 16:27  limi
+
+	* skins/LanguageTool/prefs_languages.pt: Updated the prefs panel
+	code, it still doesn't work, but at least it doesn't throw errors
+	anymore ;)
+
+2004-06-02 07:17  limi
+
+	* skins/LanguageTool/: global_languageselector.pt,
+	portlet_languages.pt: - Added support for the new Language switcher
+	slot in Plone 2.0.4 - Moved the flags inside the link area
+
+2004-06-02 04:39  limi
+
+	* www/config.zpt, skins/LanguageTool/prefs_languages.pt: Initial
+	draft for a Plone Prefs panel for language selection, some spelling
+	fixes.
+
+2004-06-01 04:56  limi
+
+	* www/config.zpt: Fixed up some wording.
+
+2004-05-28 23:43  elvix
+
+	* skins/LanguageToolFlags/flag-eo.gif: adding flag for Esperanto.
+	thanks to Erick Alves Rezende
+
+2004-05-28 23:27  elvix
+
+	* LanguageTool.py, skins/LanguageTool/portlet_languages.pt,
+	www/config.zpt: added configuration  option to toggle flags on and
+	off for the portlet. Not everyone seems to want them
+
+2004-05-13 22:39  limi
+
+	* skins/LanguageToolFlags/: flag-ja.gif, flag-jp.gif: Japanese is
+	ja, not jp.
+
+2004-05-13 15:16  longsleep
+
+	* ChangeLog: updated changelog prepare for release
+
 2004-05-13 15:14  longsleep
 
 	* LanguageTool.py: added future warnings for the todeprecate
@@ -477,21 +764,14 @@
 
 2003-09-23 20:33  elvix
 
-	* skins/: LanguageTool/addSupportedLanguage.py,
-	LanguageTool/langConfig.pt, LanguageTool/languageSelectorMacro.pt,
-	language/addSupportedLanguage.py, language/langConfig.pt,
-	language/languageSelectorMacro.pt: made new skins-directory with
-	clearer name to avoid confusion.
-
-2003-09-23 20:25  elvix
-
-	* skins/language/cvs/: Entries, Repository, Root: [no log message]
+	* skins/LanguageTool/: addSupportedLanguage.py, langConfig.pt,
+	languageSelectorMacro.pt: made new skins-directory with clearer
+	name to avoid confusion.
 
 2003-09-23 12:59  elvix
 
-	* LanguageTool.py, availablelanguages.py,
-	skins/language/languageSelectorMacro.pt: factored out lanugage-list
-	into a new module, added sorting by value, macros
+	* LanguageTool.py, availablelanguages.py: factored out
+	lanugage-list into a new module, added sorting by value, macros
 
 2003-09-14 01:02  elvix
 
@@ -510,8 +790,5 @@
 2003-09-13 17:37  batlogg
 
 	* LanguageTool.py, refresh.txt, tool.gif, version.txt,
-	Extensions/Install.py, skins/language/addSupportedLanguage.py,
-	skins/language/langConfig.pt, skins/language/cvs/Entries,
-	skins/language/cvs/Repository, skins/language/cvs/Root,
-	www/config.zpt: Initial revision
+	Extensions/Install.py, www/config.zpt: Initial revision
 
