@@ -1,6 +1,150 @@
+2004-04-30 04:53  limi
+
+	* skins/LanguageTool/portlet_languages.pt: Fixed the portlet to use
+	the correct class.
+
+2004-04-27 21:21  tesdal
+
+	* LanguageTool.py, interfaces.py,
+	skins/LanguageTool/isTranslatable.py: Added translatable interface
+	and method and script to check for translatable.
+
+2004-04-22 01:14  tesdal
+
+	* Extensions/Install.py: Changed the install_subskin method to use
+	the one from AT. This might affect backwards compatibility.
+
+2004-04-21 20:41  elvix
+
+	* skins/LanguageTool/switchLanguage.py: small change to make
+	switcher-script forwards-compatible with the
+	plonesolutions-cleaned-up interfaces
+
+2004-04-21 14:43  limi
+
+	* skins/: LanguageTool/portlet_languages.pt,
+	LanguageToolFlags/flag-pt-br.gif, LanguageToolFlags/flag-br.gif:
+	Added some UI porn, each language now gets a flag next to itself :)
+
 2004-04-21 10:50  batlogg
 
-	* availableLanguages.py: added 'zh-hk':'Mandarin+Chinese (HongKong)'
+	* ChangeLog: [no log message]
+
+2004-04-21 10:49  batlogg
+
+	* availablelanguages.py: added 'zh-hk':'Mandarin+Chinese
+	(HongKong)'
+
+2004-04-20 23:31  limi
+
+	* Extensions/Install.py: Added LanguageToolFlags to the skin path
+
+2004-04-20 17:41  limi
+
+	* CREDITS.txt, skins/LanguageToolFlags/flag-ae.gif,
+	skins/LanguageToolFlags/flag-am.gif,
+	skins/LanguageToolFlags/flag-ar.gif,
+	skins/LanguageToolFlags/flag-at.gif,
+	skins/LanguageToolFlags/flag-az.gif,
+	skins/LanguageToolFlags/flag-be.gif,
+	skins/LanguageToolFlags/flag-bg.gif,
+	skins/LanguageToolFlags/flag-bh.gif,
+	skins/LanguageToolFlags/flag-br.gif,
+	skins/LanguageToolFlags/flag-by.gif,
+	skins/LanguageToolFlags/flag-ca.gif,
+	skins/LanguageToolFlags/flag-ch.gif,
+	skins/LanguageToolFlags/flag-cu.gif,
+	skins/LanguageToolFlags/flag-cz.gif,
+	skins/LanguageToolFlags/flag-de.gif,
+	skins/LanguageToolFlags/flag-dj.gif,
+	skins/LanguageToolFlags/flag-dk.gif,
+	skins/LanguageToolFlags/flag-dz.gif,
+	skins/LanguageToolFlags/flag-ee.gif,
+	skins/LanguageToolFlags/flag-eg.gif,
+	skins/LanguageToolFlags/flag-en.gif,
+	skins/LanguageToolFlags/flag-es.gif,
+	skins/LanguageToolFlags/flag-eu.gif,
+	skins/LanguageToolFlags/flag-fi.gif,
+	skins/LanguageToolFlags/flag-fr.gif,
+	skins/LanguageToolFlags/flag-ge.gif,
+	skins/LanguageToolFlags/flag-gr.gif,
+	skins/LanguageToolFlags/flag-hr.gif,
+	skins/LanguageToolFlags/flag-hu.gif,
+	skins/LanguageToolFlags/flag-il.gif,
+	skins/LanguageToolFlags/flag-iq.gif,
+	skins/LanguageToolFlags/flag-is.gif,
+	skins/LanguageToolFlags/flag-it.gif,
+	skins/LanguageToolFlags/flag-jo.gif,
+	skins/LanguageToolFlags/flag-jp.gif,
+	skins/LanguageToolFlags/flag-km.gif,
+	skins/LanguageToolFlags/flag-kw.gif,
+	skins/LanguageToolFlags/flag-la.gif,
+	skins/LanguageToolFlags/flag-lb.gif,
+	skins/LanguageToolFlags/flag-lt.gif,
+	skins/LanguageToolFlags/flag-ly.gif,
+	skins/LanguageToolFlags/flag-ma.gif,
+	skins/LanguageToolFlags/flag-mk.gif,
+	skins/LanguageToolFlags/flag-mx.gif,
+	skins/LanguageToolFlags/flag-nl.gif,
+	skins/LanguageToolFlags/flag-no.gif,
+	skins/LanguageToolFlags/flag-om.gif,
+	skins/LanguageToolFlags/flag-pl.gif,
+	skins/LanguageToolFlags/flag-ps.gif,
+	skins/LanguageToolFlags/flag-pt.gif,
+	skins/LanguageToolFlags/flag-qa.gif,
+	skins/LanguageToolFlags/flag-qc.gif,
+	skins/LanguageToolFlags/flag-ro.gif,
+	skins/LanguageToolFlags/flag-ru.gif,
+	skins/LanguageToolFlags/flag-sa.gif,
+	skins/LanguageToolFlags/flag-si.gif,
+	skins/LanguageToolFlags/flag-sk.gif,
+	skins/LanguageToolFlags/flag-so.gif,
+	skins/LanguageToolFlags/flag-su.gif,
+	skins/LanguageToolFlags/flag-sv.gif,
+	skins/LanguageToolFlags/flag-sy.gif,
+	skins/LanguageToolFlags/flag-th.gif,
+	skins/LanguageToolFlags/flag-tn.gif,
+	skins/LanguageToolFlags/flag-tr.gif,
+	skins/LanguageToolFlags/flag-ua.gif,
+	skins/LanguageToolFlags/flag-uk.gif,
+	skins/LanguageToolFlags/flag-un.gif,
+	skins/LanguageToolFlags/flag-us.gif,
+	skins/LanguageToolFlags/flag-uy.gif,
+	skins/LanguageToolFlags/flag-vn.gif,
+	skins/LanguageToolFlags/flag-ye.gif,
+	skins/LanguageToolFlags/flag-yu.gif: Adding country flags, updated
+	credits.
+
+2004-04-20 17:13  limi
+
+	* Extensions/Install.py, tool.gif,
+	skins/LanguageTool/portlet_language.pt,
+	skins/LanguageTool/portlet_languages.pt: - Changed PLT to use the
+	portlet_languages as the default portlet (the old one is still
+	present, just not active) - Renamed portal_language to
+	portalt_languages to conform with the portlet naming style - Added
+	a flag as the tool icon - hopefully we will have the Plone flag
+	soon ;)
+
+2004-04-13 18:06  fobmagog
+
+	* LanguageTool.py: added methods to get list / dictionary of
+	country codes / names
+
+2004-04-13 18:05  fobmagog
+
+	* availablelanguages.py: changed encoding to utf-8 added iso 3166
+	country codes and names
+
+2004-03-09 13:25  tesdal
+
+	* skins/LanguageTool/: langConfig.pt, langConfig.pt.metadata:
+	Checked template security - using .metadata instead of inline
+	redirect.
+
+2004-03-09 11:59  longsleep
+
+	* ChangeLog: regenerated changelog
 
 2004-03-09 11:53  longsleep
 
@@ -324,21 +468,14 @@
 
 2003-09-23 20:33  elvix
 
-	* skins/: LanguageTool/addSupportedLanguage.py,
-	LanguageTool/langConfig.pt, LanguageTool/languageSelectorMacro.pt,
-	language/addSupportedLanguage.py, language/langConfig.pt,
-	language/languageSelectorMacro.pt: made new skins-directory with
-	clearer name to avoid confusion.
-
-2003-09-23 20:25  elvix
-
-	* skins/language/cvs/: Entries, Repository, Root: [no log message]
+	* skins/LanguageTool/: addSupportedLanguage.py, langConfig.pt,
+	languageSelectorMacro.pt: made new skins-directory with clearer
+	name to avoid confusion.
 
 2003-09-23 12:59  elvix
 
-	* LanguageTool.py, availablelanguages.py,
-	skins/language/languageSelectorMacro.pt: factored out lanugage-list
-	into a new module, added sorting by value, macros
+	* LanguageTool.py, availablelanguages.py: factored out
+	lanugage-list into a new module, added sorting by value, macros
 
 2003-09-14 01:02  elvix
 
@@ -352,13 +489,10 @@
 
 2003-09-13 17:37  batlogg
 
-	* __init__.py, tool.gif, Extensions/__init__.py: [no log message]
+	* __init__.py, Extensions/__init__.py: [no log message]
 
 2003-09-13 17:37  batlogg
 
-	* LanguageTool.py, refresh.txt, version.txt, Extensions/Install.py,
-	skins/language/addSupportedLanguage.py,
-	skins/language/langConfig.pt, skins/language/cvs/Entries,
-	skins/language/cvs/Repository, skins/language/cvs/Root,
-	www/config.zpt: Initial revision
+	* LanguageTool.py, refresh.txt, tool.gif, version.txt,
+	Extensions/Install.py, www/config.zpt: Initial revision
 
