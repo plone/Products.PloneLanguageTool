@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.42 2004/03/09 10:53:44 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.43 2004/04/13 16:06:43 fobmagog Exp $ (Author: $Author: fobmagog $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -35,6 +35,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
     supported_langs = ['en']
     local_available_langs = {}
+    local_available_countries = {}
     
     use_path_negotiation = 1
     use_cookie_negotiation = 1
@@ -452,7 +453,38 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         wrapper.manage_renameObject(temp_id,lang)
         return wrapper
 
-    
+    def getAvailableCountries(self):
+        '''
+        return dictionary of available countries
+        '''
+        countries = availablelanguages.countries.copy()
+        if self.local_available_countries.keys():
+            countries.update(self.local_available_countries)
+        return countries
+
+    def listAvailableCountries(self):
+        '''
+        return sorted list of available countries (code, name)
+        '''
+        items = list(self.getAvailableCountries().items())
+        items.sort(lambda x, y: cmp(x[1], y[1]))
+        return items
+        
+    security.declareProtected(View, 'getNameForCountryCode')
+    def getNameForCountryCode(self, countryCode):
+        '''
+        return name for country code
+        '''
+        return self.getAvailableCountries().get(countryCode, countryCode)
+
+    security.declareProtected(ManagePortal, 'addCountry')
+    def addCountry(self, countryCode, countryDescription):
+        '''
+        add a custom country to this tool. This can override predefined ones
+        '''
+        self.local_available_countries[countryCode] = countryDescription
+        self._p_changed = 1
+
 class LanguageBinding:
     '''
     helper which holding language infos in request
