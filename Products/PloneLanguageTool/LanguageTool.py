@@ -139,7 +139,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         if lang:
             if lang in self.supported_langs:  
                 portal_url = getToolByName(self, 'portal_url')()
-                self.REQUEST.RESPONSE.setCookie('languagePreference',lang,path='/')  
+                self.REQUEST.RESPONSE.setCookie('I18N_CONTENT_LANGUAGE',lang,path='/')  
         if REQUEST:
             REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
 
@@ -149,9 +149,9 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         #should take HTTP_ACCEPT_LANGUAGE into consideration, but for now , we just use the cookie or the fallback,
         pref = self.fallback_lang or 'en'
         if self.REQUEST is not None:
-            langCookie = self.REQUEST.cookies.get('languagePreference')
-            #if langCookie in supported_langs:
-            pref = langCookie
+            langCookie = self.REQUEST.cookies.get('I18N_CONTENT_LANGUAGE')
+            if langCookie in self.supported_langs:
+                pref = langCookie
         return pref
             
 
