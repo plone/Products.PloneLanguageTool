@@ -81,8 +81,11 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             return None
         if req.environ.has_key( 'WEBDAV_SOURCE_PORT' ):
             return None
-        req.set('LANGUAGE_TOOL', self)
-       
+
+        # bind the languages
+        self.setLanguageBindings()
+
+
     security.declareProtected(ManagePortal, 'manage_setLanguageSettings')
     def manage_setLanguageSettings(self, defaultLanguage, supportedLanguages, setCookieN=None, setRequestN=None, REQUEST=None):
         ''' stores the tool settings '''
@@ -162,16 +165,16 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
                 
     security.declareProtected(View, 'getPreferredLanguage')
     def getPreferredLanguage(self):
-        ''' calculate the preferred language for a user'''
-        #we leave handling of  HTTP_ACCEPT_LANGUAGE to PTS
-        if self.REQUEST is not None:
-            langCookie = self.REQUEST.cookies.get('I18N_CONTENT_LANGUAGE')
-            if langCookie is not None and langCookie in self.supported_langs:
-                pref = langCookie
-            else:
-                pref = self.default_lang
-        return pref
-    
+        ''' get the preferred cookie language '''
+        
+        if not hasattr(self, 'REQUEST'): return None
+        
+        langCookie = self.REQUEST.cookies.get('I18N_CONTENT_LANGUAGE')
+        if langCookie is not None and langCookie in self.supported_langs:
+            return langCookie
+        else:
+            return None
+       
     def manage_beforeDelete(self, item, container):
         if item is self:
             handle = self.meta_type + '/' + self.getId()
@@ -183,35 +186,170 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             container = container.this()
             nc = BeforeTraverse.NameCaller(self.getId())
             BeforeTraverse.registerBeforeTraverse(container, nc, handle)
+
+
+    security.declareProtected(View, 'getRequestLanguages')        
+    def getRequestLanguages(self):
+        ''' parse the request and return language list '''
+        
+        if not hasattr(self, 'REQUEST'): return []
+        
+        # get browser accept languages
+        browser_pref_langs = self.REQUEST.get('HTTP_ACCEPT_LANGUAGE', '')
+        browser_pref_langs = browser_pref_langs.split(',')
+                                                                                
+        langs = []
+        i=0
+        length=len(browser_pref_langs)
+                                                                                
+        # parse quality strings and build a tuple
+        # like ((float(quality), lang), (float(quality), lang))
+        # which is sorted afterwards
+        # if no quality string is given then the list order
+        # is used as quality indicator
+        for lang in browser_pref_langs:
+            lang=lang.strip().lower().replace('_','-')
+            if lang:
+                l = lang.split(';', 2)
+                quality=[]
+                                                                                
+                if len(l) == 2:
+                    try:
+                        q=l[1]
+                        if q.startswith('q='):
+                            q=q.split('=', 2)[1]
+                            quality=float(q)
+                    except: pass
+                                                                                
+                if quality == []:
+                    quality=float(length-i)
+                                                                                
+                language=l[0]
+                if language in self.supported_langs:
+                    # if allowed the add language
+                    langs.append((quality, language))
+                i=i+1
+                                                                                
+        # sort and reverse it
+        langs.sort()
+        langs.reverse()
+
+        # filter quality string
+        langs = map(lambda x: x[1], langs)
+        
+        return langs            
             
+
+    security.declareProtected(View, 'setLanguageBindings')
+    def setLanguageBindings(self):
+        # setup the current language stuff  
+        
+        useCookie=self.use_cookie_negotiation
+        useRequest=self.use_request_negotiation
+        useDefault=1 # this should never be disabled
+
+        if not hasattr(self, 'REQUEST'): return
+        
+        binding = self.REQUEST.get('LANGUAGE_TOOL', None)
+        if not isinstance(binding, LanguageBinding):
+            # create new binding instance
+            binding=LanguageBinding(self)
+            
+        # bind languages
+        lang = binding.setLanguageBindings(useCookie, useRequest, useDefault)
+        
+        # set LANGUAGE to request
+        self.REQUEST['LANGUAGE']=lang
+        
+        # set bindings instance to request
+        self.REQUEST['LANGUAGE_TOOL']=binding
+        
+        return lang
+    
+    def getLanguageBindings(self):
+        # return the bound languages
+        # (language, default_language, languages_list)
+        
+        if not hasattr(self, 'REQUEST'): return (None, None, []) # cant do anything
+        
+        binding = self.REQUEST.get('LANGUAGE_TOOL', None)
+        if not isinstance(binding, LanguageBinding):
+            # not bound -> bind
+            self.setLanguageBindings()
+            binding=self.REQUEST.get('LANGUAGE_TOOL')
+            
+        return binding.getLanguageBindings()
+       
+        
+        
+
+class LanguageBinding:
+    """ helper which holding language infos in request """
+    
+    DEFAULT_LANGUAGE=None
+    LANGUAGE=None
+    LANGUAGE_LIST=[]
+    
+    def __init__(self, tool):
+        self.tool=tool
+        
+    def setLanguageBindings(self, useCookie=1, useRequest=1, useDefault=1):
+        # setup the current language stuff
+        
+        
+        langs=[]
+               
+        if useCookie: langsDefault=[self.tool.getPreferredLanguage(),]
+        else: langsCookie=[]
+            
+        if useRequest: langsRequest=self.tool.getRequestLanguages()
+        else: langsRequest=[]
+         
+        if useDefault: langsDefault=[self.tool.getDefaultLanguage(),]
+        else: langsDefault=[]
+        
+        # build list
+        langs = langsDefault+langsRequest+langsDefault
+        
+        # filter None languages
+        langs = filter(lambda x: x is not None, langs)
+        
+        self.DEFAULT_LANGGUAGE=langs[-1]
+        self.LANGUAGE=langs[0]
+        self.LANGUAGE_LIST=langs[1:-1]
+        
+        return self.LANGUAGE
+
+    
+    def getLanguageBindings(self):
+        # return bound languages
+        # (language, default_language, languages_list)
+        
+        return (self.LANGUAGE, self.DEFAULT_LANGUAGE, self.LANGUAGE_LIST)
+        
 
 class PrefsForPTS:
     """ this one should hook into pts"""
-    def __init__(self, here):
-        self._env = here
+    def __init__(self, context):
+        self._env = context
         self.languages = []
-        LanguageTool = here.get('LANGUAGE_TOOL')
-        if LanguageTool is None:
+
+        binding = here.get('LANGUAGE_TOOL')
+        if not isinstance(binding, LanguageBinding):
             return None
-        if not hasattr(LanguageTool, 'REQUEST'):
-            LanguageTool=LanguageTool.__of__(RequestContainer(REQUEST=here))
-        self.pref = LanguageTool.getPreferredLanguage()
-        if self.pref is None:
-            pass
-        else:
-            self.languages.append(self.pref)
-        self.languages.append(LanguageTool.getDefaultLanguage())
-        #raise(str(self.languages))
+
+        self.pref = binding.getLanguageBindings()
+        self.languages=[self.pref[0],]+self.pref[2]+[self.pref[1],]
+
         return None
  
     def getPreferredLanguages(self):
-        """ language override for pts"""
-        try:
-            return self.languages
-        except:
-            return []
+        """ return the list of the bound langs """
+        try: return self.languages
+        except: return []
     
 if _hasPTS is not None:
     registerLangPrefsMethod({'klass':PrefsForPTS,'priority':15 })
 
+    
 InitializeClass(LanguageTool)
