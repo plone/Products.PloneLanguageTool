@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.43 2004/04/13 16:06:43 fobmagog Exp $ (Author: $Author: fobmagog $)
+# $Id: LanguageTool.py,v 1.44 2004/04/27 19:21:16 tesdal Exp $ (Author: $Author: tesdal $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -14,6 +14,7 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Acquisition import aq_base
 from ZPublisher import BeforeTraverse
 from ZPublisher.HTTPRequest import HTTPRequest
+from interfaces import ITranslatable
 
 try:
     from Products.PlacelessTranslationService.Negotiator import registerLangPrefsMethod
@@ -390,6 +391,10 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             binding = self.REQUEST.get('LANGUAGE_TOOL')
             
         return binding.getLanguageBindings()
+
+    security.declarePublic('isTranslatable')
+    def isTranslatable(self, obj):
+        return ITranslatable.isImplementedBy(obj)
 
     def i18nContentTypes(self):
         '''
