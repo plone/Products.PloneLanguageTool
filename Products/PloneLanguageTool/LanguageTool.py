@@ -31,7 +31,7 @@ except: _hasPTS=None
 
 
 class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
-    """ CMF Syndication Client  """
+    """ Language Administration Tool For Plone  """
 
     id        = 'portal_languages'
     meta_type = 'Plone Language Tool'
@@ -163,17 +163,24 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             if REQUEST:
                 REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
                 
-    security.declareProtected(View, 'getPreferredLanguage')
-    def getPreferredLanguage(self):
+    security.declareProtected(View, 'getLanguageCookie')
+    def getLanguageCookie(self):
         ''' get the preferred cookie language '''
-        
         if not hasattr(self, 'REQUEST'): return None
-        
         langCookie = self.REQUEST.cookies.get('I18N_CONTENT_LANGUAGE')
         if langCookie is not None and langCookie in self.supported_langs:
             return langCookie
         else:
             return None
+
+    security.declareProtected(View, 'getLanguageCookie')
+    def getPreferredLanguage(self):
+        ''' get the preferred site language '''
+        l = self.getLanguageBindings()
+        if l:
+            return l[0]
+        else:
+            return self.default_lang
        
     def manage_beforeDelete(self, item, container):
         if item is self:
@@ -299,7 +306,7 @@ class LanguageBinding:
         
         langs=[]
                
-        if useCookie: langsCookie=[self.tool.getPreferredLanguage(),]
+        if useCookie: langsCookie=[self.tool.getLanguageCookie(),]
         else: langsCookie=[]
             
         if useRequest: langsRequest=self.tool.getRequestLanguages()
