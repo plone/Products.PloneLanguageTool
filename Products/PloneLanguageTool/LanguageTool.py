@@ -132,9 +132,8 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         for i in LangCodes:
             self.supported_langs.remove(i)
 
-            
     # some methods that should be user-available
-    security.declareProtected(ManagePortal, 'View')
+    security.declareProtected(View, 'setPreferredLanguageCookie')
     def setPreferredLanguageCookie(self,lang=None, REQUEST=None):
         ''' sets a cookie for overriding language negotiation '''
         if lang:
@@ -143,6 +142,18 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
                 self.REQUEST.RESPONSE.setCookie('languagePreference',lang,path='/')  
         if REQUEST:
             REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
+
+    security.declareProtected(View, 'getPreferredLanguage')
+    def getPreferredLanguage(self):
+        ''' calculate the preferred language for a user'''
+        #should take HTTP_ACCEPT_LANGUAGE into consideration, but for now , we just use the cookie or the fallback,
+        pref = self.fallback_lang or 'en'
+        if self.REQUEST is not None:
+            langCookie = self.REQUEST.cookies.get('languagePreference')
+            #if langCookie in supported_langs:
+            pref = langCookie
+        return pref
+            
 
 
 InitializeClass(LanguageTool)

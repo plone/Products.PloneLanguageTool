@@ -13,14 +13,12 @@
     <div class="body">          
     <form tal:attributes="action string:${portal_url}/portal_languages/setPreferredLanguageCookie" method="post"
      tal:define="served_languages here/portal_languages/listSupportedLanguages;
-                 langCookie python:request.cookies.get('languagePreference','');
-                 master_language here/portal_languages/getDefaultLanguage"
+                 prefLang here/portal_languages/getPreferredLanguage"
                  tal:condition="served_languages|nothing"
                  > 
             <select name="lang" onchange="this.form.submit()" >
-                <option tal:repeat="lang served_languages" tal:content="python:lang[1]" tal:attributes="value python:lang[0];selected python:langCookie == lang[0]"></option>
+                <option tal:repeat="lang served_languages" tal:content="python:lang[1]" tal:attributes="value python:lang[0];selected python:prefLang == lang[0]"></option>
             </select>
-            <p tal:content="langCookie"></p>
     </form>
     </div>
 </div>
