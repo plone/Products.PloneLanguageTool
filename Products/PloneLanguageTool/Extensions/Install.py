@@ -5,6 +5,14 @@ from Products.CMFCore.DirectoryView import addDirectoryViews
 from Products.Archetypes.Extensions.utils import install_subskin
 from Products.CMFCore.CMFCorePermissions import ManagePortal
 
+
+# check for I18NLayer
+try: 
+   from Products import I18NLayer
+   hasI18NLayer=1
+except: hasI18NLayer=0
+
+
 _globals = globals()
 
 configlets = \
@@ -31,11 +39,13 @@ def install_actions(self, out):
 
 def addLanguageSelectorSlot(self,out):
     # add language selector portlet
-    
-    # old portlet with i18nLayer support:
-    # slot = "here/languageSelectorMacro/macros/globalLanguageSelector"
-    
-    slot = "here/portlet_languages/macros/portlet"
+   
+    if hasI18NLayer: 
+        # old portlet with i18nLayer support:
+        slot = "here/languageSelectorMacro/macros/globalLanguageSelector"
+    else: 
+        # new portlet
+        slot = "here/portlet_languages/macros/portlet"
 
     left_slots=getattr(self,'left_slots', None)
     right_slots=getattr(self, 'right_slots', ())
