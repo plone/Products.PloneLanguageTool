@@ -24,9 +24,11 @@ class ITranslatable(Interface):
         Removes a translation
         """
 
-    def getTranslation(language):
+    def getTranslation(language='language'):
         """
         Return the object corresponding to a translated version or None.
+        If called without arguments it returns the translation in the currently
+        selected language, or self.
         """
  
     def getTranslationLanguages():
@@ -54,18 +56,12 @@ class ITranslatable(Interface):
         Return the original, canonical translation of this content.
         """
 
-    def setTranslationLanguage(language):
+    def setLanguage(language):
         """
-        Sets the language for the current translation
-        """
-
-    def getTranslationLanguage():
-        """
-        Returns the language of this translation
+        Sets the language for the current translation - same as DC
         """
 
-    def initializeTranslation():
+    def Language():
         """
-        Initializes the object as a translation, would typically be called by
-        addTranslation.
+        Returns the language of this translation - same as DC
         """
