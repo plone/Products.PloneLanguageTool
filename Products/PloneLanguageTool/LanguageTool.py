@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.30 2003/10/02 15:43:20 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.31 2003/10/06 15:34:25 longsleep Exp $ (Author: $Author: longsleep $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -166,7 +166,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     security.declareProtected(ManagePortal, 'removeSupportedLanguages')
     def removeSupportedLanguages(self, langCodes):
         alist = self.supported_langs[:]
-        for i in LangCodes:
+        for i in langCodes:
             alist.remove(i)
         self.supported_langs = alist
 
