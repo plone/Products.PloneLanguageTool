@@ -89,7 +89,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     def listSupportedLanguages(self):
         r = []
         for i in self.supported_langs:
-            r.append((i,self.available_langs[i]))
+            r.append((i,self.AVAILABLE_LANGUAGES[i]))
         return r
 
     def getSupportedLanguages(self):
