@@ -3,7 +3,6 @@ from StringIO import StringIO
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.DirectoryView import addDirectoryViews
 
-SKIN_NAME = "LanguageTool"
 _globals = globals()
 
 def install_tools(self, out):
@@ -15,7 +14,7 @@ def install_actions(self, out):
     at = getToolByName(self, "portal_actions")
     at.manage_aproviders('portal_languages', add_provider=1)
 
-def install_subskin(self, out, skin_name=SKIN_NAME, globals=lang_globals):
+def install_subskin(self, out, skin_name=None, globals=lang_globals):
     skinstool=getToolByName(self, 'portal_skins')
     if skin_name not in skinstool.objectIds():
         addDirectoryViews(skinstool, 'skins', globals)
@@ -57,7 +56,8 @@ def install(self):
 
     install_tools(self, out)
     install_actions(self, out)
-    install_subskin(self, out)
+    install_subskin(self, out, skin_name="LanguageTool")
+    install_subskin(self, out, skin_name="LanguageToolFlags")
     addLanguageSelectorSlot(self,out)
     return out.getvalue()
 
