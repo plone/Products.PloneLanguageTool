@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.26 2003/10/01 21:24:17 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.27 2003/10/01 21:31:14 longsleep Exp $ (Author: $Author: longsleep $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -137,8 +137,8 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     # some convenience functions to improve the UI:
     security.declareProtected(ManagePortal, 'addSupportedLanguage')
     def addSupportedLanguage(self, langCode):
-        if (langCode in self.AVAILABLE_LANGUAGES.keys()) and not langCode in self.supported_langs:
-            alist = self.supported_langs[:]
+        alist = self.supported_langs[:]
+        if (langCode in self.AVAILABLE_LANGUAGES.keys()) and not langCode in alist:
             alist.append(langCode) 
             self.supported_langs = alist
             
