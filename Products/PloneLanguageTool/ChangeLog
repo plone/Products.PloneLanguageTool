@@ -1,3 +1,12 @@
+2004-03-06 06:10  deo
+
+	* LanguageTool.py: Standardized indentation and changed 
+    getNameForLanguageCode to looks for language name at PTS.
+
+	* skins/LanguageTool/languageSelectorMacro.pt,
+	skins/LanguageTool/portlet_language.pt:	Standardized indentation
+	and changed to display language name already translated.
+
 2004-03-01 11:19  longsleep
 
 	* LanguageTool.py, availablelanguages.py, www/config.zpt: code

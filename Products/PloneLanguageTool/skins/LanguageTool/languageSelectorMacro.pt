@@ -1,43 +1,82 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
-      lang="en-US">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      lang="en"
+      i18n:domain="plone">
 
 <body>
 
+<div class="box"
+     id="portlet-global-language-selector"
+     metal:define-macro="globalLanguageSelector"
+     tal:define="PTS modules/Products/PlacelessTranslationService | nothing"
+     tal:condition="PTS">
 
+    <h5 i18n:translate="label_language">Language</h5>  
 
-<div class="box" id="portlet-global-language-selector" metal:define-macro="globalLanguageSelector">
-         
-    <h5>Languages</h5>  
-      
     <div class="body">     
-    <div class="content even" tal:define="served_languages here/portal_languages/listSupportedLanguages;
-                 boundLanguages here/portal_languages/getLanguageBindings;
-                 prefLang python:boundLanguages[0];"
-                 tal:condition="served_languages|nothing">     
-   
-    <div tal:condition="python:len(served_languages) > 8">
-    <form action="switchLanguage" method="post" tal:attributes="action string:${here/absolute_url}/switchLanguage" > 
-            <select name="set_language" onchange="this.form.submit()" >
-                <option tal:repeat="lang served_languages" tal:content="python:lang[1]" tal:attributes="value python:lang[0];selected python:prefLang == lang[0]"></option>
-            </select>
-            
-        
-    </form>
-    </div>
-    
-    <div tal:condition="python:len(served_languages) <= 8" tal:repeat="lang served_languages">
-                 <b tal:omit-tag="python:prefLang != lang[0]"><a href="" tal:define="code python:lang[0]" tal:attributes="href string:${here/absolute_url}/switchLanguage?set_language=${code}"  tal:content="python:lang[1]"></a></b>          
-    </div>
-    
-    
-    </div> 
-    <div class="content odd" tal:condition="here/insideI18NLayer| nothing"> 
-        <div tal:condition="python:here.portal_membership.checkPermission('Modify portal content', here.retrieveI18NContentLayerOb()) or here.portal_membership.checkPermission('Add portal content', here.retrieveI18NContentLayerOb())">
-              <a href="#" tal:attributes="href string:${here/retrieveI18NContentLayerURL}/i18nlayer_languages_form">Translate</a>
+
+        <div class="content even"
+              tal:define="served_languages here/portal_languages/listSupportedLanguages;
+                          boundLanguages here/portal_languages/getLanguageBindings;
+                          prefLang python:boundLanguages[0];"
+              tal:condition="served_languages | nothing">     
+
+            <div tal:condition="python:len(served_languages) > 8">
+
+                <form action="switchLanguage"
+                      method="post"
+                      tal:attributes="action string:${here/absolute_url}/switchLanguage" > 
+
+                    <select name="set_language" onchange="this.form.submit()" >
+                        <option tal:repeat="lang served_languages"
+                                tal:content="python:here.portal_languages.getNameForLanguageCode(lang[0]) or lang[1]"
+                                tal:attributes="selected python:prefLang == lang[0];
+                                                value python:lang[0]">Language</option>
+                    </select>
+
+                </form>
+
+            </div>
+
+            <div tal:condition="python:len(served_languages) <= 8"
+                 tal:repeat="lang served_languages">
+
+                <strong tal:omit-tag="python:prefLang != lang[0]">
+
+                    <a href=""
+                       tal:define="code python:lang[0]"
+                       tal:attributes="href string:${here/absolute_url}/switchLanguage?set_language=${code}"
+                       tal:content="python:here.portal_languages.getNameForLanguageCode(lang[0]) or lang[1]">Language</a>
+
+                </strong>
+
+            </div>
+
+        </div> 
+
+        <div class="content odd" tal:condition="here/insideI18NLayer | nothing"> 
+
+            <div tal:condition="python:here.portal_membership.checkPermission('Modify portal content',
+                                       here.retrieveI18NContentLayerOb())
+                                       or
+                                       here.portal_membership.checkPermission('Add portal content',
+                                       here.retrieveI18NContentLayerOb())">
+
+                <a href="#"
+                   tal:attributes="href string:${here/retrieveI18NContentLayerURL}/i18nlayer_languages_form"
+                   i18n:translate="label_translate">Translate</a>
+
+            </div>
+
         </div>
+
     </div>
-    </div>
+
 </div>
+
 </body>
+
 </html>
