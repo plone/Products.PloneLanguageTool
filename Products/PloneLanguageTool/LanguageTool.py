@@ -1,11 +1,8 @@
-import os, os.path
-import re
-import locale
+# $Id: LanguageTool.py,v 1.22 2003/09/29 22:47:40 longsleep Exp $ (Author: $Author: longsleep $)
+
+import os, re
 from types import StringType, UnicodeType
-
 from AccessControl import ClassSecurityInfo
-from BTrees.OOBTree import OOBTree
-
 from Globals import InitializeClass, package_home
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.Expression import Expression
@@ -14,13 +11,8 @@ from Products.CMFCore.ActionInformation import ActionInformation
 from Products.CMFCore.ActionProviderBase import ActionProviderBase
 from Products.CMFCore.utils import UniqueObject, getToolByName
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from StringIO import StringIO
 from Acquisition import aq_base
-from ComputedAttribute import ComputedAttribute
 from Products.Archetypes.debug import log
-
-import availablelanguages
-
 from ZPublisher import BeforeTraverse
 from ZPublisher.HTTPRequest import HTTPRequest
 
@@ -28,6 +20,9 @@ try:
     from Products.PlacelessTranslationService.Negotiator import registerLangPrefsMethod
     _hasPTS=1
 except: _hasPTS=None
+
+import availablelanguages
+
 
 
 class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
@@ -106,6 +101,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
 
     def sortedDictItems(self,dict):
+        # XXX: dont leave me a member of the class
         items = list(dict.items())
         items.sort(lambda x, y: cmp(x[1], y[1]))
         return items
@@ -124,6 +120,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         return self.sortedDictItems(self.AVAILABLE_LANGUAGES)
     
     def getAvailableLanguages(self):
+        # XXX: this method is not working
         return self.available_langs.keys()
 
     def getDefaultLanguage(self):
@@ -143,17 +140,20 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     
     def deleteLanguage(self, langCode):
         # FIXME: to implement
+        # XXX: this is not persistent
         self.AVAILABLE_LANGUAGES.remove(langCode)
        
     # some convenience functions to improve the UI:
     security.declareProtected(ManagePortal, 'addSupportedLanguage')
     def addSupportedLanguage(self, langCode):
         if (langCode in self.AVAILABLE_LANGUAGES.keys()) and not langCode in self.supported_langs:
+            # XXX: this is not persistent
             self.supported_langs.append(langCode)
             
     security.declareProtected(ManagePortal, 'removeSupportedLanguages')
     def removeSupportedLanguages(self, langCodes):
         for i in LangCodes:
+            # XXX: this is not persistent
             self.supported_langs.remove(i)
 
     # some methods that should be user-available
@@ -162,6 +162,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         ''' sets a cookie for overriding language negotiation '''
         portal_url = getToolByName(self, 'portal_url')()
         cur = self.getLanguageCookie()
+        # XXX: use get method to get the supported langs
         if lang and lang in self.supported_langs and lang != cur:   
             self.REQUEST.RESPONSE.setCookie('I18N_LANGUAGE',lang,path='/') 
         if noredir is None:                
@@ -173,19 +174,21 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         ''' get the preferred cookie language '''
         if not hasattr(self, 'REQUEST'): return None
         langCookie = self.REQUEST.cookies.get('I18N_LANGUAGE')
+        # XXX: use get method to get the supported langs
         if langCookie is not None and langCookie in self.supported_langs:
             return langCookie
         else:
             return None
 
-    security.declareProtected(View, 'getLanguageCookie')
+    security.declareProtected(View, 'getPreferredLanguage')
     def getPreferredLanguage(self):
         ''' get the preferred site language '''
         l = self.getLanguageBindings()
-        if l:
+        if l[0]:
             return l[0]
         else:
-            return self.default_lang
+            return l[1] # this is the default language
+
        
     def manage_beforeDelete(self, item, container):
         if item is self:
@@ -237,6 +240,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
                     quality=float(length-i)
                                                                                 
                 language=l[0]
+                # XXX: use get method to get the supported langs
                 if language in self.supported_langs:
                     # if allowed the add language
                     langs.append((quality, language))
@@ -283,7 +287,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         # return the bound languages
         # (language, default_language, languages_list)
         
-        if not hasattr(self, 'REQUEST'): return (None, None, []) # cant do anything
+        if not hasattr(self, 'REQUEST'): return (None, self.tool.getDefaultLanguage(), []) # cant do anything
         
         binding = self.REQUEST.get('LANGUAGE_TOOL', None)
         if not isinstance(binding, LanguageBinding):
@@ -299,6 +303,8 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 class LanguageBinding:
     """ helper which holding language infos in request """
     
+    #XXX: make AVAILABLE_LANGUAGES available here as well
+
     DEFAULT_LANGUAGE=None
     LANGUAGE=None
     LANGUAGE_LIST=[]
@@ -373,3 +379,4 @@ if _hasPTS is not None:
 
     
 InitializeClass(LanguageTool)
+
