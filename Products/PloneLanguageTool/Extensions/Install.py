@@ -3,7 +3,7 @@ from StringIO import StringIO
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.DirectoryView import addDirectoryViews
 
-SKIN_NAME = "language"
+SKIN_NAME = "LanguageTool"
 _globals = globals()
 
 def install_tools(self, out):
