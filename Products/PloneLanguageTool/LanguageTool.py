@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.25 2003/10/01 20:12:06 elvix Exp $ (Author: $Author: elvix $)
+# $Id: LanguageTool.py,v 1.26 2003/10/01 21:24:17 longsleep Exp $ (Author: $Author: longsleep $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -20,6 +20,7 @@ try:
     from Products.PlacelessTranslationService.Negotiator import registerLangPrefsMethod
     _hasPTS=1
 except: _hasPTS=None
+
 
 import availablelanguages
 
@@ -143,10 +144,10 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             
     security.declareProtected(ManagePortal, 'removeSupportedLanguages')
     def removeSupportedLanguages(self, langCodes):
+        alist = self.supported_langs[:]
         for i in LangCodes:
-            alist =  self.supported_langs[:]
             alist.remove(i)
-            self.supported_langs = alist
+        self.supported_langs = alist
 
     # some methods that should be user-available
     security.declareProtected(View, 'setLanguageCookie')
@@ -290,8 +291,6 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 class LanguageBinding:
     """ helper which holding language infos in request """
     
-    #XXX: make AVAILABLE_LANGUAGES available here as well
-
     DEFAULT_LANGUAGE=None
     LANGUAGE=None
     LANGUAGE_LIST=[]
