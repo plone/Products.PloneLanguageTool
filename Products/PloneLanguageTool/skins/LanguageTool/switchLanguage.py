@@ -14,6 +14,11 @@ here_url=context.absolute_url()
 try: 
     layer_url=context.retrieveI18NContentLayerURL()
     available_languages=context.retrieveFilteredLanguages().keys()
+    if not available_languages:
+        try:
+            available_languages=context.getTranslationLanguages()
+            # we are probably in psol-redux branch of i18n-layer
+        except: pass
 except: 
     layer_url=here_url
     available_languages=()
