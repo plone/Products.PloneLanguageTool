@@ -16,7 +16,7 @@ languages = {
 'bn':'Bengali',  
 'bo':'Tibetan',  
 'br':'Breton',  
-'ca':'Catalan',  
+'ca':'Catalan',
 'co':'Corsican',  
 'cs':'Czech',  
 'cy':'Welsh',  
@@ -54,7 +54,7 @@ languages = {
 'is':'Icelandic',  
 'it':'Italian',  
 'iu':'Inuktitut',  
-'ja':'Japanese',  # 日本語
+'ja':'日本語',
 'jw':'Javanese',  
 'ka':'Georgian',  
 'kk':'Kazakh',  
