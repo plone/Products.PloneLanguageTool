@@ -35,7 +35,7 @@
     <div class="content odd" tal:condition="here/insideI18NLayer| nothing"> 
         <div tal:condition="python:here.portal_membership.checkPermission('Modify portal content', here.retrieveI18NContentLayerOb()) or here.portal_membership.checkPermission('Add portal content', here.retrieveI18NContentLayerOb())">
               <a href="#" tal:attributes="href string:${here/retrieveI18NContentLayerURL}/i18nlayer_languages_form">Translate</a>
-        </div>  
+        </div>
     </div>
 
     <div class="content odd" tal:condition="not:here/insideI18NLayer| nothing"> 
