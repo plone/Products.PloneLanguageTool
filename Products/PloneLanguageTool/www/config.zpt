@@ -26,10 +26,13 @@
                         tal:repeat="lang here/listAvailableLanguages"
                         tal:attributes="value python: lang[0];
                                         selected python:lang[0] in here.getSupportedLanguages()"
-                        tal:content="python: lang[1]">
+                        tal:content="python: lang[1]+'  ('+lang[0]+')'">
                     English
                 </option>
             </select>
+        </p>
+
+        <p><input type="checkbox" name="setUseCombinedLanguageCodes" value="1" tal:attributes="checked here/use_combined_language_codes| nothing" /> Allow combined language codes like de_DE or en_UK.
         </p>
         
         <h2>Negotiation Scheme</h2>
