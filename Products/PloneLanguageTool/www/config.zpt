@@ -36,7 +36,7 @@
         <p>Check the language negotiation schemes that apply to this site</p>
         <ol>
             <li><p><input type="checkbox" name="setCookieN" value="1" tal:attributes="checked here/use_cookie_negotiation| nothing" /> Use cookie negotiation.</p></li>
-            <li><p><input type="checkbox" name="setRequestN" value="1" tal:attributes="checked here/use_request_negotiation | nothing" /> Use cookie negotiation.</p></li>
+            <li><p><input type="checkbox" name="setRequestN" value="1" tal:attributes="checked here/use_request_negotiation | nothing" /> Use browser language request negotiation.</p></li>
             <li><p>Default fallback (always enabled)</p></li>
         </ol>   
 
