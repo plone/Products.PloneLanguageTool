@@ -12,15 +12,13 @@
       
     <div class="body">     
     <div class="content" tal:define="served_languages here/portal_languages/listSupportedLanguages;
-                 prefLang here/portal_languages/getPreferredLanguage"
+                 boundLanguages here/portal_languages/getLanguageBindings;
+                 prefLang python:boundLanguages[0];"
                  tal:condition="served_languages|nothing">     
-    
-    
+   
     <div tal:condition="python:len(served_languages) > 8">
-    <form action="switchLanguage" method="post"
-    
-                 > 
-            <select name="lang" onchange="this.form.submit()" >
+    <form action="switchLanguage" method="post" tal:attributes="action string:${here/absolute_url}/switchLanguage" > 
+            <select name="set_language" onchange="this.form.submit()" >
                 <option tal:repeat="lang served_languages" tal:content="python:lang[1]" tal:attributes="value python:lang[0];selected python:prefLang == lang[0]"></option>
             </select>
             
@@ -29,7 +27,7 @@
     </div>
     
     <div tal:condition="python:len(served_languages) <= 8" tal:repeat="lang served_languages">
-                 <b tal:omit-tag="python:prefLang != lang[0]"><a href="" tal:define="code python:lang[0]" tal:attributes="href string:switchLanguage?lang=${code}"  tal:content="python:lang[1]"></a></b>          
+                 <b tal:omit-tag="python:prefLang != lang[0]"><a href="" tal:define="code python:lang[0]" tal:attributes="href string:${here/absolute_url}/switchLanguage?set_language=${code}"  tal:content="python:lang[1]"></a></b>          
     </div>
     
     
