@@ -11,7 +11,7 @@
     <h5>Languages</h5>  
       
     <div class="body">     
-    <div class="content>     
+    <div class="content">     
     <form tal:attributes="action string:${portal_url}/portal_languages/setPreferredLanguageCookie" method="post"
      tal:define="served_languages here/portal_languages/listSupportedLanguages;
                  prefLang here/portal_languages/getPreferredLanguage"
