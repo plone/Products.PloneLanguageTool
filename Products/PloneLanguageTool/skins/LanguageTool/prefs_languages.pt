@@ -64,7 +64,7 @@
             <li><p><input type="checkbox" name="setAllowContentLanguageFallback" value="1" tal:attributes="checked here/allow_content_language_fallback| nothing" /> Allow content language fallback.</p></li>        
         </ol>
         
-        <input type=submit i18n:attributes="value" value="Save">
+        <input type="submit" class="context" i18n:attributes="value" value="Save" />
     </form>
 
 </div>

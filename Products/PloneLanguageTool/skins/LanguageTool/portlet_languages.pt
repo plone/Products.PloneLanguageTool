@@ -67,6 +67,17 @@
                 
             </div>
 
+            <div class="portletContent even"
+                 tal:condition="python: member.has_role('Manager')">
+            
+                <a href=""
+                   class="portletMore"
+                   tal:attributes="href string: ${portal_url}/portal_languages/prefs_languages">
+                Language setup&#8230;
+                </a>
+            
+            </div>
+
         </div>
 
     </div>
