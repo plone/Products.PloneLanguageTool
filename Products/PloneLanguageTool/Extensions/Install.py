@@ -2,6 +2,7 @@ from Products.PloneLanguageTool import lang_globals
 from StringIO import StringIO
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.DirectoryView import addDirectoryViews
+from Products.Archetypes.Extensions.utils import install_subskin
 
 _globals = globals()
 
@@ -13,24 +14,6 @@ def install_tools(self, out):
 def install_actions(self, out):
     at = getToolByName(self, "portal_actions")
     at.manage_aproviders('portal_languages', add_provider=1)
-
-def install_subskin(self, out, skin_name=None, globals=lang_globals):
-    skinstool=getToolByName(self, 'portal_skins')
-    if skin_name not in skinstool.objectIds():
-        addDirectoryViews(skinstool, 'skins', globals)
-
-    for skinName in skinstool.getSkinSelections():
-        path = skinstool.getSkinPath(skinName)
-        path = [i.strip() for i in  path.split(',')]
-        try:
-            if skin_name not in path:
-                path.insert(path.index('custom') +1, skin_name)
-        except ValueError:
-            if skin_name not in path:
-                path.append(skin_name)
-
-        path = ','.join(path)
-        skinstool.addSkinSelection( skinName, path)
 
 def addLanguageSelectorSlot(self,out):
     # add language selector portlet
@@ -56,8 +39,7 @@ def install(self):
 
     install_tools(self, out)
     install_actions(self, out)
-    install_subskin(self, out, skin_name="LanguageTool")
-    install_subskin(self, out, skin_name="LanguageToolFlags")
+    install_subskin(self, out, lang_globals)
     addLanguageSelectorSlot(self,out)
     return out.getvalue()
 
