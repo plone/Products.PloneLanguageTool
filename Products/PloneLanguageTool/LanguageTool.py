@@ -153,12 +153,13 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             self.supported_langs.remove(i)
 
     # some methods that should be user-available
-    security.declareProtected(View, 'setPreferredLanguageCookie')
-    def setPreferredLanguageCookie(self,lang=None, REQUEST=None,noredir=None):
+    security.declareProtected(View, 'setLanguageCookie')
+    def setLanguageCookie(self,lang=None, REQUEST=None,noredir=None):
         ''' sets a cookie for overriding language negotiation '''
         portal_url = getToolByName(self, 'portal_url')()
-        if lang and lang in self.supported_langs:  
-            self.REQUEST.RESPONSE.setCookie('I18N_CONTENT_LANGUAGE',lang,path='/') 
+        cur = self.getLanguageCookie()
+        if lang and lang in self.supported_langs and lang != cur:   
+            self.REQUEST.RESPONSE.setCookie('I18N_LANGUAGE',lang,path='/') 
         if noredir is None:                
             if REQUEST:
                 REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
@@ -167,7 +168,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     def getLanguageCookie(self):
         ''' get the preferred cookie language '''
         if not hasattr(self, 'REQUEST'): return None
-        langCookie = self.REQUEST.cookies.get('I18N_CONTENT_LANGUAGE')
+        langCookie = self.REQUEST.cookies.get('I18N_LANGUAGE')
         if langCookie is not None and langCookie in self.supported_langs:
             return langCookie
         else:
@@ -261,7 +262,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         if not isinstance(binding, LanguageBinding):
             # create new binding instance
             binding=LanguageBinding(self)
-            
+       
         # bind languages
         lang = binding.setLanguageBindings(useCookie, useRequest, useDefault)
         
@@ -307,12 +308,19 @@ class LanguageBinding:
         
         langs=[]
                
-        if useCookie: langsCookie=[self.tool.getLanguageCookie(),]
+        if useCookie:
+            # if we are using the cookie stuff we provide the setter here 
+            set_language = self.tool.REQUEST.get('set_language', None)
+            if set_language: self.tool.setLanguageCookie(set_language)
+            # get from cookie
+            langsCookie=[self.tool.getLanguageCookie(),]
         else: langsCookie=[]
-            
+        
+        # get langs from request    
         if useRequest: langsRequest=self.tool.getRequestLanguages()
         else: langsRequest=[]
          
+        # get default
         if useDefault: langsDefault=[self.tool.getDefaultLanguage(),]
         else: langsDefault=[]
               
@@ -357,7 +365,7 @@ class PrefsForPTS:
         except: return []
     
 if _hasPTS is not None:
-    registerLangPrefsMethod({'klass':PrefsForPTS,'priority':15 })
+    registerLangPrefsMethod({'klass':PrefsForPTS,'priority':30 })
 
     
 InitializeClass(LanguageTool)
