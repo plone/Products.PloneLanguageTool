@@ -314,7 +314,7 @@ class LanguageBinding:
         # filter None languages
         langs = filter(lambda x: x is not None, langs)
         
-        self.DEFAULT_LANGGUAGE=langs[-1]
+        self.DEFAULT_LANGUAGE=langs[-1]
         self.LANGUAGE=langs[0]
         self.LANGUAGE_LIST=langs[1:-1]
         
