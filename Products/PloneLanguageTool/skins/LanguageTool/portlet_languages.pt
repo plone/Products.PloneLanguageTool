@@ -46,17 +46,21 @@
                 <strong tal:omit-tag="python:prefLang != lang[0]"
                         tal:define="code python:lang[0]">
 
-                    <img width="15" 
-                         height="12" 
-                         alt=""
-						 tal:condition="here/portal_languages/showFlags | nothing"
-                         tal:attributes="src string:${portal_url}/flag-${code}.gif;
-                                         title python: lang[1]" 
-                                         />
-                        
                     <a href=""
-                       tal:attributes="href string:${here/absolute_url}/switchLanguage?set_language=${code}"
-                       tal:content="python:here.portal_languages.getNameForLanguageCode(lang[0]) or lang[1]">Language</a>
+                       tal:attributes="href string:${here/absolute_url}/switchLanguage?set_language=${code}">
+
+                        <img width="15" 
+                             height="12" 
+                             alt=""
+    						 tal:condition="here/portal_languages/showFlags | nothing"
+                             tal:attributes="src string:${portal_url}/flag-${code}.gif;
+                                             title python: lang[1]" 
+                                             />
+ 
+                        <span tal:replace="python:here.portal_languages.getNameForLanguageCode(lang[0]) or lang[1]">
+                        Language
+                        </span>
+                        </a>
 
                 </strong>
 
