@@ -35,7 +35,11 @@ def install_subskin(self, out, skin_name=SKIN_NAME, globals=lang_globals):
 
 def addLanguageSelectorSlot(self,out):
     # add language selector portlet
-    slot = "here/languageSelectorMacro/macros/globalLanguageSelector"
+    
+    # old portlet with i18nLayer support:
+    # slot = "here/languageSelectorMacro/macros/globalLanguageSelector"
+    
+    slot = "here/portlet_languages/macros/portlet"
 
     left_slots=getattr(self,'left_slots', None)
     right_slots=getattr(self, 'right_slots', ())

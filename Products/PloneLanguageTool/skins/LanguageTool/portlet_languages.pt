@@ -1,0 +1,64 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n:domain="plone">
+
+<body>
+
+<!-- The languages box -->
+
+<div metal:define-macro="portlet"
+     tal:define="PTS modules/Products/PlacelessTranslationService | nothing;"
+     tal:condition="PTS">
+
+    <div class="portlet"
+         id="portlet-language"
+         tal:define="served_languages here/portal_languages/listSupportedLanguages;
+                     boundLanguages here/portal_languages/getLanguageBindings;
+                     prefLang python:boundLanguages[0];">
+
+        <h5 i18n:translate="label_language">Language</h5>
+
+        <div class="portletBody">
+
+            <div class="portletContent even"
+                 tal:condition="python:len(served_languages) > 8">
+
+                <form action="switchLanguage"
+                      method="post"
+                      tal:attributes="action string:${here/absolute_url}/switchLanguage" > 
+
+                    <select name="set_language" onchange="this.form.submit()" >
+                        <option tal:repeat="lang served_languages"
+                                tal:content="python:here.portal_languages.getNameForLanguageCode(lang[0]) or lang[1]"
+                                tal:attributes="selected python:prefLang == lang[0];
+                                                value python:lang[0]">Language</option>
+                    </select>
+
+                </form>
+
+            </div>
+
+            <div class="portletContent even"
+                 tal:condition="python:len(served_languages) <= 8"
+                 tal:repeat="lang served_languages">
+
+                <strong tal:omit-tag="python:prefLang != lang[0]">
+
+                    <a href=""
+                       tal:define="code python:lang[0]"
+                       tal:attributes="href string:${here/absolute_url}/switchLanguage?set_language=${code}"
+                       tal:content="python:here.portal_languages.getNameForLanguageCode(lang[0]) or lang[1]">Language</a>
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
