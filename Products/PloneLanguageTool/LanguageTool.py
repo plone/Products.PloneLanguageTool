@@ -272,7 +272,8 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         self.REQUEST['LANGUAGE_TOOL']=binding
         
         return lang
-    
+
+    security.declareProtected(View, 'getLanguageBindings')    
     def getLanguageBindings(self):
         # return the bound languages
         # (language, default_language, languages_list)
