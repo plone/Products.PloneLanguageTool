@@ -4,7 +4,9 @@
     <form action="manage_setLanguageSettings" tal:attributes="action python:here.absolute_url()+'/manage_setLanguageSettings'" method="POST">
 
         <h2>Default language </h2>
-        <p>if you create new content, this is the default language<br />
+        <p>if content requested is not available in the language
+           the user preferred, content will be presented in the fallback language</p>
+        <p>
             <select name="defaultLanguage">
                 <option value="en"
                         tal:repeat="lang here/listSupportedLanguages"
@@ -14,21 +16,7 @@
                     English
                 </option>
             </select>
-        </p>
-
-        <h2>Fallback language </h2>
-        <p>if content requested is not available in the language
-           the user preferred, content will be presented in the fallback language<br />
-           <select name="fallbackLanguage">
-                <option value="en"
-                        tal:repeat="lang here/listSupportedLanguages"
-                        tal:attributes="value python: lang[0];
-                                        selected python:lang[0]==here.getFallbackLanguage()"
-                        tal:content="python: lang[1]">
-                    English
-                </option>
-           </select>
-        </p>
+       </p>
 
         <h2>Allowed languages </h2>
         <p>please narrow the range of languages that can be added in your portal<br />
@@ -43,6 +31,14 @@
                 </option>
             </select>
         </p>
+        
+        <h2>Negotiation Scheme</h2>
+        <p>Check the language negotiation schemes that apply to this site</p>
+        <ol>
+            <li><p><input type="checkbox" name="setCookieN" value="1" tal:attributes="checked here/use_cookie_negotiation| nothing" /> Use cookie negotiation.</p></li>
+            <li><p><input type="checkbox" name="setRequestN" value="1" tal:attributes="checked here/use_request_negotiation | nothing" /> Use cookie negotiation.</p></li>
+            <li><p>Default fallback (always enabled)</p></li>
+        </ol>   
 
         <input type=submit i18n:attributes="value" value="Save">
     </form>

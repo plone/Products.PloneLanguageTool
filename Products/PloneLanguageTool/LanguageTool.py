@@ -41,7 +41,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     AVAILABLE_LANGUAGES = availablelanguages.languages
     supported_langs = availablelanguages.languages.keys()
     default_lang = 'en'
-    fallback_lang = 'en'
+
     # copy global available_langs to class variable
 
     _actions = [ActionInformation(
@@ -66,6 +66,10 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
     def __init__(self):
         self.id = 'portal_languages'
+
+        self.use_cookie_negotiation  = 1
+        self.use_request_negotiation = 1
+        
         log('init')
 
 
@@ -78,20 +82,23 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         if req.environ.has_key( 'WEBDAV_SOURCE_PORT' ):
             return None
         req.set('LANGUAGE_TOOL', self)
-        
+       
     security.declareProtected(ManagePortal, 'manage_setLanguageSettings')
-    def manage_setLanguageSettings(self, defaultLanguage, fallbackLanguage, supportedLanguages, REQUEST=None):
-        ''' stores the languages (default, fallback, supported) '''
+    def manage_setLanguageSettings(self, defaultLanguage, supportedLanguages, setCookieN=None, setRequestN=None, REQUEST=None):
+        ''' stores the tool settings '''
+
         self.default_lang=defaultLanguage
-        self.fallback_lang=fallbackLanguage
 
         if supportedLanguages and type(supportedLanguages) == type([]):
             self.supported_langs=supportedLanguages
-        #else:
-        #    self.supported_langs=[supportedLanguages]
-        # removed this one because it makes for unpredictable behavior
-        # added :list to the zmi forms instead so editing always returns a list.
-        
+        if setCookieN:
+            self.use_cookie_negotiation  = 1
+        else:
+            self.use_cookie_negotiation  = 0
+        if setRequestN:
+            self.use_request_negotiation  = 1
+        else:
+            self.use_request_negotiation  = 0
         if REQUEST:
             REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
 
@@ -122,13 +129,6 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     security.declareProtected(ManagePortal, 'setDefaultLanguage')
     def setDefaultLanguage(self, langCode):
         self.default_lang = langCode
-
-    def getFallbackLanguage(self):
-        return self.fallback_lang
-    
-    security.declareProtected(ManagePortal, 'setFallbackLanguage')
-    def setFallbackLanguage(self, langCode):
-        self.fallback_lang = langCode
     
     security.declareProtected(ManagePortal, 'addLanguage')
     def addLanguage(self, langCode, langDescription):
@@ -169,7 +169,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             if langCookie is not None and langCookie in self.supported_langs:
                 pref = langCookie
             else:
-                pref = self.fallback_lang
+                pref = self.default_lang
         return pref
     
     def manage_beforeDelete(self, item, container):
@@ -200,7 +200,7 @@ class PrefsForPTS:
             pass
         else:
             self.languages.append(self.pref)
-        self.languages.append(LanguageTool.getFallbackLanguage())
+        self.languages.append(LanguageTool.getDefaultLanguage())
         #raise(str(self.languages))
         return None
  
