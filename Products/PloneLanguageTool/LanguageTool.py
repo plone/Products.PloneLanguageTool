@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.38 2004/03/01 10:19:28 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.39 2004/03/06 10:28:43 dtremea Exp $ (Author: $Author: dtremea $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -17,20 +17,18 @@ from ZPublisher.HTTPRequest import HTTPRequest
 
 try:
     from Products.PlacelessTranslationService.Negotiator import registerLangPrefsMethod
-    _hasPTS=1
-except: _hasPTS=None
-
+    _hasPTS = 1
+except:
+    _hasPTS = None
 
 import availablelanguages
-
-
 
 class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     '''
     Language Administration Tool For Plone
     '''
 
-    id        = 'portal_languages'
+    id  = 'portal_languages'
     meta_type = 'Plone Language Tool'
 
     security = ClassSecurityInfo()
@@ -38,9 +36,9 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     supported_langs = ['en']
     local_available_langs = {}
     
-    use_path_negotiation        = 1
-    use_cookie_negotiation      = 1
-    use_request_negotiation     = 1
+    use_path_negotiation = 1
+    use_cookie_negotiation = 1
+    use_request_negotiation = 1
     use_combined_language_codes = 0
 
     # copy global available_langs to class variable
@@ -56,8 +54,8 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         )]
 
     manage_options=(
-        ({ 'label'   : 'LanguageConfig',
-           'action'  : 'manage_configForm',
+        ({ 'label'  : 'LanguageConfig',
+           'action' : 'manage_configForm',
            },
          ) + SimpleItem.manage_options
         +  ActionProviderBase.manage_options
@@ -73,7 +71,6 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         self.use_request_negotiation = 1
         self.force_language_urls = 1
         self.allow_content_language_fallback = 0
-        
 
     def __call__(self, container, req):
         '''
@@ -89,9 +86,12 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         # bind the languages
         self.setLanguageBindings()
 
-
     security.declareProtected(ManagePortal, 'manage_setLanguageSettings')
-    def manage_setLanguageSettings(self, defaultLanguage, supportedLanguages, setCookieN=None, setRequestN=None,setPathN=None, setForcelanguageUrls=None, setAllowContentLanguageFallback=None, setUseCombinedLanguageCodes=None, REQUEST=None):
+    def manage_setLanguageSettings(self, defaultLanguage, supportedLanguages, 
+                                   setCookieN=None, setRequestN=None, 
+                                   setPathN=None, setForcelanguageUrls=None,
+                                   setAllowContentLanguageFallback=None,
+                                   setUseCombinedLanguageCodes=None, REQUEST=None):
         '''
         stores the tool settings
         '''
@@ -99,7 +99,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         self.setDefaultLanguage(defaultLanguage)
 
         if supportedLanguages and type(supportedLanguages) == type([]):
-            self.supported_langs=supportedLanguages
+            self.supported_langs = supportedLanguages
   
         if setCookieN:
             self.use_cookie_negotiation = 1
@@ -173,10 +173,12 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         '''
         return our default language
         '''
-        portal_properties=getToolByName(self, 'portal_properties')
+        portal_properties = getToolByName(self, 'portal_properties')
         portal=getToolByName(self, 'portal_url').getPortalObject()
-        if portal_properties.site_properties.hasProperty('default_language'): return portal_properties.site_properties.getProperty('default_language')
-        if portal.hasProperty('default_language'): return portal.getProperty('default_language')
+        if portal_properties.site_properties.hasProperty('default_language'):
+            return portal_properties.site_properties.getProperty('default_language')
+        if portal.hasProperty('default_language'):
+            return portal.getProperty('default_language')
         return getattr(self, 'default_lang', 'en')
 
     security.declareProtected(ManagePortal, 'setDefaultLanguage')
@@ -185,9 +187,11 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         set our default language
         '''
         portal_properties=getToolByName(self, 'portal_properties')
-        portal=getToolByName(self, 'portal_url').getPortalObject()
-        if portal_properties.site_properties.hasProperty('default_language'): return portal_properties.site_properties._updateProperty('default_language', langCode)
-        if portal.hasProperty('default_language'): return portal._updateProperty('default_language', langCode)
+        portal = getToolByName(self, 'portal_url').getPortalObject()
+        if portal_properties.site_properties.hasProperty('default_language'):
+            return portal_properties.site_properties._updateProperty('default_language', langCode)
+        if portal.hasProperty('default_language'): 
+            return portal._updateProperty('default_language', langCode)
         self.default_lang = langCode
     
     security.declareProtected(ManagePortal, 'addLanguage')
@@ -195,15 +199,19 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         '''
         add a custom language to this tool. This can override predefined ones
         '''
-        self.local_available_langs[langCode]=langDescription
-        self._p_changed=1
+        self.local_available_langs[langCode] = langDescription
+        self._p_changed = 1
 
     security.declareProtected(View, 'getNameForLanguageCode')
     def getNameForLanguageCode(self, langCode):
         '''
         return name for languge code
         '''
-        return self.getAvailableLanguages().get(langCode, langCode)
+        try:
+            from Products.PlacelessTranslationService import getLanguageName
+            return getLanguageName(langCode)
+        except:    
+            return self.getAvailableLanguages().get(langCode, langCode)
     
     # some convenience functions to improve the UI:
     security.declareProtected(ManagePortal, 'addSupportedLanguage')
@@ -227,16 +235,16 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         self.supported_langs = alist
 
     security.declareProtected(View, 'setLanguageCookie')
-    def setLanguageCookie(self,lang=None, REQUEST=None,noredir=None):
+    def setLanguageCookie(self, lang=None, REQUEST=None, noredir=None):
         '''
         sets a cookie for overriding language negotiation
         '''
-        res=None
+        res = None
         portal_url = getToolByName(self, 'portal_url')()
         cur = self.getLanguageCookie()
         if lang and lang in self.getSupportedLanguages():
             if lang != cur: self.REQUEST.RESPONSE.setCookie('I18N_LANGUAGE',lang,path='/')
-            res=lang
+            res = lang
         if noredir is None:                
             if REQUEST:
                 REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
@@ -264,7 +272,6 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             return l[0]
         else:
             return l[1] # this is the default language
-
        
     def manage_beforeDelete(self, item, container):
         if item is self:
@@ -303,8 +310,8 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         browser_pref_langs = browser_pref_langs.split(',')
                                                                                 
         langs = []
-        i=0
-        length=len(browser_pref_langs)
+        i = 0
+        length = len(browser_pref_langs)
                                                                                 
         # parse quality strings and build a tuple
         # like ((float(quality), lang), (float(quality), lang))
@@ -312,27 +319,27 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         # if no quality string is given then the list order
         # is used as quality indicator
         for lang in browser_pref_langs:
-            lang=lang.strip().lower().replace('_','-')
+            lang = lang.strip().lower().replace('_','-')
             if lang:
                 l = lang.split(';', 2)
-                quality=[]
+                quality = []
                                                                                 
                 if len(l) == 2:
                     try:
-                        q=l[1]
+                        q = l[1]
                         if q.startswith('q='):
-                            q=q.split('=', 2)[1]
-                            quality=float(q)
+                            q = q.split('=', 2)[1]
+                            quality = float(q)
                     except: pass
                                                                                 
                 if quality == []:
-                    quality=float(length-i)
+                    quality = float(length-i)
                                                                                 
-                language=l[0]
+                language = l[0]
                 if language in self.getSupportedLanguages():
                     # if allowed the add language
                     langs.append((quality, language))
-                i=i+1
+                i = i + 1
                                                                                 
         # sort and reverse it
         langs.sort()
@@ -342,32 +349,31 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         langs = map(lambda x: x[1], langs)
         
         return langs            
-            
 
     security.declareProtected(View, 'setLanguageBindings')
     def setLanguageBindings(self):
         # setup the current language stuff  
 
         usePath = self.use_path_negotiation
-        useCookie=self.use_cookie_negotiation
-        useRequest=self.use_request_negotiation
-        useDefault=1 # this should never be disabled
+        useCookie = self.use_cookie_negotiation
+        useRequest = self.use_request_negotiation
+        useDefault = 1 # this should never be disabled
 
         if not hasattr(self, 'REQUEST'): return
         
         binding = self.REQUEST.get('LANGUAGE_TOOL', None)
         if not isinstance(binding, LanguageBinding):
             # create new binding instance
-            binding=LanguageBinding(self)
+            binding = LanguageBinding(self)
        
         # bind languages
         lang = binding.setLanguageBindings(usePath, useCookie, useRequest, useDefault)
         
         # set LANGUAGE to request
-        self.REQUEST['LANGUAGE']=lang
+        self.REQUEST['LANGUAGE'] = lang
         
         # set bindings instance to request
-        self.REQUEST['LANGUAGE_TOOL']=binding
+        self.REQUEST['LANGUAGE_TOOL'] = binding
         
         return lang
 
@@ -376,16 +382,17 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         # return the bound languages
         # (language, default_language, languages_list)
        
-        if not hasattr(self, 'REQUEST'): return (None, self.getDefaultLanguage(), []) # cant do anything
+        if not hasattr(self, 'REQUEST'):
+            return (None, self.getDefaultLanguage(), []) # cant do anything
         binding = self.REQUEST.get('LANGUAGE_TOOL', None)
         if not isinstance(binding, LanguageBinding):
             # not bound -> bind
             self.setLanguageBindings()
-            binding=self.REQUEST.get('LANGUAGE_TOOL')
+            binding = self.REQUEST.get('LANGUAGE_TOOL')
             
         return binding.getLanguageBindings()
 
-    def i18nContentTypes( self ):
+    def i18nContentTypes(self):
         '''
         List type info objects for types which can be added in
         I18NLayers.
@@ -397,16 +404,15 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
         if myType is not None:
             for contentType in portal_types.listTypeInfo(self):
-                if myType.allowType( contentType.getId() ):
-                    result.append( contentType )
+                if myType.allowType(contentType.getId()):
+                    result.append(contentType)
         else:
             result = portal_types.listTypeInfo()
 
-        return filter( lambda typ, container=self:
-                          typ.isConstructionAllowed( container )
-                     , result )
+        return filter(lambda typ, container=self:
+                      typ.isConstructionAllowed(container), result)
                      
-    def i18nContentTypeNames( self ):
+    def i18nContentTypeNames(self):
         '''
         List type info objects for types which can be added in
         I18NLayers.
@@ -414,8 +420,8 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         # XXX: please make me a python script in the skin
         return [t.getId() for t in self.i18nContentTypes()]
 
-    security.declareProtected(View,'canI18nifyObject')
-    def canI18nifyObject(self,object):
+    security.declareProtected(View, 'canI18nifyObject')
+    def canI18nifyObject(self, object):
         '''
         tests wether i can i18nify an object (no folders, or if an object is already i18nified)
         '''
@@ -425,25 +431,25 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             not object.insideI18NLayer() and \
             self.portal_types.getTypeInfo(object).getId() in self.i18nContentTypeNames()
             
-    security.declareProtected(ModifyPortalContent,'i18nifyObject')
-    def i18nifyObject(self,object,lang=None):
+    security.declareProtected(ModifyPortalContent, 'i18nifyObject')
+    def i18nifyObject(self, object, lang=None):
         ''' 
         wraps an I18NLayer around an existing Content Object -> returns 
         the wrapper object (the I18NLayer instance)
         '''
         # XXX: please make me a python script in the skin
         if not lang:
-            lang=self.getPreferredLanguage()
+            lang = self.getPreferredLanguage()
             
-        temp_id='tm_'  # only ids with 2 or three chars are allowed by I18NLayer
-        id=object.getId()
+        temp_id = 'tm_'  # only ids with 2 or three chars are allowed by I18NLayer
+        id = object.getId()
 
-        folder=object.aq_parent
+        folder = object.aq_parent
         folder.manage_renameObject(id,temp_id) #rename before cut
 
-        copydata=folder.manage_cutObjects([temp_id])
+        copydata = folder.manage_cutObjects([temp_id])
         folder.invokeFactory('I18NLayer',id)   #create wrapper with same id
-        wrapper=getattr(folder,id)
+        wrapper = getattr(folder,id)
         wrapper.manage_pasteObjects(copydata)
         wrapper.manage_renameObject(temp_id,lang)
         return wrapper
@@ -454,9 +460,9 @@ class LanguageBinding:
     helper which holding language infos in request
     '''
     
-    DEFAULT_LANGUAGE=None
-    LANGUAGE=None
-    LANGUAGE_LIST=[]
+    DEFAULT_LANGUAGE = None
+    LANGUAGE = None
+    LANGUAGE_LIST = []
     
     def __init__(self, tool):
         self.tool=tool
@@ -464,9 +470,7 @@ class LanguageBinding:
     def setLanguageBindings(self, usePath=1, useCookie=1, useRequest=1, useDefault=1):
         # setup the current language stuff
         
-        
-        langs=[]
-
+        langs = []
         
         if usePath:
             # this one is set if there is an allowed language in the current path        
@@ -476,17 +480,23 @@ class LanguageBinding:
         if useCookie:
             # if we are using the cookie stuff we provide the setter here 
             set_language = self.tool.REQUEST.get('set_language', None)
-            if set_language: langsCookie=[self.tool.setLanguageCookie(set_language),]
-            else: langsCookie=[self.tool.getLanguageCookie(),] # get from cookie
-        else: langsCookie=[]
+            if set_language:
+                langsCookie=[self.tool.setLanguageCookie(set_language),]
+            else:
+                langsCookie=[self.tool.getLanguageCookie(),] # get from cookie
+        else: langsCookie = []
         
         # get langs from request    
-        if useRequest: langsRequest=self.tool.getRequestLanguages()
-        else: langsRequest=[]
+        if useRequest:
+            langsRequest = self.tool.getRequestLanguages()
+        else:
+            langsRequest = []
          
         # get default
-        if useDefault: langsDefault=[self.tool.getDefaultLanguage(),]
-        else: langsDefault=[]
+        if useDefault:
+            langsDefault = [self.tool.getDefaultLanguage(),]
+        else:
+            langsDefault = []
               
         # build list
         langs = langsPath+langsCookie+langsRequest+langsDefault
@@ -494,12 +504,11 @@ class LanguageBinding:
         # filter None languages
         langs = filter(lambda x: x is not None, langs)
         
-        self.DEFAULT_LANGUAGE=langs[-1]
-        self.LANGUAGE=langs[0]
-        self.LANGUAGE_LIST=langs[1:-1]
+        self.DEFAULT_LANGUAGE = langs[-1]
+        self.LANGUAGE = langs[0]
+        self.LANGUAGE_LIST = langs[1:-1]
         
         return self.LANGUAGE
-
     
     def getLanguageBindings(self):
         # return bound languages
@@ -521,7 +530,7 @@ class PrefsForPTS:
             return None
 
         self.pref = binding.getLanguageBindings()
-        self.languages=[self.pref[0],]+self.pref[2]+[self.pref[1],]
+        self.languages = [self.pref[0],] + self.pref[2] + [self.pref[1],]
 
         return None
  
@@ -529,12 +538,13 @@ class PrefsForPTS:
         '''
         return the list of the bound langs
         '''
-        try: return self.languages
-        except: return []
+        try:
+            return self.languages
+        except:
+            return []
     
 if _hasPTS is not None:
-    registerLangPrefsMethod({'klass':PrefsForPTS,'priority':30 })
+    registerLangPrefsMethod({'klass':PrefsForPTS, 'priority':30 })
 
     
 InitializeClass(LanguageTool)
-
