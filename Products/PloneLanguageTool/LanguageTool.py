@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.28 2003/10/02 11:12:40 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.29 2003/10/02 15:09:19 longsleep Exp $ (Author: $Author: longsleep $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -35,7 +35,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     security = ClassSecurityInfo()
 
     AVAILABLE_LANGUAGES = availablelanguages.languages
-    supported_langs = availablelanguages.languages.keys()
+    supported_langs = ['en']
     default_lang = 'en'
 
     # copy global available_langs to class variable
@@ -65,6 +65,8 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
         self.use_cookie_negotiation  = 1
         self.use_request_negotiation = 1
+        self.force_language_urls = 1
+        self.allow_content_language_fallback = 0
         
         log('init')
 
@@ -83,7 +85,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
 
     security.declareProtected(ManagePortal, 'manage_setLanguageSettings')
-    def manage_setLanguageSettings(self, defaultLanguage, supportedLanguages, setCookieN=None, setRequestN=None, REQUEST=None):
+    def manage_setLanguageSettings(self, defaultLanguage, supportedLanguages, setCookieN=None, setRequestN=None, setForcelanguageUrls=None, setAllowContentLanguageFallback=None, REQUEST=None):
         ''' stores the tool settings '''
 
         self.setDefaultLanguage(defaultLanguage)
@@ -92,13 +94,25 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             self.supported_langs=supportedLanguages
   
         if setCookieN:
-            self.use_cookie_negotiation  = 1
+            self.use_cookie_negotiation = 1
         else:
-            self.use_cookie_negotiation  = 0
+            self.use_cookie_negotiation = 0
+            
         if setRequestN:
-            self.use_request_negotiation  = 1
+            self.use_request_negotiation = 1
         else:
-            self.use_request_negotiation  = 0
+            self.use_request_negotiation = 0
+            
+        if setForcelanguageUrls:
+            self.force_language_urls = 1
+        else:
+            self.force_language_urls = 0
+            
+        if setAllowContentLanguageFallback:
+            self.allow_content_language_fallback = 1
+        else:
+            self.allow_content_language_fallback = 0
+            
         if REQUEST:
             REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
 
