@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.47 2004/06/29 09:22:34 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.48 2004/09/02 11:19:46 shh42 Exp $ (Author: $Author: shh42 $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -30,6 +30,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     '''
 
     id  = 'portal_languages'
+    title = 'Manages available languages'
     meta_type = 'Plone Language Tool'
 
     security = ClassSecurityInfo()
