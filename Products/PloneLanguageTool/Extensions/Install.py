@@ -57,4 +57,19 @@ def install(self):
     addLanguageSelectorSlot(self,out)
     return out.getvalue()
 
+#
+# Uninstall methods
+#
 
+def unregisterActionProvider(self, out):
+    actionTool = getToolByName(self, 'portal_actions', None)
+    if actionTool:
+        actionTool.deleteActionProvider('portal_languages')
+        out.write('Removed action provider\n')
+
+# The uninstall is used by the CMFQuickInstaller for uninstalling.
+# CMFQuickInstaller uninstalls skins.
+def uninstall(self):
+    out=StringIO()
+    unregisterActionProvider(self, out)
+    return out.getvalue()
