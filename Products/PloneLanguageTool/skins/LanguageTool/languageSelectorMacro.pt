@@ -20,8 +20,13 @@
             <select name="lang" onchange="this.form.submit()" >
                 <option tal:repeat="lang served_languages" tal:content="python:lang[1]" tal:attributes="value python:lang[0];selected python:prefLang == lang[0]"></option>
             </select>
+            
+        
     </form>
-    </div>
+    </div>  
+    <div class="content even" tal:condition="python:here.portal_membership.checkPermission('Modify portal content', here.retrieveI18NContentLayerOb()) or here.portal_membership.checkPermission('Add portal content', here.retrieveI18NContentLayerOb())">
+              <a href="#" tal:attributes="href string:${here/retrieveI18NContentLayerURL}/i18nlayer_languages_form">Translate</a>
+    </div>  
     </div>
 </div>
 </body>
