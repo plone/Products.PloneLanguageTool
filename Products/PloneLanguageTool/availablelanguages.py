@@ -1,4 +1,4 @@
-
+# -*- coding: Latin-1 -*-
 languages = {
 'aa':'Afar',  
 'ab':'Abkhazian',  
