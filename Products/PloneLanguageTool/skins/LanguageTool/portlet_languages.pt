@@ -14,7 +14,8 @@
          id="portlet-language"
          tal:define="served_languages here/portal_languages/listSupportedLanguages;
                      boundLanguages here/portal_languages/getLanguageBindings;
-                     prefLang python:boundLanguages[0];">
+                     prefLang python:boundLanguages[0];
+					 ">
 
         <h5 i18n:translate="label_language">Language</h5>
 
@@ -48,6 +49,7 @@
                     <img width="15" 
                          height="12" 
                          alt=""
+						 tal:condition="here/portal_languages/showFlags | nothing"
                          tal:attributes="src string:${portal_url}/flag-${code}.gif;
                                          title python: lang[1]" 
                                          />

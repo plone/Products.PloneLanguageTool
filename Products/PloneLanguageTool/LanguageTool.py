@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.45 2004/05/13 13:14:02 longsleep Exp $ (Author: $Author: longsleep $)
+# $Id: LanguageTool.py,v 1.46 2004/05/28 21:27:05 elvix Exp $ (Author: $Author: elvix $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -42,6 +42,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     use_cookie_negotiation = 1
     use_request_negotiation = 1
     use_combined_language_codes = 0
+    display_flags = 1
 
 
     _actions = [ActionInformation(
@@ -92,7 +93,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
                                    setCookieN=None, setRequestN=None, 
                                    setPathN=None, setForcelanguageUrls=None,
                                    setAllowContentLanguageFallback=None,
-                                   setUseCombinedLanguageCodes=None, REQUEST=None):
+                                   setUseCombinedLanguageCodes=None, displayFlags=None, REQUEST=None):
         '''
         stores the tool settings
         '''
@@ -131,9 +132,19 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             self.use_combined_language_codes = 1
         else:
             self.use_combined_language_codes = 0
+
+        if displayFlags:
+            self.display_flags = 1
+        else:
+            self.display_flags = 0
             
         if REQUEST:
             REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
+
+    security.declarePublic('showFlags')
+    def showFlags(self):
+        """ show flags in language listings or not"""
+        return self.display_flags
 
     def listSupportedLanguages(self):
         '''
