@@ -25,6 +25,7 @@ except: referrer=here_url
 
 print "layer_url", layer_url
 print "referrer", referrer
+print "lang", lang
 
 if referrer[:len(layer_url)] == layer_url:
     try: rest=referrer[len(layer_url):]
@@ -40,16 +41,25 @@ if referrer[:len(layer_url)] == layer_url:
             else: q=None
             r=rs[0]
             print "r, q", r,q
-            if r in available_languages and lang in available_languages:
-                if context.portal_membership.checkPermission('View', getattr(context, lang)):
-                    print "permission on", lang
-                    r=lang
+            if r in available_languages: 
+                print "1"
+                if lang in available_languages:
+                    if context.portal_membership.checkPermission('View', getattr(context, lang)):
+                        print "permission on", lang
+                        r=lang
+                    else:
+                        print "no permission on", lang
+                        r=None
                 else:
-                    print "no permission on", lang
-                    r=None
+                    # changed from valid lang to unavailable
+                    print "lang %s not available" % lang
+                    rest = []
             elif r == 'i18nlayer_languages_form':
+                print "2"
                 r=None
-            #else: rest=[]
+            else: 
+                print "3"
+                #rest=[]
             if q and r and len(rest)>1: rest[1]='?'.join((r, q))
             elif r and len(rest)>1: rest[1]=r
             elif not r and len(rest) >1: del rest[1]
@@ -79,6 +89,8 @@ if set_language:
 qst="?"
 for k, v in query.items():
     qst=qst+"%s=%s&" % (k, v)
+
+print "query", query
 
 redirect=redirect+qst[:-1]
 print "redirect", redirect
