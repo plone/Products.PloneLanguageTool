@@ -1,4 +1,4 @@
-# $Id: LanguageTool.py,v 1.35 2003/10/13 02:46:57 zworkb Exp $ (Author: $Author: zworkb $)
+# $Id: LanguageTool.py,v 1.36 2003/10/21 10:03:27 tesdal Exp $ (Author: $Author: tesdal $)
 
 import os, re
 from types import StringType, UnicodeType
@@ -358,11 +358,12 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         """
         return [t.getId() for t in self.i18nContentTypes()]
 
-    security.declareProtected(ModifyPortalContent,'canI18nifyObject')
+    security.declareProtected(View,'canI18nifyObject')
     def canI18nifyObject(self,object):
         ''' tests wether i can i18nify an object (no folders, or if an object is already i18nified)
         '''
-        return self.portal_quickinstaller.isProductInstalled('I18NLayer') and \
+        return self.portal_membership.checkPermission(ModifyPortalContent, object)\
+            and self.portal_quickinstaller.isProductInstalled('I18NLayer') and \
             not object.insideI18NLayer() and \
             self.portal_types.getTypeInfo(object).getId() in self.i18nContentTypeNames()
             
