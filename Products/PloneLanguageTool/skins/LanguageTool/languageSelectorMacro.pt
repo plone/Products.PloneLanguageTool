@@ -12,7 +12,7 @@
       
     <div class="body">     
     <div class="content">     
-    <form tal:attributes="action string:${portal_url}/portal_languages/setPreferredLanguageCookie" method="post"
+    <form tal:attributes="action string:$switchLanguage" method="post"
      tal:define="served_languages here/portal_languages/listSupportedLanguages;
                  prefLang here/portal_languages/getPreferredLanguage"
                  tal:condition="served_languages|nothing"
