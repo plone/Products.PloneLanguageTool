@@ -5,13 +5,12 @@ from Products.CMFCore.DirectoryView import addDirectoryViews
 from Products.Archetypes.Extensions.utils import install_subskin
 from Products.CMFCore.CMFCorePermissions import ManagePortal
 
-
 # check for I18NLayer
-try: 
+try:
    from Products import I18NLayer
-   hasI18NLayer=1
-except: hasI18NLayer=0
-
+   hasI18NLayer = 1
+except ImportError:
+   hasI18NLayer = 0
 
 _globals = globals()
 
@@ -23,37 +22,33 @@ configlets = \
   , 'appId'      : 'PloneLanguageTool'
   , 'permission' : ManagePortal
   , 'imageUrl'   : 'flag-plone.gif'
-  }
-,
+  },
 )
 
-
 def install_tools(self, out):
-    if not hasattr(self, "portal_languages"):
+    if not hasattr(self, 'portal_languages'):
         addTool = self.manage_addProduct['PloneLanguageTool'].manage_addTool
         addTool('Plone Language Tool')
 
 def install_actions(self, out):
-    at = getToolByName(self, "portal_actions")
+    at = getToolByName(self, 'portal_actions')
     at.manage_aproviders('portal_languages', add_provider=1)
 
 def addLanguageSelectorSlot(self,out):
-    # add language selector portlet
-   
-    if hasI18NLayer: 
+    if hasI18NLayer:
         # old portlet with i18nLayer support:
-        slot = "here/languageSelectorMacro/macros/globalLanguageSelector"
-    else: 
+        slot = 'here/languageSelectorMacro/macros/globalLanguageSelector'
+    else:
         # new portlet
-        slot = "here/portlet_languages/macros/portlet"
+        slot = 'here/portlet_languages/macros/portlet'
 
-    left_slots=getattr(self,'left_slots', None)
-    right_slots=getattr(self, 'right_slots', ())
+    left_slots = getattr(self, 'left_slots', None)
+    right_slots = getattr(self, 'right_slots', ())
 
     if left_slots != None:
         if slot not in left_slots and slot not in right_slots:
-            left_slots=list(left_slots)+[slot,]
-            self.left_slots=left_slots
+            left_slots = list(left_slots) + [slot]
+            self.left_slots = left_slots
             print >> out, 'Added Language selector portlet to left_slots property.\n'
 
 def addConfiglets(self, out):
@@ -65,14 +60,15 @@ def addConfiglets(self, out):
 
 def install(self):
     out = StringIO()
-    print >>out, "Installing PloneLanguageTool"
+    print >>out, 'Installing PloneLanguageTool'
 
     install_tools(self, out)
     install_actions(self, out)
     install_subskin(self, out, lang_globals)
     addConfiglets(self, out)
-# Re-enable this if you want the language portlet. Superceded by the language selector.
-#    addLanguageSelectorSlot(self,out)
+    # Re-enable this if you want the language portlet.
+    # Superceded by the language selector.
+    # addLanguageSelectorSlot(self,out)
     return out.getvalue()
 
 #
@@ -85,16 +81,12 @@ def unregisterActionProvider(self, out):
         actionTool.deleteActionProvider('portal_languages')
         out.write('Removed action provider\n')
 
-# The uninstall is used by the CMFQuickInstaller for uninstalling.
-# CMFQuickInstaller uninstalls skins.
-
 def removeConfiglets(self, out):
     configTool = getToolByName(self, 'portal_controlpanel', None)
     if configTool:
         for conf in configlets:
             out.write('Removing configlet %s\n' % conf['id'])
             configTool.unregisterConfiglet(conf['id'])
-
 
 def uninstall(self):
     out=StringIO()

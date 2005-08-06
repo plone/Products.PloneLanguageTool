@@ -11,7 +11,8 @@ class ITranslatable(Interface):
 
     def isTranslation():
         """
-        return language if this object is used as multilingual content, 0 otherwise
+        Return language if this object is used as multilingual content,
+        0 otherwise.
         """
 
     def addTranslation(language, **kwargs):
@@ -21,7 +22,7 @@ class ITranslatable(Interface):
 
     def removeTranslation(language):
         """
-        Removes a translation
+        Removes a translation.
         """
 
     def getTranslation(language='language'):
@@ -30,20 +31,20 @@ class ITranslatable(Interface):
         If called without arguments it returns the translation in the currently
         selected language, or self.
         """
- 
+
     def getTranslationLanguages():
         """
-        Return a list of language codes
+        Return a list of language codes.
         """
 
     def getTranslations():
         """
-        Return a dict of {lang : [object, wf_state]}
+        Return a dict of {lang : [object, wf_state]}.
         """
 
     def isCanonical():
         """
-        boolean, is this the original, canonical translation of the content.
+        Boolean, is this the original, canonical translation of the content.
         """
 
     def getCanonicalLanguage():
@@ -58,10 +59,10 @@ class ITranslatable(Interface):
 
     def setLanguage(language):
         """
-        Sets the language for the current translation - same as DC
+        Sets the language for the current translation - same as DC.
         """
 
     def Language():
         """
-        Returns the language of this translation - same as DC
+        Returns the language of this translation - same as DC.
         """

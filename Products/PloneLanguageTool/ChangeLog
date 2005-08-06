@@ -1,3 +1,10 @@
+2005-08-06 04:07  dtremea
+
+	* LanguageTool.py: Standardized code. Cleaned up imports. Made
+	some optimizations. Removed CVS traces.
+
+	* General whitespaces cleanup.
+
 2004-10-08 19:00  longsleep
 
 	* LanguageTool.py: set display_flag member in init
@@ -55,7 +62,7 @@
 	doesn't install the portlet by default anymore, but uses the
 	content language switch macro instead. Portlet is still included
 	and easy to enable, if needed.
-	
+
 	Added South-African flag.
 
 2004-07-03 18:22  limi
@@ -636,7 +643,7 @@
 
 2003-09-29 21:03  elvix
 
-	* skins/LanguageTool/switchLanguage.py: fixed a buggy  reference 
+	* skins/LanguageTool/switchLanguage.py: fixed a buggy  reference
 	to setLanguageCookie() in the skins
 
 2003-09-29 18:44  elvix

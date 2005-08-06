@@ -6,7 +6,7 @@ Overview
 
 Credits
 
-  PloneLanguageTool was built by: 
+  PloneLanguageTool was built by:
 
   - Jodok Batlogg, "Solution2U":http://solution2u.net
 
@@ -18,7 +18,10 @@ Credits
 
   - Helge Tesdal, "Plone Solutions":http://www.plonesolutions.com
 
-  Parts of development sponsored by Learning Lab Denmark, donated by Plone Solutions. 
+  - Dorneles Treméa, "Plone Solutions":http://www.plonesolutions.com
+
+  Parts of development sponsored by Learning Lab Denmark, donated by
+  Plone Solutions.
 
   Flags by Jakub Steiner from the GNOME project:
   "Home page":http://jimmac.musichall.cz/ikony.php3
