@@ -42,26 +42,76 @@
         </select>
 
         <p>
-        <input type="checkbox" name="setUseCombinedLanguageCodes" value="1" tal:attributes="checked here/use_combined_language_codes| nothing" /> Allow combined language codes like de_DE or en_UK.
+            <input type="checkbox" 
+                   class="noborder"
+                   name="setUseCombinedLanguageCodes" 
+                   value="1" 
+                   tal:attributes="checked here/use_combined_language_codes| nothing" /> 
+            Allow combined language codes like de-de or en-uk.
         </p>
         
-        <p><input type="checkbox" name="displayFlags" value="1" tal:attributes="checked here/display_flags| nothing" /> Display flags for language selection. </p>
-        		
+        <p>
+            <input type="checkbox" 
+                   class="noborder"
+                   name="displayFlags" 
+                   value="1" 
+                   tal:attributes="checked here/display_flags| nothing" /> 
+            Display flags for language selection. 
+        </p>
+
         <h2>Negotiation Scheme</h2>
         <p>Check the language negotiation schemes that apply to this site</p>
         <ol>
         
-            <li><p><input type="checkbox" name="setPathN" value="1" tal:attributes="checked here/use_path_negotiation| nothing" /> Use language codes in URL path for manual override.</p></li>
-            <li><p><input type="checkbox" name="setCookieN" value="1" tal:attributes="checked here/use_cookie_negotiation| nothing" /> Use cookie for manual override.</p></li>
-            <li><p><input type="checkbox" name="setRequestN" value="1" tal:attributes="checked here/use_request_negotiation | nothing" /> Use browser language request negotiation.</p></li>
-            <li><p>Default fallback (always enabled). This is the language specified as default above.</p></li>
+            <li>
+                <input type="checkbox" 
+                       class="noborder"
+                       name="setPathN" 
+                       value="1" 
+                       tal:attributes="checked here/use_path_negotiation| nothing" />
+                Use language codes in URL path for manual override.
+            </li>
+            <li>
+                <input type="checkbox" 
+                       class="noborder"
+                       name="setCookieN" 
+                       value="1" 
+                       tal:attributes="checked here/use_cookie_negotiation| nothing" /> 
+                Use cookie for manual override.
+            </li>
+            <li>
+                <input type="checkbox" 
+                       class="noborder"
+                       name="setRequestN" 
+                       value="1" 
+                       tal:attributes="checked here/use_request_negotiation | nothing" /> 
+                Use browser language request negotiation.
+            </li>
+            <li>
+            Default fallback (always enabled). This is the language specified 
+            as default above.
+            </li>
         </ol>   
 
         <h2>Content Control Settings</h2>
-        <p>Check the settings that apply to multilingual content</p>
+        <p>Check the settings that apply to multilingual content.</p>
         <ol>
-            <li><p><input type="checkbox" name="setForcelanguageUrls" value="1" tal:attributes="checked here/force_language_urls| nothing" /> Force different urls for each language (redirect).</p></li>        
-            <li><p><input type="checkbox" name="setAllowContentLanguageFallback" value="1" tal:attributes="checked here/allow_content_language_fallback| nothing" /> Allow content language fallback.</p></li>        
+            <li>
+                <input type="checkbox" 
+                       class="noborder"
+                       name="setForcelanguageUrls" 
+                       value="1" 
+                       tal:attributes="checked here/force_language_urls| nothing" /> 
+                Force different urls for each language (redirect).
+            </li>
+            <li>
+                <input type="checkbox" 
+                       class="noborder"
+                       name="setAllowContentLanguageFallback" 
+                       value="1" 
+                       tal:attributes="checked here/allow_content_language_fallback| nothing" /> 
+                Allow content language fallback.
+            </li>        
         </ol>
         
         <input type="submit" class="context" i18n:attributes="value" value="Save" />
