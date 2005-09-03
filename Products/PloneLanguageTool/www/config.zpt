@@ -19,7 +19,6 @@
        </p>
 
         <h2>Allowed languages</h2>
-        <p>please narrow the range of languages that can be added in your portal<br />
            <i>use the CTRL key to select / deselect single items</i><br />
             <select name="supportedLanguages:list" size="10" multiple>
                 <option value="en"
