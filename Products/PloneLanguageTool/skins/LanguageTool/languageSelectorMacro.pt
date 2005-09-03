@@ -41,7 +41,7 @@
 
             </div>
 
-            <div tal:condition="python:len(served_languages) <= 8"
+            <div tal:condition="python:len(served_languages) &lt; 9"
                  tal:repeat="lang served_languages">
 
                 <strong tal:omit-tag="python:prefLang != lang[0]">

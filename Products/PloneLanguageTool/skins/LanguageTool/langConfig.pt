@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
       lang="en-US"
       metal:use-macro="here/main_template/macros/master"
@@ -12,16 +11,16 @@
         tal:define="errors python:request.get('errors', {});
                     Iterator python:modules['Products.CMFPlone'].IndexIterator;
                     tabindex python:Iterator();
-		    served_languages python:here.getSupportedLanguages();
+                    served_languages python:here.getSupportedLanguages();
                     master_language python:here.getMasterLanguage()">
 
-        <h1 i18n:translate="heading_languages_sheet"> Sprachverwaltung für diese Plone Instanz
+        <h1 i18n:translate="heading_languages_sheet">
+            Sprachverwaltung fÃ¼r diese Plone Instanz
         </h1>
 
         <p i18n:translate="description_languages_sheet">
-        Hier können Sie die möglichen Sprachen von Ihrem Portal verwalten und die Mastersprache ändern.
+            Hier kÃ¶nnen Sie die mÃ¶glichen Sprachen von Ihrem Portal verwalten und die Mastersprache Ã¤ndern.
         </p>  
-
 
         <form name="folderContentsForm"
 	      tal:condition="python:len(served_languages)"
@@ -39,15 +38,14 @@
               <input class="context" type="submit" name="here.deleteLanguage()" i18n:domain="plone" i18n:attributes="value" value="Delete" />
             </div>
 
-	</form>
-    
+        </form>
 
         <form class="group"
               name="edit_form"
               action="addSupportedLanguage" 
               method="get" >
 
-            <span class="legend" i18n:translate="legend_create_new_language">Language hinzufügen</span>
+            <span class="legend" i18n:translate="legend_create_new_language">Language hinzufgen</span>
 
             <div class="row">
                 <div class="label">

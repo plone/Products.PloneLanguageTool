@@ -1,3 +1,7 @@
+2005-09-03 19:00  hannosch
+
+	* i18n-ize the prefs_panel of the product itself
+
 2005-08-20 13:38  hannosch
 
 	* skins/LanguageTool/portlet_languages.pt: converted to 2.1 portlet style

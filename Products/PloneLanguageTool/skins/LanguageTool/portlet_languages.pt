@@ -35,7 +35,7 @@
 
         <tal:languages tal:repeat="lang served_languages">
         <dd class="portletItem even"
-            tal:condition="python:len(served_languages) <= 8"
+            tal:condition="python:len(served_languages) &lt; 9"
             tal:define="oddrow repeat/lang/odd"
             tal:attributes="class python:test(oddrow, 'portletItem even', 'portletItem odd')">
 

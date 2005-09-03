@@ -40,7 +40,7 @@
                     
                         <select style="font-size: 94%;"
                                 onchange=""
-                                tal:attributes="onchange string:window.location='${here/absolute_url}/switchLanguage?set_language=' + this.options(this.selectedIndex).value" >
+                                tal:attributes="onchange string:window.location='${here/absolute_url}/switchLanguage?set_language=' + this.options(this.selectedIndex).value">
                             <option tal:repeat="lang served_languages"
                                     tal:content="python:here.portal_languages.getNameForLanguageCode(lang[0]) or lang[1]"
                                     tal:attributes="selected python:prefLang == lang[0];
