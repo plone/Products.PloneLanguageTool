@@ -1,3 +1,7 @@
+2005-09-11 18:00  hannosch
+
+    * i18n: moved all files to PloneTranslations and added README.txt
+
 2005-09-04 20:00  hannosch
 
 	* ChangeLog: prepare for 0.7 release
