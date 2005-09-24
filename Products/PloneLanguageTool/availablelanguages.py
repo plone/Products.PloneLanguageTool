@@ -3,6 +3,10 @@
 # List by Alexander Limi, Plone Solutions - http://www.plonesolutions.com
 # Please contact me if you have any corrections or additions.
 
+# This should probably be a dictionary of dictionaries, something like:
+#
+# 'langcode-variation': { 'Native name', 'English name', 'flag-*.png' }
+
 languages = {
 'aa':'магIарул мацI', # Afar
 'ab':'бызшәа', # Abkhazian
