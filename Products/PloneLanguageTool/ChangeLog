@@ -1,3 +1,7 @@
+2005-09-28 18:45  hannosch
+
+	* Added test infrastructure and first tests
+
 2005-09-13 23:00  hannosch
 
 	* Fixed http://plone.org/collector/4681 - fixed missing p-tag in
@@ -115,7 +119,7 @@
 2004-06-04 16:05  limi
 
 	* skins/LanguageToolFlags/: README.txt, flag-fa.gif, flag-fo.gif,
-	flag-ko.gif, flag-zh.gif: Added Korean, Chinese, Færøyene, Persian.
+	flag-ko.gif, flag-zh.gif: Added Korean, Chinese, F?yene, Persian.
 
 2004-06-03 18:01  limi
 
