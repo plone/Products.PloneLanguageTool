@@ -165,7 +165,9 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
     security.declarePublic('getAvailableLanguages')
     def getAvailableLanguages(self):
-        """Returns the dictionary of available languages."""
+        """Returns the dictionary of available languages.
+        The dict should have the form: {code : {native, english, flag}}.
+        """
         langs = availablelanguages.getNativeLanguageNames()
         if self.use_combined_language_codes:
             langs.update(availablelanguages.getCombinedLanguageNames())
@@ -176,9 +178,15 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     security.declarePublic('listAvailableLanguageInformation')
     def listAvailableLanguageInformation(self):
         """Returns dict of available languages."""
-        items = self.getAvailableLanguageInformation()
-        #items.sort(lambda x, y: cmp(x.get('native'), y.get('native')))
-        return items
+        langs = self.getAvailableLanguageInformation()
+        new_langs = []
+        for lang in langs:
+            # add language-code to dict
+            langs[lang]['code'] = lang
+            # flatten outer dict to list to make it sortable
+            new_langs.append(langs[lang])
+        new_langs.sort(lambda x, y: cmp(x.get('native', x.get('english')), y.get('native', y.get('english'))))
+        return new_langs
 
     security.declarePublic('getAvailableLanguageInformation')
     def getAvailableLanguageInformation(self):

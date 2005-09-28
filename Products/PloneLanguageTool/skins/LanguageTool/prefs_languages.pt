@@ -37,6 +37,23 @@
             Select the languages that can be added in your portal.
         </p>
 
+        <span class="optionsToggle">
+        <input type="checkbox"
+               onclick="javascript:toggleSelect(this, 'supportedLanguages', true);"
+               name="lc_toggle"
+               value="#"
+               checked="checked"
+               id="lc_toggle"
+               class="noborder" />
+        <label for=""
+               i18n:domain="plone"
+               i18n:translate="label_toggle"
+               tal:attributes="for string:lc_toggle"
+               >Select All/None
+        </label>
+        <br />
+        </span>
+
         <table class="listing"
                id="lang-selection"
                style="display: block; height: 15em; width: 36em; overflow: auto;">
@@ -50,30 +67,29 @@
             </thead>
 
             <tbody tal:define="languages here/portal_languages/listAvailableLanguageInformation">
-                <tal:language repeat="lc languages">
-                <tr tal:define="oddrow repeat/lc/odd;
-                                lang python: languages.get(lc)"
+                <tal:language repeat="lang languages">
+                <tr tal:define="oddrow repeat/lang/odd;"
                     tal:attributes="class python:test(oddrow, 'even', 'odd')">
                     <td style="text-align: center;">
                         <input type="checkbox"
                                class="noborder"
                                name="supportedLanguages"
-                               tal:attributes="value lc;
+                               tal:attributes="value lang/code;
                                                checked python: lang.get('selected', False)" />
                     </td>
                     <td>
                         <img src="" alt="" height="16" width="16"
-                             tal:condition="here/portal_languages/showFlags"
+                             tal:condition="python: here.portal_languages.showFlags() and lang.get('flag', False)"
                              tal:attributes="src string:${portal_url}/${lang/flag}" />
-                        <span tal:replace="lang/native">Norsk</span>
+                        <span tal:replace="lang/native | nothing">Norsk</span>
                     </td>
                     <td>
                         <img src="" alt="" height="16" width="16"
-                             tal:condition="here/portal_languages/showFlags"
+                             tal:condition="python: here.portal_languages.showFlags() and lang.get('flag', False)"
                              tal:attributes="src string:${portal_url}/${lang/flag}" />
                         <span tal:replace="lang/english">Norwegian</span>
                     </td>
-                    <td tal:content="lc">no</td>
+                    <td tal:content="lang/code">no</td>
                 </tr>
                 </tal:language>
             </tbody>
