@@ -69,17 +69,6 @@ class TestLanguageTool(PloneTestCase.PloneTestCase):
         self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
         self.failUnless(len(self.ltool.listSupportedLanguages())==len(supportedLanguages))
 
-    def testAddingLocalLanguages(self):
-        defaultLanguage = 'de'
-        supportedLanguages = ['en','de','no']
-        self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages,
-                                              setUseCombinedLanguageCodes=False)
-        self.ltool.addLanguage('xy', 'Test language')
-        self.failUnless(len(self.ltool.getAvailableLanguages())==len(availablelanguages.languages)+1)
-
-        self.failUnless(self.ltool.getNameForLanguageCode('xy')=='Test language')
-        self.failUnless(self.ltool.getNameForLanguageCode('de')=='Deutsch')
-
     def testSupportedLanguages(self):
         defaultLanguage = 'de'
         supportedLanguages = ['en','de','no']
@@ -94,14 +83,43 @@ class TestLanguageTool(PloneTestCase.PloneTestCase):
         self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
 
     def testSupportedCountries(self):
-        self.failUnless(len(self.ltool.getAvailableCountries())==len(availablelanguages.countries))
-        self.failUnless(len(self.ltool.listAvailableCountries())==len(availablelanguages.countries))
+        self.failUnless(len(self.ltool.getAvailableCountries())==len(availablelanguages.getCountries()))
+        self.failUnless(len(self.ltool.listAvailableCountries())==len(availablelanguages.getCountries()))
 
         self.ltool.addCountry('XY', 'MyTestPlace')
-        self.failUnless(len(self.ltool.getAvailableCountries())==len(availablelanguages.countries)+1)
+        self.failUnless(len(self.ltool.getAvailableCountries())==len(availablelanguages.getCountries())+1)
         self.failUnless(self.ltool.getNameForCountryCode('XY')=='MyTestPlace')
         self.failUnless(self.ltool.getNameForCountryCode('DE')=='Germany')
-        
+
+    def testAvailableLanguage(self):
+        defaultLanguage = 'de'
+        supportedLanguages = ['en','de','no']
+        self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages)
+        availableLanguages = self.ltool.getAvailableLanguageInformation()
+        self.failUnless(len(availableLanguages)==len(availablelanguages.getLanguages()))
+        for lang in availableLanguages:
+            if lang in supportedLanguages:
+                self.failUnless(availableLanguages[lang]['selected'] == True)
+
+
+class TestAddingLanguage(PloneTestCase.PloneTestCase):
+
+    def afterSetUp(self):
+        self.id = LanguageTool.id
+        self.ltool = self.portal._getOb(self.id)
+
+    def testAddingLocalLanguages(self):
+        defaultLanguage = 'de'
+        supportedLanguages = ['en','de','no']
+        self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages,
+                                              setUseCombinedLanguageCodes=False)
+        # Warning: Addition of languages persists between tests
+        self.ltool.addLanguage('xy', 'Test language')
+        self.failUnless(len(self.ltool.getAvailableLanguages())==len(availablelanguages.getLanguages())+1)
+
+        self.failUnless(self.ltool.getNameForLanguageCode('xy')=='Test language')
+        self.failUnless(self.ltool.getNameForLanguageCode('de')=='Deutsch')
+
 
 def test_suite():
     from unittest import TestSuite, makeSuite
@@ -109,6 +127,7 @@ def test_suite():
     suite.addTest(makeSuite(TestLanguageToolExists))
     suite.addTest(makeSuite(TestLanguageToolSettings))
     suite.addTest(makeSuite(TestLanguageTool))
+    suite.addTest(makeSuite(TestAddingLanguage))
     return suite
 
 if __name__ == '__main__':

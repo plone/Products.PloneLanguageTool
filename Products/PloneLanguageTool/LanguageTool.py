@@ -166,11 +166,31 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     security.declarePublic('getAvailableLanguages')
     def getAvailableLanguages(self):
         """Returns the dictionary of available languages."""
-        langs = availablelanguages.languages.copy()
+        langs = availablelanguages.getNativeLanguageNames()
         if self.use_combined_language_codes:
-            langs.update(availablelanguages.combined)
+            langs.update(availablelanguages.getCombinedLanguageNames())
         if self.local_available_langs.keys():
             langs.update(self.local_available_langs)
+        return langs
+
+    security.declarePublic('listAvailableLanguageInformation')
+    def listAvailableLanguageInformation(self):
+        """Returns dict of available languages."""
+        items = self.getAvailableLanguageInformation()
+        #items.sort(lambda x, y: cmp(x.get('native'), y.get('native')))
+        return items
+
+    security.declarePublic('getAvailableLanguageInformation')
+    def getAvailableLanguageInformation(self):
+        """Returns the dictionary of available languages."""
+        langs = availablelanguages.getLanguages()
+        if self.use_combined_language_codes:
+            langs.update(availablelanguages.getCombined())
+        if self.local_available_langs.keys():
+            langs.update(self.local_available_langs)
+        for lang in self.supported_langs:
+            if lang in langs:
+                langs[lang]['selected'] = True
         return langs
 
     security.declareProtected(View, 'getDefaultLanguage')
