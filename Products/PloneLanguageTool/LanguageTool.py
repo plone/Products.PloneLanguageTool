@@ -239,6 +239,14 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         """Returns the name for a language code."""
         return self.getAvailableLanguages().get(langCode, langCode)
 
+    security.declareProtected(View, 'getFlagForLanguageCode')
+    def getFlagForLanguageCode(self, langCode):
+        """Returns the name of the falg for a language code."""
+        info = self.getAvailableLanguageInformation().get(langCode, None)
+        if info is not None:
+            return info.get('flag', None)
+        return None
+
     security.declareProtected(ManagePortal, 'addSupportedLanguage')
     def addSupportedLanguage(self, langCode):
         """Registers a language code as supported."""
