@@ -64,6 +64,7 @@
             tal:condition="python: member.has_role('Manager')">
 
             <a href=""
+               i18n:translate="label_language_settings_link"
                tal:attributes="href string:${portal_url}/portal_languages/prefs_languages">
                 Language settings&#8230;
             </a>

@@ -1,11 +1,4 @@
-2005-09-13 23:00  hannosch
-
-	* Fixed http://plone.org/collector/4681 - fixed missing p-tag in
-	portal_languages/manage_configForm
-
-2005-09-11 18:00  hannosch
-
-	* i18n: moved all files to PloneTranslations and added README.txt
+*** This file is closed. For details on newer releases, look in HISTORY.txt ***
 
 2005-09-04 20:00  hannosch
 
@@ -115,7 +108,7 @@
 2004-06-04 16:05  limi
 
 	* skins/LanguageToolFlags/: README.txt, flag-fa.gif, flag-fo.gif,
-	flag-ko.gif, flag-zh.gif: Added Korean, Chinese, Færøyene, Persian.
+	flag-ko.gif, flag-zh.gif: Added Korean, Chinese, F?yene, Persian.
 
 2004-06-03 18:01  limi
 
