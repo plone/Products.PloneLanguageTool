@@ -1,0 +1,26 @@
+Changelog for PloneLanguageTool
+
+   (name of developer listed in brackets)
+
+PloneLanguageTool 0.8 - Unreleased
+
+    - Added test infrastructure and first tests
+      [hannosch]
+
+    - Fixed two missing i18n tags in portlet_languages.pt
+      [hannosch]
+
+    - Fixed http://plone.org/collector/4774 - missing i18n tags in
+      prefs_languages.pt
+      [hannosch]
+
+    - Fixed http://plone.org/collector/4681 - fixed missing p-tag in
+      portal_languages/manage_configForm
+      [hannosch]
+
+    - i18n: moved all files to PloneTranslations and added README.txt
+      [hannosch]
+
+PloneLanguageTool 0.7 - Released September 4, 2005
+
+    - See ChangeLog for details on former releases

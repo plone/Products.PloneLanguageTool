@@ -10,6 +10,15 @@
 
 <div metal:fill-slot="prefs_configlet_main">
 
+    <h1 i18n:translate="heading_language_settings">
+        Language Settings
+    </h1>
+    
+    <p class="documentDescription"
+       i18n:translate="description_language_settings">
+        Settings related to interface languages and content translations.
+    </p>
+
     <form action="manage_setLanguageSettings" 
           tal:attributes="action python:here.absolute_url()+'/manage_setLanguageSettings'" 
           method="post">
