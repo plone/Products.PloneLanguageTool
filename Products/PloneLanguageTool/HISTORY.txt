@@ -4,7 +4,8 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 0.9 - Unreleased
 
-    - 
+    - Fix http://plone.org/collector/4815 - misspelled i18n msgid
+      [hannosch]
 
 PloneLanguageTool 0.8 - Released October 8, 2005
 

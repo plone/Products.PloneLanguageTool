@@ -141,7 +141,7 @@
 
         <fieldset>
             <legend i18n:translate="heading_content_settings">Content Control Settings</legend>
-            <p i18n:translate="decription_content_settings">
+            <p i18n:translate="description_content_settings">
                 Check the settings that apply to multilingual content.
             </p>
 
