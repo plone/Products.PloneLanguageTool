@@ -4,6 +4,11 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 0.9 - Unreleased
 
+    - Added start_neutral content language setting. Now you can control
+      if the content should start as language neutral or in the current
+      selected language.
+      [deo]
+
     - Fix http://plone.org/collector/4815 - misspelled i18n msgid
       [hannosch]
 

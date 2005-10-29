@@ -46,6 +46,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     use_request_negotiation = 1
     use_combined_language_codes = 0
     display_flags = 1
+    start_neutral = 1
 
     _actions = [ActionInformation(
         id='languages'
@@ -75,6 +76,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         self.force_language_urls = 1
         self.allow_content_language_fallback = 0
         self.display_flags = 1
+        self.start_neutral = 1
 
     def __call__(self, container, req):
         """The __before_publishing_traverse__ hook."""
@@ -93,7 +95,8 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
                                    setPathN=None, setForcelanguageUrls=None,
                                    setAllowContentLanguageFallback=None,
                                    setUseCombinedLanguageCodes=None,
-                                   displayFlags=None, REQUEST=None):
+                                   displayFlags=None, startNeutral=None,
+                                   REQUEST=None):
         """Stores the tool settings."""
         self.setDefaultLanguage(defaultLanguage)
 
@@ -135,8 +138,20 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         else:
             self.display_flags = 0
 
+        if startNeutral:
+            self.start_neutral = 1
+        else:
+            self.start_neutral = 0
+
         if REQUEST:
             REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
+
+    security.declarePublic('startNeutral')
+    def startNeutral(self):
+        """Checks if the content start as language neutral or using the
+        preferred language.
+        """
+        return self.start_neutral
 
     security.declarePublic('showFlags')
     def showFlags(self):
