@@ -4,6 +4,13 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 0.9 - Unreleased
 
+    - Fix http://trac.plone.org/plone/ticket/4959 - if the default language was
+      not contained in the supported languages the config form showed a false
+      default language and the form had to be saved again to get the desired
+      result. Now in this special case the default language is set to the first
+      supported language.
+      [hannosch]
+
     - Added removeCountry and removeLanguage methods as counterpart for the
       corresponding add-methods. Added some basic tests.
       [hannosch]

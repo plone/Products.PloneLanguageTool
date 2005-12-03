@@ -83,6 +83,19 @@ class TestLanguageTool(PloneTestCase.PloneTestCase):
             self.ltool.addSupportedLanguage(lang)
         self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
 
+    def testDefaultLanguage(self):
+        supportedLanguages = ['de','no']
+
+        self.ltool.manage_setLanguageSettings('no', supportedLanguages)
+        self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
+        self.failUnless(self.ltool.getDefaultLanguage()=='no')
+
+        # default not in supported languages, should set to first supported
+        self.ltool.manage_setLanguageSettings('nl', supportedLanguages)
+
+        self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
+        self.failUnless(self.ltool.getDefaultLanguage()=='de')
+
 
 class TestLocalLanguages(PloneTestCase.PloneTestCase):
 

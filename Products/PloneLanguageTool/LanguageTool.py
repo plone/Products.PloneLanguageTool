@@ -98,10 +98,13 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
                                    displayFlags=None, startNeutral=None,
                                    REQUEST=None):
         """Stores the tool settings."""
-        self.setDefaultLanguage(defaultLanguage)
-
         if supportedLanguages and type(supportedLanguages) == type([]):
             self.supported_langs = supportedLanguages
+
+        if defaultLanguage in self.supported_langs:
+            self.setDefaultLanguage(defaultLanguage)
+        else:
+            self.setDefaultLanguage(self.supported_langs[0])
 
         if setCookieN:
             self.use_cookie_negotiation = 1
