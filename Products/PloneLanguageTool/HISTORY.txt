@@ -4,6 +4,10 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 0.9 - Unreleased
 
+    - Added removeCountry and removeLanguage methods as counterpart for the
+      corresponding add-methods. Added some basic tests.
+      [hannosch]
+
     - Added start_neutral content language setting. Now you can control
       if the content should start as language neutral or in the current
       selected language.

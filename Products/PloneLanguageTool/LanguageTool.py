@@ -221,6 +221,13 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         self.local_available_langs[langCode] = langDescription
         self._p_changed = 1
 
+    security.declareProtected(ManagePortal, 'removeLanguage')
+    def removeLanguage(self, langCode):
+        """Removes a custom language from the tool."""
+        if langCode in self.local_available_langs:
+            del self.local_available_langs[langCode]
+            self._p_changed = 1
+
     security.declareProtected(View, 'getNameForLanguageCode')
     def getNameForLanguageCode(self, langCode):
         """Returns the name for a language code."""
@@ -425,6 +432,13 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         """
         self.local_available_countries[countryCode] = countryDescription
         self._p_changed = 1
+
+    security.declareProtected(ManagePortal, 'removeCountry')
+    def removeCountry(self, countryCode):
+        """Removes a custom country from the tool."""
+        if countryCode in self.local_available_countries:
+            del self.local_available_countries[countryCode]
+            self._p_changed = 1
 
 
 class LanguageBinding:
