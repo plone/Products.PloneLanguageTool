@@ -3,7 +3,11 @@ from StringIO import StringIO
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.DirectoryView import addDirectoryViews
 from Products.Archetypes.Extensions.utils import install_subskin
-from Products.CMFCore.CMFCorePermissions import ManagePortal
+# BBB CMF < 1.5
+try:
+    from Products.CMFCore.permissions import ManagePortal
+except ImportError:
+    from Products.CMFCore.CMFCorePermissions import ManagePortal
 
 # check for I18NLayer
 try:
