@@ -2,7 +2,11 @@ Changelog for PloneLanguageTool
 
    (name of developer listed in brackets)
 
-PloneLanguageTool 0.9 - Unreleased
+PloneLanguageTool 1.0 - Unreleased
+
+    -
+
+PloneLanguageTool 0.9 - Released December 18, 2005
 
     - Fix http://trac.plone.org/plone/ticket/4959 - if the default language was
       not contained in the supported languages the config form showed a false
