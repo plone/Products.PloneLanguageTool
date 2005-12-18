@@ -1,8 +1,0 @@
-
-PloneLanguageTool was built by: 
-
-Jodok Batlogg, Solution2u           http://solution2u.net
-Simon Eisenmann, Struktur AG        http://www.strukturag.com
-Geir Bækholt, Plone Solutions AS    http://www.plonesolutions.com
-
-Parts of development sponsored by Learning Lab Denmark. 
