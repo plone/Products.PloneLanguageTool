@@ -1,0 +1,50 @@
+<div tal:replace="structure here/manage_page_header"/>
+<div tal:replace="structure here/manage_tabs"/>
+
+    <form action="manage_setLanguageSettings" tal:attributes="action python:here.absolute_url()+'/manage_setLanguageSettings'" method="POST">
+
+        <h2>Default language </h2>
+        <p>if you create new content, this is the default language<br />
+            <select name="defaultLanguage">
+                <option value="en"
+                        tal:repeat="lang here/listAllowedLanguages"
+                        tal:attributes="value python: lang[0];
+                                        selected python: test(lang[0]==here.getDefaultLanguage(), 'selected', '')"
+                        tal:content="python: lang[1]">
+                    English
+                </option>
+            </select>
+        </p>
+
+        <h2>Fallback language </h2>
+        <p>if content requested is not available in the language
+           the user preferred, content will be presented in the fallback language<br />
+           <select name="fallbackLanguage">
+                <option value="en"
+                        tal:repeat="lang here/listAllowedLanguages"
+                        tal:attributes="value python: lang[0];
+                                        selected python: test(lang[0]==here.getFallbackLanguage(), 'selected', '')"
+                        tal:content="python: lang[1]">
+                    English
+                </option>
+           </select>
+        </p>
+
+        <h2>Allowed languages </h2>
+        <p>please narrow the range of languages that can be added in your portal<br />
+           <i>use the CTRL key to select / deselect single items</i><br />
+            <select name="supportedLanguages" size="10" multiple>
+                <option value="en"
+                        tal:repeat="lang here/listAvailableLanguages"
+                        tal:attributes="value python: lang[0];
+                                        selected python: test(lang[0] in here.getSupportedLanguages(), 'selected', '')"
+                        tal:content="python: lang[1]">
+                    English
+                </option>
+            </select>
+        </p>
+
+        <input type=submit i18n:attributes="value" value="Save">
+    </form>
+
+<div tal:replace="structure here/manage_page_footer"/>
