@@ -227,7 +227,7 @@ languages_english = {
 'ln':'Lingala',
 'lo':'Laotian',
 'lt':'Lithuanian',
-'lv':'Latvian Lettish',
+'lv':'Latvian',
 'mg':'Malagasy',
 'mi':'Maori',
 'mk':'Macedonian',
