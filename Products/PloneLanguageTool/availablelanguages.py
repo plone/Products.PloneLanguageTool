@@ -1,7 +1,24 @@
 # -*- coding: UTF-8 -*-
 
-# List by Alexander Limi, Plone Solutions - http://www.plonesolutions.com
-# Please contact me if you have any corrections or additions.
+"""
+   List by Alexander Limi, Plone Solutions - http://www.plonesolutions.com
+   Please contact me if you have any corrections or additions.
+
+   Each language should have an English name
+   >>> len(languages) == len(languages_english)
+   True
+
+   The keys of native and english languages should be in sync
+   >>> native == english
+   True
+
+   Also the keys should be sorted
+   >>> native.index('de') < native.index('zh')
+   True
+
+   >>> english.index('de') < english.index('zh')
+   True
+"""
 
 languages = {
 'aa':'магIарул мацI', # Afar
@@ -781,17 +798,3 @@ english=languages_english.keys()
 native =languages.keys()
 english.sort()
 native.sort()
-
-# assert the keys are in sync
-try: assert(native == english)
-except AssertionError:
-    changed = []
-    count = 0
-    for c in native:
-        try: e = english[count]
-        except IndexError, msg: e=msg
-        if c != e: changed.append('%s != %s' % (c, e))
-        count=count+1
-
-    raise AssertionError, "Native and english languaes not in sync (%s)" % ', '.join(changed)
-

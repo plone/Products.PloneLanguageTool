@@ -4,7 +4,8 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 1.0 - Unreleased
 
-    -
+    - Converted some runtime tests to doctests.
+      [hannosch]
 
 PloneLanguageTool 0.9 - Released December 18, 2005
 
