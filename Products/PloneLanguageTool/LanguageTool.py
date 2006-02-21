@@ -1,12 +1,15 @@
-# $Id$
-
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.Expression import Expression
-from Products.CMFCore.CMFCorePermissions import View
-from Products.CMFCore.CMFCorePermissions import ManagePortal
-from Products.CMFCore.CMFCorePermissions import ModifyPortalContent
+# BBB CMF < 1.5
+try:
+    from Products.CMFCore.permissions import ManagePortal
+    from Products.CMFCore.permissions import View
+except ImportError:
+    from Products.CMFCore.CMFCorePermissions import ManagePortal
+    from Products.CMFCore.CMFCorePermissions import View
+
 from Products.CMFCore.ActionInformation import ActionInformation
 from Products.CMFCore.ActionProviderBase import ActionProviderBase
 from Products.CMFCore.utils import UniqueObject, getToolByName
@@ -46,6 +49,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     use_request_negotiation = 1
     use_combined_language_codes = 0
     display_flags = 1
+    start_neutral = 1
 
     _actions = [ActionInformation(
         id='languages'
@@ -75,6 +79,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         self.force_language_urls = 1
         self.allow_content_language_fallback = 0
         self.display_flags = 1
+        self.start_neutral = 1
 
     def __call__(self, container, req):
         """The __before_publishing_traverse__ hook."""
@@ -93,12 +98,16 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
                                    setPathN=None, setForcelanguageUrls=None,
                                    setAllowContentLanguageFallback=None,
                                    setUseCombinedLanguageCodes=None,
-                                   displayFlags=None, REQUEST=None):
+                                   displayFlags=None, startNeutral=None,
+                                   REQUEST=None):
         """Stores the tool settings."""
-        self.setDefaultLanguage(defaultLanguage)
-
         if supportedLanguages and type(supportedLanguages) == type([]):
             self.supported_langs = supportedLanguages
+
+        if defaultLanguage in self.supported_langs:
+            self.setDefaultLanguage(defaultLanguage)
+        else:
+            self.setDefaultLanguage(self.supported_langs[0])
 
         if setCookieN:
             self.use_cookie_negotiation = 1
@@ -135,8 +144,20 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         else:
             self.display_flags = 0
 
+        if startNeutral:
+            self.start_neutral = 1
+        else:
+            self.start_neutral = 0
+
         if REQUEST:
             REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
+
+    security.declarePublic('startNeutral')
+    def startNeutral(self):
+        """Checks if the content start as language neutral or using the
+        preferred language.
+        """
+        return self.start_neutral
 
     security.declarePublic('showFlags')
     def showFlags(self):
@@ -233,6 +254,13 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         """
         self.local_available_langs[langCode] = langDescription
         self._p_changed = 1
+
+    security.declareProtected(ManagePortal, 'removeLanguage')
+    def removeLanguage(self, langCode):
+        """Removes a custom language from the tool."""
+        if langCode in self.local_available_langs:
+            del self.local_available_langs[langCode]
+            self._p_changed = 1
 
     security.declareProtected(View, 'getNameForLanguageCode')
     def getNameForLanguageCode(self, langCode):
@@ -446,6 +474,13 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         """
         self.local_available_countries[countryCode] = countryDescription
         self._p_changed = 1
+
+    security.declareProtected(ManagePortal, 'removeCountry')
+    def removeCountry(self, countryCode):
+        """Removes a custom country from the tool."""
+        if countryCode in self.local_available_countries:
+            del self.local_available_countries[countryCode]
+            self._p_changed = 1
 
 
 class LanguageBinding:

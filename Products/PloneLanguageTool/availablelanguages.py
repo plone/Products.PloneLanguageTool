@@ -1,5 +1,24 @@
 # -*- coding: UTF-8 -*-
 
+"""
+   This file contains a list of language and country names.
+
+   >>> languages == getLanguages()
+   True
+   
+   >>> len(languages) == len(getNativeLanguageNames())
+   True
+
+   >>> combined == getCombined()
+   True
+
+   >>> len(combined) == len(getCombinedLanguageNames())
+   True
+
+   >>> len(countries) == len(getCountries())
+   True
+"""
+
 def getLanguages():
     """ Get all languages"""
     return languages.copy()
@@ -40,7 +59,7 @@ languages = {
 'ay' : {'native' : 'Aymara', 'english' : 'Aymara'},
 'az' : {'native' : 'Azəri Türkçəsi', 'english' : 'Azerbaijani', 'flag' : 'flag-az.png'},
 'ba' : {'native' : 'Bashkir', 'english' : 'Bashkir'},
-'be' : {'native' : 'Беларускі', 'english' : 'Belarusian', 'flag' : 'flag-by.png'},
+'be' : {'native' : 'Беларускі', 'english' : 'Belarussian', 'flag' : 'flag-by.png'},
 'bg' : {'native' : 'Български', 'english' : 'Bulgarian', 'flag' : 'flag-bg.png'},
 'bh' : {'native' : 'Bihari', 'english' : 'Bihari'},
 'bi' : {'native' : 'Bislama', 'english' : 'Bislama'},
@@ -97,7 +116,7 @@ languages = {
 'ks' : {'native' : 'काऽशुर', 'english' : 'Kashmiri', 'flag' : 'flag-in.png'},
 'ku' : {'native' : 'Kurdí', 'english' : 'Kurdish'},
 'kw' : {'native' : 'Kernewek', 'english' : 'Cornish'},
-'ky' : {'native' : 'Кыргыз', 'english' : 'Kyrgyz'},
+'ky' : {'native' : 'Кыргыз', 'english' : 'Kirghiz'},
 'la' : {'native' : 'Latin', 'english' : 'Latin', 'flag' : 'flag-va.png'},
 'lb' : {'native' : 'Lëtzebuergesch', 'english' : 'Luxemburgish', 'flag' : 'flag-lu.png'},
 'li' : {'native' : 'Limburgs', 'english' : 'Limburgish'},

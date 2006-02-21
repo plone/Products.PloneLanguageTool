@@ -2,10 +2,33 @@ Changelog for PloneLanguageTool
 
    (name of developer listed in brackets)
 
-PloneLanguageTool 0.8 - Unreleased
+PloneLanguageTool 1.0 - Unreleased
 
-    - Added test infrastructure and first tests
+    - Converted some runtime tests to doctests.
       [hannosch]
+
+PloneLanguageTool 0.9 - Released December 18, 2005
+
+    - Fix http://trac.plone.org/plone/ticket/4959 - if the default language was
+      not contained in the supported languages the config form showed a false
+      default language and the form had to be saved again to get the desired
+      result. Now in this special case the default language is set to the first
+      supported language.
+      [hannosch]
+
+    - Added removeCountry and removeLanguage methods as counterpart for the
+      corresponding add-methods. Added some basic tests.
+      [hannosch]
+
+    - Added start_neutral content language setting. Now you can control
+      if the content should start as language neutral or in the current
+      selected language.
+      [deo]
+
+    - Fix http://plone.org/collector/4815 - misspelled i18n msgid
+      [hannosch]
+
+PloneLanguageTool 0.8 - Released October 8, 2005
 
     - Fixed two missing i18n tags in portlet_languages.pt
       [hannosch]
