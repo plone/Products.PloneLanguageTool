@@ -1,5 +1,3 @@
-# $Id$
-
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 from OFS.SimpleItem import SimpleItem
@@ -16,7 +14,6 @@ from Products.CMFCore.ActionInformation import ActionInformation
 from Products.CMFCore.ActionProviderBase import ActionProviderBase
 from Products.CMFCore.utils import UniqueObject, getToolByName
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Acquisition import aq_base
 from ZPublisher import BeforeTraverse
 from ZPublisher.HTTPRequest import HTTPRequest
 
