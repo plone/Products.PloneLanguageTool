@@ -2,10 +2,19 @@ Changelog for PloneLanguageTool
 
    (name of developer listed in brackets)
 
-PloneLanguageTool 1.0 - Unreleased
+PloneLanguageTool 1.0 - Released March 19, 2006
+
+    - Added a Welsh flag.
+      [russf]
+
+    - Adding flags for Bosnia and Serbia. Jakub Steiner, you rock!
+      [limi]
 
     - Converted some runtime tests to doctests.
       [hannosch]
+
+    - Fixed Latvian language name. Thanks to Michael Dexter for the heads up.
+      [deo]
 
 PloneLanguageTool 0.9 - Released December 18, 2005
 
