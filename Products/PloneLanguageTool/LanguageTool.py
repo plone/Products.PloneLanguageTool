@@ -14,7 +14,6 @@ from Products.CMFCore.ActionInformation import ActionInformation
 from Products.CMFCore.ActionProviderBase import ActionProviderBase
 from Products.CMFCore.utils import UniqueObject, getToolByName
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Acquisition import aq_base
 from ZPublisher import BeforeTraverse
 from ZPublisher.HTTPRequest import HTTPRequest
 
@@ -198,7 +197,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
     security.declarePublic('listAvailableLanguageInformation')
     def listAvailableLanguageInformation(self):
-        """Returns dict of available languages."""
+        """Returns list of available languages."""
         langs = self.getAvailableLanguageInformation()
         new_langs = []
         for lang in langs:
@@ -217,9 +216,11 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             langs.update(availablelanguages.getCombined())
         if self.local_available_langs.keys():
             langs.update(self.local_available_langs)
-        for lang in self.supported_langs:
-            if lang in langs:
+        for lang in langs:
+            if lang in self.supported_langs:
                 langs[lang]['selected'] = True
+            else:
+                langs[lang]['selected'] = False
         return langs
 
     security.declareProtected(View, 'getDefaultLanguage')
@@ -269,7 +270,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
     security.declareProtected(View, 'getFlagForLanguageCode')
     def getFlagForLanguageCode(self, langCode):
-        """Returns the name of the falg for a language code."""
+        """Returns the name of the flag for a language code."""
         info = self.getAvailableLanguageInformation().get(langCode, None)
         if info is not None:
             return info.get('flag', None)

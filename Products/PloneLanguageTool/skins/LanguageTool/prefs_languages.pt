@@ -86,7 +86,7 @@
                                    class="noborder"
                                    name="supportedLanguages"
                                    tal:attributes="value lang/code;
-                                                   checked python: lang.get('selected', False)" />
+                                                   checked lang/selected | nothing" />
                         </td>
                         <td>
                             <img src="" alt="" height="16" width="16"

@@ -1,7 +1,6 @@
 from Products.PloneLanguageTool import lang_globals
 from StringIO import StringIO
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.DirectoryView import addDirectoryViews
 from Products.Archetypes.Extensions.utils import install_subskin
 # BBB CMF < 1.5
 try:
