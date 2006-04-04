@@ -185,12 +185,42 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
     security.declarePublic('getAvailableLanguages')
     def getAvailableLanguages(self):
-        """Returns the dictionary of available languages."""
-        langs = availablelanguages.languages.copy()
+        """Returns the dictionary of available languages.
+        The dict should have the form: {code : {native, english, flag}}.
+        """
+        langs = availablelanguages.getNativeLanguageNames()
         if self.use_combined_language_codes:
-            langs.update(availablelanguages.combined)
+            langs.update(availablelanguages.getCombinedLanguageNames())
         if self.local_available_langs.keys():
             langs.update(self.local_available_langs)
+        return langs
+
+    security.declarePublic('listAvailableLanguageInformation')
+    def listAvailableLanguageInformation(self):
+        """Returns list of available languages."""
+        langs = self.getAvailableLanguageInformation()
+        new_langs = []
+        for lang in langs:
+            # add language-code to dict
+            langs[lang]['code'] = lang
+            # flatten outer dict to list to make it sortable
+            new_langs.append(langs[lang])
+        new_langs.sort(lambda x, y: cmp(x.get('native', x.get('english')), y.get('native', y.get('english'))))
+        return new_langs
+
+    security.declarePublic('getAvailableLanguageInformation')
+    def getAvailableLanguageInformation(self):
+        """Returns the dictionary of available languages."""
+        langs = availablelanguages.getLanguages()
+        if self.use_combined_language_codes:
+            langs.update(availablelanguages.getCombined())
+        if self.local_available_langs.keys():
+            langs.update(self.local_available_langs)
+        for lang in langs:
+            if lang in self.supported_langs:
+                langs[lang]['selected'] = True
+            else:
+                langs[lang]['selected'] = False
         return langs
 
     security.declareProtected(View, 'getDefaultLanguage')
@@ -237,6 +267,14 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     def getNameForLanguageCode(self, langCode):
         """Returns the name for a language code."""
         return self.getAvailableLanguages().get(langCode, langCode)
+
+    security.declareProtected(View, 'getFlagForLanguageCode')
+    def getFlagForLanguageCode(self, langCode):
+        """Returns the name of the flag for a language code."""
+        info = self.getAvailableLanguageInformation().get(langCode, None)
+        if info is not None:
+            return info.get('flag', None)
+        return None
 
     security.declareProtected(ManagePortal, 'addSupportedLanguage')
     def addSupportedLanguage(self, langCode):

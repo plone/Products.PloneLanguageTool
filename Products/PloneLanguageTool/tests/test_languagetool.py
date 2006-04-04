@@ -96,6 +96,25 @@ class TestLanguageTool(PloneTestCase.PloneTestCase):
         self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
         self.failUnless(self.ltool.getDefaultLanguage()=='de')
 
+    def testSupportedCountries(self):
+        self.failUnless(len(self.ltool.getAvailableCountries())==len(availablelanguages.getCountries()))
+        self.failUnless(len(self.ltool.listAvailableCountries())==len(availablelanguages.getCountries()))
+
+        self.ltool.addCountry('XY', 'MyTestPlace')
+        self.failUnless(len(self.ltool.getAvailableCountries())==len(availablelanguages.getCountries())+1)
+        self.failUnless(self.ltool.getNameForCountryCode('XY')=='MyTestPlace')
+        self.failUnless(self.ltool.getNameForCountryCode('DE')=='Germany')
+
+    def testAvailableLanguage(self):
+        defaultLanguage = 'de'
+        supportedLanguages = ['en','de','no']
+        self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages)
+        availableLanguages = self.ltool.getAvailableLanguageInformation()
+        self.failUnless(len(availableLanguages)==len(availablelanguages.getLanguages()))
+        for lang in availableLanguages:
+            if lang in supportedLanguages:
+                self.failUnless(availableLanguages[lang]['selected'] == True)
+
 
 class TestLocalLanguages(PloneTestCase.PloneTestCase):
 

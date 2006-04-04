@@ -4,7 +4,21 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 1.1 - Unreleased
 
-    -
+    - Replaced the available language selector in the preference panel with a
+      new one, which shows both the original and the english language names as
+      well as the country flag which might be used for the language switcher
+      and the language code. It is possible to sort on any of these criteria as
+      well as on the 'selected' status by clicking on the table heading.
+      [hannosch] [limi]
+
+    - Removed all language flags in 15x12 GIF format and replaced them with
+      16x16 PNG country flags. These are named flag-<country code>.png. The
+      country codes follow the ISO 3166 standard. The mapping of flags to
+      languages is now more flexibly handled through a new underlying format in
+      availablelanguages.py, which would allow to map the same flag to more than
+      one language without having to duplicate the file as it was needed with
+      the former approach.
+      [hannosch] [limi]
 
 PloneLanguageTool 1.0 - Released March 19, 2006
 
