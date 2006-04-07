@@ -397,7 +397,7 @@ combined = {
 'nl-nl' : {'english' : 'Dutch (Netherlands)'},
 'nl-sr' : {'english' : 'Dutch (Suriname)'},
 'pt-ao' : {'english' : 'Português (Angola)'},
-'pt-br' : {'english' : 'Português (Brasil)'},
+'pt-br' : {'native'  : 'Português (Brasil)', 'english' : 'Brazilian Portuguese', 'flag' : 'flag-br.png'},
 'pt-cv' : {'english' : 'Português (Ilhas Cabo Verde)'},
 'pt-gw' : {'english' : 'Português (Guiné-Bissau)'},
 'pt-mz' : {'english' : 'Português (Moçambique)'},
