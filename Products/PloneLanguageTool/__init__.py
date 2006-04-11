@@ -13,6 +13,5 @@ tools = (LanguageTool,)
 def initialize(context):
     ToolInit('Plone Language Tool',
              tools=tools,
-             product_name=PKG_NAME,
              icon='tool.gif',
     ).initialize(context)

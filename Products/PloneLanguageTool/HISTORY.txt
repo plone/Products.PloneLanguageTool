@@ -4,6 +4,9 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 1.1 - Unreleased
 
+    - Avoid DeprecationWarning for manageAddDelete and product_name.
+      [hannosch]
+
     - Replaced the available language selector in the preference panel with a
       new one, which shows both the original and the english language names as
       well as the country flag which might be used for the language switcher
