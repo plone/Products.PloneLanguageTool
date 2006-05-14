@@ -2,7 +2,7 @@ Changelog for PloneLanguageTool
 
    (name of developer listed in brackets)
 
-PloneLanguageTool 1.1 - Unreleased
+PloneLanguageTool 1.1 - Released May 15, 2006
 
     - Avoid DeprecationWarning for product_name.
       [hannosch]
