@@ -2,6 +2,11 @@ Changelog for PloneLanguageTool
 
    (name of developer listed in brackets)
 
+PloneLanguageTool 1.0.1 - Unreleased
+
+    - Removed now unused i18n folder.
+      [hannosch]
+
 PloneLanguageTool 1.0 - Released March 19, 2006
 
     - Added a Welsh flag.
