@@ -79,7 +79,7 @@ languages = {
 'eo' : {'native' : 'Esperanto', 'english' : 'Esperanto'},
 'es' : {'native' : 'Español', 'english' : 'Spanish', 'flag' : 'flag-es.png'},
 'et' : {'native' : 'Eesti', 'english' : 'Estonian', 'flag' : 'flag-ee.png'},
-'eu' : {'native' : 'Euskara', 'english' : 'Basque'},
+'eu' : {'native' : 'Euskara', 'english' : 'Basque', 'flag' : 'flag-eu.png'},
 'fa' : {'native' : 'فارسی', 'english' : 'Persian'},
 'fi' : {'native' : 'Suomi', 'english' : 'Finnish', 'flag' : 'flag-fi.png'},
 'fj' : {'native' : 'Fiji', 'english' : 'Fiji', 'flag' : 'flag-fj.png'},
