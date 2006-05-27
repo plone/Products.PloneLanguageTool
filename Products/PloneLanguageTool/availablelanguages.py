@@ -155,7 +155,7 @@ languages = {
 'sa' : {'native' : 'संस्कृत', 'english' : 'Sanskrit'},
 'sd' : {'native' : 'Sindhi', 'english' : 'Sindhi', 'flag' : 'flag-pk.png'},
 'se' : {'native' : 'Northern Sámi', 'english' : 'Northern Sámi'},
-'sg' : {'native' : 'Sangho', 'english' : 'Sangho'},
+'sg' : {'native' : 'Sangho', 'english' : 'Sangho', 'flag' : 'flag-cf.png'},
 'sh' : {'native' : 'Serbo-Croatian', 'english' : 'Serbo-Croatian'},
 'si' : {'native' : 'Singhalese', 'english' : 'Singhalese'},
 'sk' : {'native' : 'Slovenčina', 'english' : 'Slovak', 'flag' : 'flag-sk.png'},

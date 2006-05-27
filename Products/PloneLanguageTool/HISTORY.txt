@@ -4,6 +4,9 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 1.2 - Unreleased
 
+    - Use Central African Republic (cf) flag for Sangho (sg). This closes
+      http://dev.plone.org/plone/ticket/5339.
+
     - Removed the unused i18n folder.
       [hannosch]
 
