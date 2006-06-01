@@ -2,7 +2,7 @@ Changelog for PloneLanguageTool
 
    (name of developer listed in brackets)
 
-PloneLanguageTool 1.2 - Unreleased
+PloneLanguageTool 1.2 - Released June 1, 2006
 
     - Readded flag for Basque country, currently we use flag-eu.png as there's
       no official country code in the ISO 3166 standard.
