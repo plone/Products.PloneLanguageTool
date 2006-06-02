@@ -76,7 +76,7 @@ languages = {
 'dz' : {'native' : 'Bhutani', 'english' : 'Indian Bhutani'},
 'el' : {'native' : 'Ελληνικά', 'english' : 'Greek', 'flag' : 'flag-gr.png'},
 'en' : {'native' : 'English', 'english' : 'English', 'flag' : 'flag-gb.png'},
-'eo' : {'native' : 'Esperanto', 'english' : 'Esperanto'},
+'eo' : {'native' : 'Esperanto', 'english' : 'Esperanto', 'flag' : 'flag-eo.png'},
 'es' : {'native' : 'Español', 'english' : 'Spanish', 'flag' : 'flag-es.png'},
 'et' : {'native' : 'Eesti', 'english' : 'Estonian', 'flag' : 'flag-ee.png'},
 'eu' : {'native' : 'Euskara', 'english' : 'Basque', 'flag' : 'flag-eu.png'},

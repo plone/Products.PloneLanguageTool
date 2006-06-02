@@ -2,6 +2,12 @@ Changelog for PloneLanguageTool
 
    (name of developer listed in brackets)
 
+PloneLanguageTool 1.3 - Unreleased
+
+    - Readded flag for Esperanto, we use flag-eo.png as there's no country code.
+      This closes http://dev.plone.org/plone/ticket/5547.
+      [hannosch]
+
 PloneLanguageTool 1.2 - Released June 1, 2006
 
     - Readded flag for Basque country, currently we use flag-eu.png as there's
