@@ -4,6 +4,8 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 1.3 - Unreleased
 
+    - Fixed displaying flags in the portlet_languages by using getFlagForLanguageCode
+
     - Cleanup switchLanguage.py because it contained a lot of I18NLayer specific code.
       I added the original file to I18NLayer. Also changed .gif to .png in the portlet_languages
       [jladage]
