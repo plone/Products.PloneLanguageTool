@@ -8,82 +8,12 @@
 ##parameters=set_language=None
 REQUEST=context.REQUEST
 
-if set_language: lang=set_language
+if set_language:
+    lang=set_language
 
 here_url=context.absolute_url()
-try: 
-    layer_url=context.retrieveI18NContentLayerURL()
-    available_languages=context.retrieveFilteredLanguages().keys()
-    if not available_languages:
-        try:
-            available_languages=context.getTranslationLanguages()
-            # we are probably in psol-redux branch of i18n-layer
-        except: pass
-except: 
-    layer_url=here_url
-    available_languages=()
 
-redirect=layer_url
-
-try: referrer=REQUEST.environ['HTTP_REFERER']
-except: referrer=here_url
-
-print "layer_url", layer_url
-print "referrer", referrer
-print "lang", lang
-
-if referrer[:len(layer_url)] == layer_url:
-    try: rest=referrer[len(layer_url):]
-    except: rest=None
-    print "r1", rest
-    if rest and rest != '/' and rest != '/index_html':
-        rest=rest.split('/')
-        print "rest", rest
-        print "langs", available_languages
-        if len(rest) > 1:
-            rs = rest[1].split('?')
-            if len(rs) > 1: q=rs[1]
-            else: q=None
-            r=rs[0]
-            print "r, q", r,q
-            if r in available_languages: 
-                print "1"
-                if lang in available_languages:
-                    if context.portal_membership.checkPermission('View', getattr(context, lang)):
-                        print "permission on", lang
-                        r=lang
-                    else:
-                        print "no permission on", lang
-                        r=None
-                else:
-                    # changed from valid lang to unavailable
-                    print "lang %s not available" % lang
-                    rest = []
-            elif r == 'i18nlayer_languages_form':
-                print "2"
-                r=None
-            else: 
-                print "3"
-                #rest=[]
-            if q and r and len(rest)>1: rest[1]='?'.join((r, q))
-            elif r and len(rest)>1: rest[1]=r
-            elif not r and len(rest) >1: del rest[1]
-            print "rest", rest, q, r
-        redirect=layer_url+'/'.join(rest)
-
-query={}
-# parse current query
-s = redirect.find('?')
-if s >= 0:
-    q = redirect[s+1:]
-    redirect=redirect[:s]
-    for e in q.split("&"):
-        if e:
-            k,v = e.split("=")
-            query[k]=v
-
-print "query", query
-
+query = {}
 if lang:
     # no cookie support
     query['cl']=lang
@@ -94,11 +24,7 @@ if set_language:
 qst="?"
 for k, v in query.items():
     qst=qst+"%s=%s&" % (k, v)
+redirect=here_url+qst[:-1]
 
-print "query", query
-
-redirect=redirect+qst[:-1]
-print "redirect", redirect
-#return printed
 REQUEST.RESPONSE.redirect(redirect)
 
