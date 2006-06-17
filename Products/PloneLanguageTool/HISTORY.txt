@@ -2,7 +2,14 @@ Changelog for PloneLanguageTool
 
    (name of developer listed in brackets)
 
-PloneLanguageTool 1.3 - Unreleased
+PloneLanguageTool 1.3 - Released June 17, 2006
+
+    - Use the Norwegian flag for Nynorsk.
+      [limi]
+
+    - Removed all accidentally added country flags in 16x16 PNG format again
+      and converted them to 14x11 GIF format. Transparent PNG don't work in IE.
+      [limi]
 
     - Fixed changing supported languages in the control panel. It silently
       failed for the case of only one resulting supported language.
