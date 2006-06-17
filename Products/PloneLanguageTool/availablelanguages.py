@@ -138,7 +138,7 @@ languages = {
 'ne' : {'native' : 'नेपाली', 'english' : 'Nepali'},
 'nl' : {'native' : 'Nederlands', 'english' : 'Dutch', 'flag' : 'flag-nl.gif'},
 'no' : {'native' : 'Norsk', 'english' : 'Norwegian', 'flag' : 'flag-no.gif'},
-'nn' : {'native' : 'Nynorsk', 'english' : 'Norwegian Nynorsk'},
+'nn' : {'native' : 'Nynorsk', 'english' : 'Norwegian Nynorsk', 'flag' : 'flag-no.gif'},
 'oc' : {'native' : 'Occitan', 'english' : 'Occitan'},
 'om' : {'native' : 'Oromo', 'english' : 'Oromo'},
 'or' : {'native' : 'ଓଡ଼ିଆ', 'english' : 'Oriya'},
