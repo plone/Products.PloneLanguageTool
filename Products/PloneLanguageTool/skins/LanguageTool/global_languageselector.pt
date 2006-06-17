@@ -23,8 +23,8 @@
                    tal:attributes="href string:${here/absolute_url}/switchLanguage?set_language=${code};
                                    title python:here.portal_languages.getNameForLanguageCode(lang[0]) or lang[1]">
                     <tal:flag condition="flag">
-                        <img width="16"
-                             height="16"
+                        <img width="14"
+                             height="11"
                              alt=""
                              tal:attributes="src string:${portal_url}/${flag};
                                              title python: lang[1];
