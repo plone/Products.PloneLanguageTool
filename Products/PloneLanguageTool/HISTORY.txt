@@ -4,6 +4,10 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 1.3 - Unreleased
 
+    - Fixed changing supported languages in the control panel. It silently
+      failed for the case of only one resulting supported language.
+      [hannosch]
+
     - Fixed displaying flags in the portlet_languages by using
       getFlagForLanguageCode.
       [jladage]
