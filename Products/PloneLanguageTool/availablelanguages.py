@@ -422,9 +422,9 @@ combined = {
 'tr-tr' : {'english' : 'Turkish (Turkey)'},
 'ur-in' : {'english' : 'Urdu (India)'},
 'ur-pk' : {'english' : 'Urdu (Pakistan)'},
-'zh-cn' : {'english' : 'Chinese (China)', 'native' : '簡體中文(中國)',  'flag' : 'flag-cn.gif'},
+'zh-cn' : {'english' : 'Chinese (China)', 'native' : '简体中文(中国)',  'flag' : 'flag-cn.gif'},
 'zh-hk' : {'english' : 'Chinese (Hongkong)', 'native' : '繁體中文(香港)',  'flag' : 'flag-hk.gif'},
-'zh-sg' : {'english' : 'Chinese (Singapore)', 'native' : '簡體中文(新加坡)',  'flag' : 'flag-sg.gif'},
+'zh-sg' : {'english' : 'Chinese (Singapore)', 'native' : '简体中文(新加坡)',  'flag' : 'flag-sg.gif'},
 'zh-tw' : {'english' : 'Chinese (Taiwan)', 'native' : '繁體中文(臺灣)',  'flag' : 'flag-tw.gif'}
 }
 
