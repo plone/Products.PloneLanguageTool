@@ -115,7 +115,7 @@
                        tal:attributes="checked here/use_combined_language_codes| nothing" />
                 <label for="CombinedLangCodes"
                        i18n:translate="label_allow_combined_language_codes">
-                    Show country-specific variants, like pt-br (Brazilian Portuguese) or en-us (American English).
+                    Show country-specific language variants, like pt-br (Brazilian Portuguese), en-us (American English) etc.
                 </label>
             </p>
 
