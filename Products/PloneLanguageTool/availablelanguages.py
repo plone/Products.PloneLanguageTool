@@ -106,6 +106,7 @@ languages = {
 'it' : {'native' : 'Italiano', 'english' : 'Italian', 'flag' : 'flag-it.gif'},
 'iu' : {'native' : 'ᐃᓄᒃᑎᑐᑦ', 'english' : 'Inuktitut', 'flag' : 'flag-it.gif'},
 'ja' : {'native' : '日本語', 'english' : 'Japanese', 'flag' : 'flag-jp.gif'},
+'jbo': {'native' : 'lojban', 'english' : 'Lojban'},
 'jw' : {'native' : 'Basa Jawi', 'english' : 'Javanese', 'flag' : 'flag-id.gif'},
 'ka' : {'native' : 'ქართული', 'english' : 'Georgian', 'flag' : 'flag-ge.gif'},
 'kk' : {'native' : 'ﻗﺎﺯﺍﻗﺸﺎ', 'english' : 'Kazakh', 'flag' : 'flag-kz.gif'},
