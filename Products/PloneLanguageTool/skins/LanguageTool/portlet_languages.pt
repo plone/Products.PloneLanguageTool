@@ -48,7 +48,7 @@
                     <img width="14" height="11" alt=""
                          tal:define="flag python: here.portal_languages.getFlagForLanguageCode(code)"
                          tal:condition="here/portal_languages/showFlags | nothing"
-                         tal:attributes="src string:${portal_url}/${flag};
+                         tal:attributes="src string:${portal_url}${flag};
                                          title python: lang[1]"/>
  
                     <span tal:replace="python:here.portal_languages.getNameForLanguageCode(lang[0]) or lang[1]">

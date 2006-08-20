@@ -17,6 +17,10 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZPublisher import BeforeTraverse
 from ZPublisher.HTTPRequest import HTTPRequest
 
+from plone.i18n.locales.interfaces import ICountryAvailability
+from plone.i18n.locales.interfaces import IContentLanguageAvailability
+from zope.component import queryUtility
+
 try:
     from Products.CMFPlone.interfaces.Translatable import ITranslatable
 except ImportError:
@@ -27,8 +31,6 @@ try:
     _hasPTS = 1
 except ImportError:
     _hasPTS = 0
-
-import availablelanguages
 
 class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     """Language Administration Tool For Plone."""
@@ -163,37 +165,40 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         """Shows the flags in language listings or not."""
         return self.display_flags
 
-    security.declareProtected(View, 'listSupportedLanguages')
-    def listSupportedLanguages(self):
-        """Returns a list of supported language names."""
-        r = []
-        for i in self.supported_langs:
-            r.append((i,self.getAvailableLanguages()[i]))
-        return r
-
     security.declareProtected(View, 'getSupportedLanguages')
     def getSupportedLanguages(self):
         """Returns a list of supported language codes."""
         return self.supported_langs
 
-    security.declarePublic('listAvailableLanguages')
-    def listAvailableLanguages(self):
-        """Returns sorted list of available languages (code, name)."""
-        items = list(self.getAvailableLanguages().items())
-        items.sort(lambda x, y: cmp(x[1], y[1]))
-        return items
+    security.declareProtected(View, 'listSupportedLanguages')
+    def listSupportedLanguages(self):
+        """Returns a list of supported language names."""
+        r = []
+        for i in self.supported_langs:
+            r.append((i,self.getAvailableLanguages()[i][u'name']))
+        return r
 
     security.declarePublic('getAvailableLanguages')
     def getAvailableLanguages(self):
         """Returns the dictionary of available languages.
-        The dict should have the form: {code : {native, english, flag}}.
         """
-        langs = availablelanguages.getNativeLanguageNames()
+        util = queryUtility(IContentLanguageAvailability)
         if self.use_combined_language_codes:
-            langs.update(availablelanguages.getCombinedLanguageNames())
-        if self.local_available_langs.keys():
-            langs.update(self.local_available_langs)
-        return langs
+            languages = util.getLanguages(combined=True)
+        else:
+            languages = util.getLanguages()
+        return languages
+
+    security.declarePublic('listAvailableLanguages')
+    def listAvailableLanguages(self):
+        """Returns sorted list of available languages (code, name)."""
+        util = queryUtility(IContentLanguageAvailability)
+        if self.use_combined_language_codes:
+            languages = util.getLanguageListing(combined=True)
+        else:
+            languages = util.getLanguageListing()
+        languages.sort(lambda x, y: cmp(x[1], y[1]))
+        return languages
 
     security.declarePublic('listAvailableLanguageInformation')
     def listAvailableLanguageInformation(self):
@@ -202,26 +207,27 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         new_langs = []
         for lang in langs:
             # add language-code to dict
-            langs[lang]['code'] = lang
+            langs[lang][u'code'] = lang
             # flatten outer dict to list to make it sortable
             new_langs.append(langs[lang])
-        new_langs.sort(lambda x, y: cmp(x.get('native', x.get('english')), y.get('native', y.get('english'))))
+        new_langs.sort(lambda x, y: cmp(x.get(u'native', x.get(u'name')), y.get(u'native', y.get(u'name'))))
         return new_langs
 
     security.declarePublic('getAvailableLanguageInformation')
     def getAvailableLanguageInformation(self):
         """Returns the dictionary of available languages."""
-        langs = availablelanguages.getLanguages()
+        util = queryUtility(IContentLanguageAvailability)
         if self.use_combined_language_codes:
-            langs.update(availablelanguages.getCombined())
-        if self.local_available_langs.keys():
-            langs.update(self.local_available_langs)
-        for lang in langs:
+            languages = util.getLanguages(combined=True)
+        else:
+            languages = util.getLanguages()
+
+        for lang in languages:
             if lang in self.supported_langs:
-                langs[lang]['selected'] = True
+                languages[lang]['selected'] = True
             else:
-                langs[lang]['selected'] = False
-        return langs
+                languages[lang]['selected'] = False
+        return languages
 
     security.declareProtected(View, 'getDefaultLanguage')
     def getDefaultLanguage(self):
@@ -266,14 +272,17 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     security.declareProtected(View, 'getNameForLanguageCode')
     def getNameForLanguageCode(self, langCode):
         """Returns the name for a language code."""
-        return self.getAvailableLanguages().get(langCode, langCode)
+        info = self.getAvailableLanguageInformation().get(langCode, None)
+        if info is not None:
+            return info.get(u'name', None)
+        return None
 
     security.declareProtected(View, 'getFlagForLanguageCode')
     def getFlagForLanguageCode(self, langCode):
         """Returns the name of the flag for a language code."""
         info = self.getAvailableLanguageInformation().get(langCode, None)
         if info is not None:
-            return info.get('flag', None)
+            return info.get(u'flag', None)
         return None
 
     security.declareProtected(ManagePortal, 'addSupportedLanguage')
@@ -450,17 +459,16 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     security.declarePublic('getAvailableCountries')
     def getAvailableCountries(self):
         """Returns the dictionary of available countries."""
-        countries = availablelanguages.countries.copy()
-        if self.local_available_countries.keys():
-            countries.update(self.local_available_countries)
-        return countries
+        util = queryUtility(ICountryAvailability)
+        return util.getCountries()
 
     security.declarePublic('listAvailableCountries')
     def listAvailableCountries(self):
         """Returns the sorted list of available countries (code, name)."""
-        items = list(self.getAvailableCountries().items())
-        items.sort(lambda x, y: cmp(x[1], y[1]))
-        return items
+        util = queryUtility(ICountryAvailability)
+        countries = util.getCountryListing()
+        countries.sort(lambda x, y: cmp(x[1], y[1]))
+        return countries
 
     security.declareProtected(View, 'getNameForCountryCode')
     def getNameForCountryCode(self, countryCode):

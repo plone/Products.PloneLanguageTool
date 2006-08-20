@@ -91,14 +91,14 @@
                         <td>
                             <img src="" alt="" height="11" width="14"
                                  tal:condition="python: here.portal_languages.showFlags() and lang.get('flag', False)"
-                                 tal:attributes="src string:${portal_url}/${lang/flag}" />
+                                 tal:attributes="src string:${portal_url}${lang/flag}" />
                             <span tal:replace="lang/native | nothing">Norsk</span>
                         </td>
                         <td>
                             <img src="" alt="" height="11" width="14"
                                  tal:condition="python: here.portal_languages.showFlags() and lang.get('flag', False)"
-                                 tal:attributes="src string:${portal_url}/${lang/flag}" />
-                            <span tal:replace="lang/english">Norwegian</span>
+                                 tal:attributes="src string:${portal_url}${lang/flag}" />
+                            <span tal:replace="lang/name">Norwegian</span>
                         </td>
                         <td tal:content="lang/code">no</td>
                     </tr>

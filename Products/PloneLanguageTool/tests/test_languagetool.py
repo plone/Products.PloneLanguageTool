@@ -13,7 +13,6 @@ PRODUCTS = ['PloneLanguageTool']
 
 PloneTestCase.setupPloneSite(products=PRODUCTS)
 from Products.PloneLanguageTool import LanguageTool
-from Products.PloneLanguageTool import availablelanguages
 
 class TestLanguageToolExists(PloneTestCase.PloneTestCase):
 
@@ -68,7 +67,6 @@ class TestLanguageTool(PloneTestCase.PloneTestCase):
                                               setUseCombinedLanguageCodes=False)
         self.failUnless(self.ltool.getDefaultLanguage()==defaultLanguage)
         self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
-        self.failUnless(len(self.ltool.listSupportedLanguages())==len(supportedLanguages))
 
     def testSupportedLanguages(self):
         defaultLanguage = 'de'
@@ -96,82 +94,14 @@ class TestLanguageTool(PloneTestCase.PloneTestCase):
         self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
         self.failUnless(self.ltool.getDefaultLanguage()=='de')
 
-    def testSupportedCountries(self):
-        self.failUnless(len(self.ltool.getAvailableCountries())==len(availablelanguages.getCountries()))
-        self.failUnless(len(self.ltool.listAvailableCountries())==len(availablelanguages.getCountries()))
-
-        self.ltool.addCountry('XY', 'MyTestPlace')
-        self.failUnless(len(self.ltool.getAvailableCountries())==len(availablelanguages.getCountries())+1)
-        self.failUnless(self.ltool.getNameForCountryCode('XY')=='MyTestPlace')
-        self.failUnless(self.ltool.getNameForCountryCode('DE')=='Germany')
-
     def testAvailableLanguage(self):
         defaultLanguage = 'de'
         supportedLanguages = ['en','de','no']
         self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages)
         availableLanguages = self.ltool.getAvailableLanguageInformation()
-        self.failUnless(len(availableLanguages)==len(availablelanguages.getLanguages()))
         for lang in availableLanguages:
             if lang in supportedLanguages:
                 self.failUnless(availableLanguages[lang]['selected'] == True)
-
-
-class TestLocalLanguages(PloneTestCase.PloneTestCase):
-
-    def afterSetUp(self):
-        self.id = LanguageTool.id
-        self.ltool = self.portal._getOb(self.id)
-
-    def testAddRemove(self):
-        defaultLanguage = 'de'
-        supportedLanguages = ['en','de','no']
-        self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages,
-                                              setUseCombinedLanguageCodes=False)
-
-        # Warning: Addition of languages persists between tests
-        before = self.ltool.getAvailableLanguages()
-        self.ltool.addLanguage('xy', 'Test language')
-        after = self.ltool.getAvailableLanguages()
-        self.failUnless(len(before)+1==len(after))
-        self.failUnless('xy' in after)
-
-        self.failUnless(self.ltool.getNameForLanguageCode('xy')=='Test language')
-        self.failUnless(self.ltool.getNameForLanguageCode('de')=='Deutsch')
-
-        self.ltool.removeLanguage('xy')
-        after = self.ltool.getAvailableLanguages()
-        self.failUnless(len(before)==len(after))
-        self.failUnless('xy' not in after)
-
-    def beforeTearDown(self):
-        self.ltool.removeLanguage('xy')
-
-
-class TestLocalCountries(PloneTestCase.PloneTestCase):
-
-    def afterSetUp(self):
-        self.id = LanguageTool.id
-        self.ltool = self.portal._getOb(self.id)
-
-    def testAddRemove(self):
-
-        # Warning: Addition of countries persists between tests
-        before = self.ltool.getAvailableCountries()
-        self.ltool.addCountry('qq', 'Test country')
-        after = self.ltool.getAvailableCountries()
-        self.failUnless(len(before)+1==len(after))
-        self.failUnless('qq' in after)
-
-        self.failUnless(self.ltool.getNameForCountryCode('qq')=='Test country')
-        self.failUnless(self.ltool.getNameForCountryCode('DE')=='Germany')
-
-        self.ltool.removeCountry('qq')
-        after = self.ltool.getAvailableCountries()
-        self.failUnless(len(before)==len(after))
-        self.failUnless('qq' not in after)
-
-    def beforeTearDown(self):
-        self.ltool.removeCountry('qq')
 
 
 def test_suite():
@@ -180,8 +110,6 @@ def test_suite():
     suite.addTest(makeSuite(TestLanguageToolExists))
     suite.addTest(makeSuite(TestLanguageToolSettings))
     suite.addTest(makeSuite(TestLanguageTool))
-    suite.addTest(makeSuite(TestLocalLanguages))
-    suite.addTest(makeSuite(TestLocalCountries))
     return suite
 
 if __name__ == '__main__':
