@@ -2,18 +2,7 @@ from Products.PloneLanguageTool import lang_globals
 from StringIO import StringIO
 from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.Extensions.utils import install_subskin
-# BBB CMF < 1.5
-try:
-    from Products.CMFCore.permissions import ManagePortal
-except ImportError:
-    from Products.CMFCore.CMFCorePermissions import ManagePortal
-
-# check for I18NLayer
-try:
-   from Products import I18NLayer
-   hasI18NLayer = 1
-except ImportError:
-   hasI18NLayer = 0
+from Products.CMFCore.permissions import ManagePortal
 
 _globals = globals()
 
@@ -38,12 +27,8 @@ def install_actions(self, out):
     at.manage_aproviders('portal_languages', add_provider=1)
 
 def addLanguageSelectorSlot(self,out):
-    if hasI18NLayer:
-        # old portlet with i18nLayer support:
-        slot = 'here/languageSelectorMacro/macros/globalLanguageSelector'
-    else:
-        # new portlet
-        slot = 'here/portlet_languages/macros/portlet'
+    # portlet
+    slot = 'here/portlet_languages/macros/portlet'
 
     left_slots = getattr(self, 'left_slots', None)
     right_slots = getattr(self, 'right_slots', ())
