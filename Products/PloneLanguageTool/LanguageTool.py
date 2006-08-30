@@ -2,16 +2,10 @@ from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.Expression import Expression
-# BBB CMF < 1.5
-try:
-    from Products.CMFCore.permissions import ManagePortal
-    from Products.CMFCore.permissions import View
-except ImportError:
-    from Products.CMFCore.CMFCorePermissions import ManagePortal
-    from Products.CMFCore.CMFCorePermissions import View
-
 from Products.CMFCore.ActionInformation import ActionInformation
 from Products.CMFCore.ActionProviderBase import ActionProviderBase
+from Products.CMFCore.permissions import ManagePortal
+from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import UniqueObject, getToolByName
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZPublisher import BeforeTraverse
