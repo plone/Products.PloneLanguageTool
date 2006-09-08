@@ -1,6 +1,17 @@
 Changelog for PloneLanguageTool
 
-   (name of developer listed in brackets)
+    (name of developer listed in brackets)
+
+PloneLanguageTool 1.4 - Unreleased
+
+    - Changed the browser language based negotiation to recognize combined
+      language codes as the base language if only the base language is allowed
+      and specified in the browser. So if the browser requests the site in
+      'de-de' and only 'de' is allowed for the site, it is recognized as 'de'.
+      If the usage of combined language codes is explicitly enabled this
+      fallback is not applied, so you can still have full control over combined
+      codes as well. This closes http://dev.plone.org/plone/ticket/5784.
+      [hannosch]
 
 PloneLanguageTool 1.3 - Released June 17, 2006
 

@@ -391,9 +391,16 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
                     quality = float(length-i)
 
                 language = l[0]
-                if language in self.getSupportedLanguages():
-                    # If allowed the add language
-                    langs.append((quality, language))
+                if self.use_combined_language_codes:
+                    if language in self.getSupportedLanguages():
+                        # If allowed the add language
+                        langs.append((quality, language))
+                else:
+                    # if we only use simply language codes, we should recognize
+                    # combined codes as their base code. So 'de-de' is treated
+                    # as 'de'.
+                    if language.split('-')[0] in self.getSupportedLanguages():
+                        langs.append((quality, language))
                 i = i + 1
 
         # Sort and reverse it
