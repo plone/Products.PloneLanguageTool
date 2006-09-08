@@ -2,7 +2,7 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
-PloneLanguageTool 1.4 - Unreleased
+PloneLanguageTool 1.4 - Released September 8, 2006
 
     - Changed the browser language based negotiation to recognize combined
       language codes as the base language if only the base language is allowed
