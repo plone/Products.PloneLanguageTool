@@ -19,7 +19,7 @@
        </p>
 
         <h2>Allowed languages</h2>
-        <p><i>use the CTRL key to select / deselect single items</i><br />
+        <p><i>Use the ctlr/alt/option key to select / deselect single items</i><br />
             <select name="supportedLanguages:list" size="10" multiple>
                 <option value="en"
                         tal:repeat="lang here/listAvailableLanguages"

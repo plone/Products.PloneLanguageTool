@@ -7,6 +7,7 @@ from Products.CMFCore.ActionProviderBase import ActionProviderBase
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import UniqueObject, getToolByName
+from Products.CMFPlone.interfaces.Translatable import ITranslatable
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZPublisher import BeforeTraverse
 from ZPublisher.HTTPRequest import HTTPRequest
@@ -16,17 +17,12 @@ from plone.i18n.locales.interfaces import IContentLanguageAvailability
 from zope.component import queryUtility
 
 try:
-    from Products.CMFPlone.interfaces.Translatable import ITranslatable
-except ImportError:
-    from interfaces import ITranslatable
-
-try:
     from Products.PlacelessTranslationService.Negotiator import registerLangPrefsMethod
     _hasPTS = 1
 except ImportError:
     _hasPTS = 0
 
-class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
+class LanguageTool(UniqueObject, SimpleItem):
     """Language Administration Tool For Plone."""
 
     id  = 'portal_languages'
@@ -36,9 +32,6 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     security = ClassSecurityInfo()
 
     supported_langs = ['en']
-    local_available_langs = {}
-    local_available_countries = {}
-
     use_path_negotiation = 1
     use_cookie_negotiation = 1
     use_request_negotiation = 1
@@ -46,22 +39,11 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     display_flags = 1
     start_neutral = 1
 
-    _actions = [ActionInformation(
-        id='languages'
-        , title='Portal Languages'
-        , action=Expression(text='string: ${portal_url}/portal_languages/langConfig')
-        , condition=Expression(text='member')
-        , permissions=(ManagePortal,)
-        , category='portal_tabs'
-        , visible=0
-        )]
-
     manage_options=(
         ({ 'label'  : 'LanguageConfig',
            'action' : 'manage_configForm',
            },
          ) + SimpleItem.manage_options
-        +  ActionProviderBase.manage_options
         )
 
     manage_configForm = PageTemplateFile('www/config', globals())
@@ -246,22 +228,6 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         if portal.hasProperty('default_language'):
             return portal._updateProperty('default_language', langCode)
         self.default_lang = langCode
-
-    security.declareProtected(ManagePortal, 'addLanguage')
-    def addLanguage(self, langCode, langDescription):
-        """Adds a custom language to the tool.
-
-        This can override predefined ones.
-        """
-        self.local_available_langs[langCode] = langDescription
-        self._p_changed = 1
-
-    security.declareProtected(ManagePortal, 'removeLanguage')
-    def removeLanguage(self, langCode):
-        """Removes a custom language from the tool."""
-        if langCode in self.local_available_langs:
-            del self.local_available_langs[langCode]
-            self._p_changed = 1
 
     security.declareProtected(View, 'getNameForLanguageCode')
     def getNameForLanguageCode(self, langCode):
@@ -455,7 +421,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     security.declarePublic('isTranslatable')
     def isTranslatable(self, obj):
         """Checks if ITranslatable interface is implemented."""
-        return ITranslatable.isImplementedBy(obj)
+        return ITranslatable.isProvidedBy(obj)
 
     security.declarePublic('getAvailableCountries')
     def getAvailableCountries(self):
@@ -475,22 +441,6 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     def getNameForCountryCode(self, countryCode):
         """Returns the name for a country code."""
         return self.getAvailableCountries().get(countryCode, countryCode)
-
-    security.declareProtected(ManagePortal, 'addCountry')
-    def addCountry(self, countryCode, countryDescription):
-        """Adds a custom country to the tool.
-
-        This can override predefined ones.
-        """
-        self.local_available_countries[countryCode] = countryDescription
-        self._p_changed = 1
-
-    security.declareProtected(ManagePortal, 'removeCountry')
-    def removeCountry(self, countryCode):
-        """Removes a custom country from the tool."""
-        if countryCode in self.local_available_countries:
-            del self.local_available_countries[countryCode]
-            self._p_changed = 1
 
 
 class LanguageBinding:

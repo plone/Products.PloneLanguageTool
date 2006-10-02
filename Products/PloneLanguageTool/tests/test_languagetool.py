@@ -1,17 +1,8 @@
-#
-# PloneLanguageTool TestCase
-#
-
-import os, sys
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
-
 from Products.PloneTestCase import PloneTestCase
 
 PloneTestCase.installProduct('PloneLanguageTool')
-PRODUCTS = ['PloneLanguageTool']
 
-PloneTestCase.setupPloneSite(products=PRODUCTS)
+PloneTestCase.setupPloneSite()
 from Products.PloneLanguageTool import LanguageTool
 
 class TestLanguageToolExists(PloneTestCase.PloneTestCase):
@@ -111,7 +102,3 @@ def test_suite():
     suite.addTest(makeSuite(TestLanguageToolSettings))
     suite.addTest(makeSuite(TestLanguageTool))
     return suite
-
-if __name__ == '__main__':
-    framework()
-
