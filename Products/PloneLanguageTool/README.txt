@@ -20,6 +20,8 @@ Credits
 
   - Dorneles Treméa, "Plone Solutions":http://www.plonesolutions.com
 
+  - Hanno Schlichting, independent
+
   Parts of development sponsored by Learning Lab Denmark, donated by
   Plone Solutions.
 
