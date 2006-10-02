@@ -1,9 +1,6 @@
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 from OFS.SimpleItem import SimpleItem
-from Products.CMFCore.Expression import Expression
-from Products.CMFCore.ActionInformation import ActionInformation
-from Products.CMFCore.ActionProviderBase import ActionProviderBase
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import UniqueObject, getToolByName
