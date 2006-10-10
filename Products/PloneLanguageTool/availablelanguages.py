@@ -340,7 +340,7 @@ combined = {
 'fr-ad' : {'english' : 'French (Andorra)', 'flag' : 'flag-as.gif'},
 'fr-be' : {'english' : 'French (Belgium)', 'flag' : 'flag-be.gif'},
 'fr-bf' : {'english' : 'French (Burkina Faso)', 'flag' : 'flag-bf.gif'},
-'fr-bi' : {'english' : 'French (Burundi)', 'flag' : 'flag-bi.gif'},
+'fr-bi' : {'english' : 'French (Burundi)', 'flag' : 'flag-fr-bi.gif'},
 'fr-bj' : {'english' : 'French (Benin)', 'flag' : 'flag-bj.gif'},
 'fr-ca' : {'english' : 'French (Canada)', 'flag' : 'flag-ca.gif'},
 'fr-cd' : {'english' : 'French (Democratic Republic of Congo)', 'flag' : 'flag-cd.gif'},
