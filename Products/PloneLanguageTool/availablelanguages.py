@@ -66,7 +66,7 @@ languages = {
 'be' : {'native' : 'Беларускі', 'english' : 'Belarussian', 'flag' : 'flag-by.gif'},
 'bg' : {'native' : 'Български', 'english' : 'Bulgarian', 'flag' : 'flag-bg.gif'},
 'bh' : {'native' : 'Bihari', 'english' : 'Bihari'},
-'bi' : {'native' : 'Bislama', 'english' : 'Bislama'},
+'bi' : {'native' : 'Bislama', 'english' : 'Bislama', 'flag' : 'flag-vu.gif'},
 'bn' : {'native' : 'বাংলা', 'english' : 'Bengali'},
 'bo' : {'native' : 'བོད་སྐད་', 'english' : 'Tibetan'},
 'bs' : {'native' : 'Bosanski', 'english' : 'Bosnian', 'flag' : 'flag-ba.gif'},
