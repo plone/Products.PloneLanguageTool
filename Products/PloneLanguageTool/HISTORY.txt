@@ -2,6 +2,9 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
+    - Changed the native Name of 'rm' to 'Rumantsch'. 
+      [jensens]
+
 PloneLanguageTool 1.4 - Released September 8, 2006
 
     - Changed the browser language based negotiation to recognize combined

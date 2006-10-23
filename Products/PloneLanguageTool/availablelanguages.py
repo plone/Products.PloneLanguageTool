@@ -152,7 +152,7 @@ languages = {
 'ps' : {'native' : 'پښتو', 'english' : 'Pashto'},
 'pt' : {'native' : 'Português', 'english' : 'Portuguese', 'flag' : 'flag-pt.gif'},
 'qu' : {'native' : 'Quechua', 'english' : 'Quechua'},
-'rm' : {'native' : 'Rhaeto-Romance', 'english' : ''},
+'rm' : {'native' : 'Rumantsch', 'english' : 'Rhaeto-Romance'},
 'rn' : {'native' : 'Kirundi', 'english' : 'Kirundi'},
 'ro' : {'native' : 'Română', 'english' : 'Romanian', 'flag' : 'flag-ro.gif'},
 'ru' : {'native' : 'Русский', 'english' : 'Russian', 'flag' : 'flag-ru.gif'},
