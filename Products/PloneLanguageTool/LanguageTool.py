@@ -320,6 +320,10 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         """Gets the preferred site language."""
         l = self.getLanguageBindings()
         if l[0]:
+            if not self.use_combined_language_codes:
+                return l[0].split('-')[0]
+            else:
+                return l[0]
             return l[0]
         # this is the default language
         return l[1]
