@@ -2,6 +2,9 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
+    - Removed obsolete testSkeleton.
+      [hannosch]
+
     - Changed the native Name of 'rm' to 'Rumantsch'. 
       [jensens]
 
