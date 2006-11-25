@@ -72,6 +72,7 @@ languages = {
 'bs' : {'native' : 'Bosanski', 'english' : 'Bosnian', 'flag' : 'flag-ba.gif'},
 'br' : {'native' : 'Brezhoneg', 'english' : 'Breton'},
 'ca' : {'native' : 'Català', 'english' : 'Catalan', 'flag' : 'flag-cat.gif'},
+'ch' : {'native' : 'Chamoru', 'english' : 'Chamorro'},
 'co' : {'native' : 'Corsu', 'english' : 'Corsican'},
 'cs' : {'native' : 'Čeština', 'english' : 'Czech', 'flag' : 'flag-cz.gif'},
 'cy' : {'native' : 'Cymraeg', 'english' : 'Welsh', 'flag' : 'flag-cym.gif'},

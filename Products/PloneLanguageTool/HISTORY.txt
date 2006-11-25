@@ -2,6 +2,10 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
+    - Added missing Chamorro language to the basic listing.
+      This closes http://dev.plone.org/plone/ticket/5836.
+      [hannosch]
+
     - Removed obsolete testSkeleton.
       [hannosch]
 
