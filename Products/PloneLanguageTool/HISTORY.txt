@@ -2,6 +2,14 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
+PloneLanguageTool 1.5 - Released December 15, 2006
+
+    - Fixed bug in request language negotiation. If the tool is configured not
+      to use combined language codes, we have to use the basic language code in
+      all places. This closes http://dev.plone.org/plone/ticket/5804 and
+      http://dev.plone.org/plone/ticket/5941.
+      [hannosch]
+
     - Added missing Chamorro language to the basic listing.
       This closes http://dev.plone.org/plone/ticket/5836.
       [hannosch]

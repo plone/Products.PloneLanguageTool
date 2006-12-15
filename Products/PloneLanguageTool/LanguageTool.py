@@ -403,8 +403,9 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
                     # if we only use simply language codes, we should recognize
                     # combined codes as their base code. So 'de-de' is treated
                     # as 'de'.
-                    if language.split('-')[0] in self.getSupportedLanguages():
-                        langs.append((quality, language))
+                    baselanguage = language.split('-')[0]
+                    if baselanguage in self.getSupportedLanguages():
+                        langs.append((quality, baselanguage))
                 i = i + 1
 
         # Sort and reverse it
