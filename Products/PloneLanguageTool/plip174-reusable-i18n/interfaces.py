@@ -1,0 +1,1 @@
+from Products.CMFPlone.interfaces.Translatable import ITranslatable

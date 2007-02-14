@@ -1,0 +1,130 @@
+Changelog for PloneLanguageTool
+
+    (name of developer listed in brackets)
+
+PloneLanguageTool 1.4 - Released September 8, 2006
+
+    - Changed the browser language based negotiation to recognize combined
+      language codes as the base language if only the base language is allowed
+      and specified in the browser. So if the browser requests the site in
+      'de-de' and only 'de' is allowed for the site, it is recognized as 'de'.
+      If the usage of combined language codes is explicitly enabled this
+      fallback is not applied, so you can still have full control over combined
+      codes as well. This closes http://dev.plone.org/plone/ticket/5784.
+      [hannosch]
+
+PloneLanguageTool 1.3 - Released June 17, 2006
+
+    - Use the Norwegian flag for Nynorsk.
+      [limi]
+
+    - Removed all accidentally added country flags in 16x16 PNG format again
+      and converted them to 14x11 GIF format. Transparent PNG don't work in IE.
+      [limi]
+
+    - Fixed changing supported languages in the control panel. It silently
+      failed for the case of only one resulting supported language.
+      [hannosch]
+
+    - Fixed displaying flags in the portlet_languages by using
+      getFlagForLanguageCode.
+      [jladage]
+
+    - Cleaned up switchLanguage.py because it contained a lot of I18NLayer
+      specific code. I added the original file to I18NLayer. Also changed .gif
+      to .png in the portlet_languages.
+      [jladage]
+
+    - Readded flag for Esperanto, we use flag-eo.png as there's no country code.
+      This closes http://dev.plone.org/plone/ticket/5547.
+      [hannosch]
+
+PloneLanguageTool 1.2 - Released June 1, 2006
+
+    - Readded flag for Basque country, currently we use flag-eu.png as there's
+      no official country code in the ISO 3166 standard.
+      This closes http://dev.plone.org/plone/ticket/5522.
+      [hannosch]
+
+    - Use Central African Republic (cf) flag for Sangho (sg). This closes
+      http://dev.plone.org/plone/ticket/5339.
+      [hannosch]
+
+    - Removed the unused i18n folder.
+      [hannosch]
+
+PloneLanguageTool 1.1 - Released May 15, 2006
+
+    - Avoid DeprecationWarning for product_name.
+      [hannosch]
+
+    - Replaced the available language selector in the preference panel with a
+      new one, which shows both the original and the english language names as
+      well as the country flag which might be used for the language switcher
+      and the language code. It is possible to sort on any of these criteria as
+      well as on the 'selected' status by clicking on the table heading.
+      [hannosch] [limi]
+
+    - Removed all language flags in 15x12 GIF format and replaced them with
+      16x16 PNG country flags. These are named flag-<country code>.png. The
+      country codes follow the ISO 3166 standard. The mapping of flags to
+      languages is now more flexibly handled through a new underlying format in
+      availablelanguages.py, which would allow to map the same flag to more than
+      one language without having to duplicate the file as it was needed with
+      the former approach.
+      [hannosch] [limi]
+
+PloneLanguageTool 1.0 - Released March 19, 2006
+
+    - Added a Welsh flag.
+      [russf]
+
+    - Adding flags for Bosnia and Serbia. Jakub Steiner, you rock!
+      [limi]
+
+    - Converted some runtime tests to doctests.
+      [hannosch]
+
+    - Fixed Latvian language name. Thanks to Michael Dexter for the heads up.
+      [deo]
+
+PloneLanguageTool 0.9 - Released December 18, 2005
+
+    - Fix http://trac.plone.org/plone/ticket/4959 - if the default language was
+      not contained in the supported languages the config form showed a false
+      default language and the form had to be saved again to get the desired
+      result. Now in this special case the default language is set to the first
+      supported language.
+      [hannosch]
+
+    - Added removeCountry and removeLanguage methods as counterpart for the
+      corresponding add-methods. Added some basic tests.
+      [hannosch]
+
+    - Added start_neutral content language setting. Now you can control
+      if the content should start as language neutral or in the current
+      selected language.
+      [deo]
+
+    - Fix http://plone.org/collector/4815 - misspelled i18n msgid
+      [hannosch]
+
+PloneLanguageTool 0.8 - Released October 8, 2005
+
+    - Fixed two missing i18n tags in portlet_languages.pt
+      [hannosch]
+
+    - Fixed http://plone.org/collector/4774 - missing i18n tags in
+      prefs_languages.pt
+      [hannosch]
+
+    - Fixed http://plone.org/collector/4681 - fixed missing p-tag in
+      portal_languages/manage_configForm
+      [hannosch]
+
+    - i18n: moved all files to PloneTranslations and added README.txt
+      [hannosch]
+
+PloneLanguageTool 0.7 - Released September 4, 2005
+
+    - See ChangeLog for details on former releases
