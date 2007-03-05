@@ -1,0 +1,254 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/prefs_main_template/macros/master"
+      i18n:domain="plonelanguagetool">
+
+<metal:block metal:fill-slot="top_slot"
+             tal:define="dummy python:request.set('disable_border',1)" />
+
+<body>
+
+<div metal:fill-slot="prefs_configlet_main">
+
+    <h1 i18n:translate="heading_language_settings">
+        Language Settings
+    </h1>
+
+    <p class="documentDescription"
+       i18n:translate="description_language_settings">
+        Settings related to interface languages and content translations.
+    </p>
+
+    <form action="manage_setLanguageSettings"
+          tal:attributes="action python:here.absolute_url()+'/manage_setLanguageSettings'"
+          method="post">
+
+        <fieldset>
+            <legend i18n:translate="heading_default_language">Default language</legend>
+            <p i18n:translate="description_default_language">
+                If content requested is not available in the language the user
+                requested, content will be presented in this default language.
+            </p>
+
+            <select name="defaultLanguage">
+                <option value="en"
+                        tal:repeat="lang here/portal_languages/listSupportedLanguages"
+                        tal:attributes="value python:lang[0];
+                                        selected python:lang[0]==here.portal_languages.getDefaultLanguage()"
+                        tal:content="python: lang[1]">
+                    English
+                </option>
+            </select>
+        </fieldset>
+
+        <fieldset>
+            <p>
+                <input type="checkbox"
+                       id="DisplayFlags"
+                       class="noborder"
+                       name="displayFlags"
+                       value="1"
+                       tal:attributes="checked here/display_flags | nothing" />
+                <label for="DisplayFlags"
+                       i18n:translate="label_display_flags">
+                    Display flags for language selection
+                </label>
+                <span class="formHelp">
+                    (May be politically
+                    sensitive in some areas, do not use this unless you know that it is acceptable).
+                </span>
+
+            </p>
+
+            <p>
+                <input type="checkbox"
+                       id="CombinedLangCodes"
+                       class="noborder"
+                       name="setUseCombinedLanguageCodes"
+                       value="1"
+                       tal:attributes="checked here/use_combined_language_codes| nothing" />
+                <label for="CombinedLangCodes"
+                       i18n:translate="label_allow_combined_language_codes">
+                    Show country-specific language variants
+                </label>
+                <span class="formHelp">Examples: pt-br (Brazilian Portuguese), en-us (American English) etc.</span>
+            </p>
+
+            <legend i18n:translate="heading_allowed_languages">Allowed languages</legend>
+
+            <p i18n:translate="description_allowed_languages">
+                Select the languages that can be added in your portal.
+            </p>
+
+<!-- This doesn't make sense, you never select all/none for languages ~limi
+            <span class="optionsToggle">
+            <input type="checkbox"
+                   onclick="javascript:toggleSelect(this, 'supportedLanguages', true);"
+                   name="lc_toggle"
+                   value="#"
+                   checked="checked"
+                   id="lc_toggle"
+                   class="noborder" />
+            <label for=""
+                   i18n:domain="plone"
+                   i18n:translate="label_toggle"
+                   tal:attributes="for string:lc_toggle"
+                   >Select All/None
+            </label>
+            <br />
+            </span>
+-->
+            <table class="listing"
+                   id="lang-selection"
+                   style="display: block; height: 20em; width: 50em; overflow: auto;">
+                <thead>
+                    <tr>
+                        <th class="nosort">Allowed?</th>
+                        <th>Language</th>
+                        <th>Language (English)</th>
+                        <th>Code</th>
+                    </tr>
+                </thead>
+
+                <tbody tal:define="languages here/portal_languages/listAvailableLanguageInformation">
+                    <tal:language repeat="lang languages">
+                    <tr tal:define="oddrow repeat/lang/odd;"
+                        tal:attributes="class python:test(oddrow, 'even', 'odd')">
+                        <td style="text-align: center;">
+                            <input type="checkbox"
+                                   class="noborder"
+                                   name="supportedLanguages:list"
+                                   tal:attributes="value lang/code;
+                                                   checked lang/selected | nothing" />
+                        </td>
+                        <td>
+                            <img src="" alt="" height="11" width="14"
+                                 tal:condition="python: here.portal_languages.showFlags() and lang.get('flag', False)"
+                                 tal:attributes="src string:${portal_url}${lang/flag}" />
+                            <span tal:replace="lang/native | nothing">Norsk</span>
+                        </td>
+                        <td>
+                            <img src="" alt="" height="11" width="14"
+                                 tal:condition="python: here.portal_languages.showFlags() and lang.get('flag', False)"
+                                 tal:attributes="src string:${portal_url}${lang/flag}" />
+                            <span tal:replace="lang/name">Norwegian</span>
+                        </td>
+                        <td tal:content="lang/code">no</td>
+                    </tr>
+                    </tal:language>
+                </tbody>
+            </table>
+
+        </fieldset>
+
+        <fieldset>
+            <legend i18n:translate="heading_negotiation_scheme">Negotiation Scheme</legend>
+            <p i18n:translate="description_negotiation_scheme">
+                Check the language negotiation schemes that apply to this site.
+            </p>
+
+            <ol>
+                <li>
+                    <input type="checkbox"
+                           id="LanguageCodes"
+                           class="noborder"
+                           name="setPathN"
+                           value="1"
+                           tal:attributes="checked here/use_path_negotiation| nothing" />
+                    <label for="LanguageCodes"
+                           i18n:translate="label_language_codes_in_url">
+                        Use language codes in URL path for manual override.
+                    </label>
+                </li>
+                <li>
+                    <input type="checkbox"
+                           id="CookieOverride"
+                           class="noborder"
+                           name="setCookieN"
+                           value="1"
+                           tal:attributes="checked here/use_cookie_negotiation| nothing" />
+                    <label for="CookieOverride"
+                           i18n:translate="label_cookies_for_override">
+                        Use cookie for manual override.
+                    </label>
+                </li>
+                <li>
+                    <input type="checkbox"
+                           id="RequestNegotiation"
+                           class="noborder"
+                           name="setRequestN"
+                           value="1"
+                           tal:attributes="checked here/use_request_negotiation | nothing" />
+                    <label for="RequestNegotiation"
+                           i18n:translate="label_browser_language_negotiation">
+                        Use browser language request negotiation.
+                    </label>
+                </li>
+                <li i18n:translate="text_default_fallback">
+                    Default fallback (always enabled). This is the language
+                    specified as default above.
+                </li>
+            </ol>
+        </fieldset>
+
+        <fieldset>
+            <legend i18n:translate="heading_content_settings">Content Control Settings</legend>
+            <p i18n:translate="description_content_settings">
+                Check the settings that apply to multilingual content.
+            </p>
+
+            <ol>
+                <li>
+                    <input type="checkbox"
+                           id="ForceLanguageURLs"
+                           class="noborder"
+                           name="setForcelanguageUrls"
+                           value="1"
+                           tal:attributes="checked here/force_language_urls| nothing" />
+                    <label for="ForceLanguageURLs"
+                           i18n:translate="label_force_different_urls">
+                        Force different URLs for each language (redirect).
+                    </label>
+                </li>
+
+<!-- Content language is not supported in any of the things that work with Plone 3, so disabling this ~limi
+                <li>
+                    <input type="checkbox"
+                           id="AllowContentFallback"
+                           class="noborder"
+                           name="setAllowContentLanguageFallback"
+                           value="1"
+                           tal:attributes="checked here/allow_content_language_fallback| nothing" />
+                    <label for="AllowContentFallback"
+                           i18n:translate="label_allow_content_language_fallback">
+                        Allow content language fallback if the implementation supports it.
+                    </label>
+                </li>
+-->
+                <li>
+                    <input type="checkbox"
+                           id="StartNeutral"
+                           class="noborder"
+                           name="startNeutral"
+                           value="1"
+                           tal:attributes="checked here/start_neutral | nothing" />
+                    <label for="StartNeutral"
+                           i18n:translate="label_start_neutral">
+                        Create content initially as neutral language.
+                    </label>
+                </li>
+            </ol>
+        </fieldset>
+
+        <input type="submit"
+               class="context"
+               value="Save"
+               i18n:attributes="value label_save;"
+               i18n:domain="plone"
+               />
+    </form>
+
+</div>
+
+</body>
+</html>
