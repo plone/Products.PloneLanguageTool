@@ -2,9 +2,9 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
-PloneLanguageTool 2.0 - Unreleased
+PloneLanguageTool 2.0b1 - Released March 5, 2007
 
-    - Integrated with plone.i18n / plone.app.i18n.
+    - Integration and refactoring into plone.i18n / plone.app.i18n packages.
       [hannosch]
 
 PloneLanguageTool 1.5 - Released December 15, 2006
