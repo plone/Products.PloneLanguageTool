@@ -12,6 +12,9 @@ from ZPublisher.HTTPRequest import HTTPRequest
 from plone.i18n.locales.interfaces import ICountryAvailability
 from plone.i18n.locales.interfaces import IContentLanguageAvailability
 from zope.component import queryUtility
+from zope.interface import implements
+
+from Products.PloneLanguageTool.interfaces import ILanguageTool
 
 try:
     from Products.PlacelessTranslationService.Negotiator import registerLangPrefsMethod
@@ -25,6 +28,8 @@ class LanguageTool(UniqueObject, SimpleItem):
     id  = 'portal_languages'
     title = 'Manages available languages'
     meta_type = 'Plone Language Tool'
+
+    implements(ILanguageTool)
 
     security = ClassSecurityInfo()
 
