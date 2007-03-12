@@ -12,6 +12,7 @@ from Products.CMFCore.interfaces import IPropertiesTool
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import registerToolInterface
 from Products.CMFCore.utils import UniqueObject
 from Products.CMFPlone.interfaces.Translatable import ITranslatable
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
@@ -540,3 +541,4 @@ if _hasPTS:
     registerLangPrefsMethod({'klass':PrefsForPTS, 'priority':100 })
 
 InitializeClass(LanguageTool)
+registerToolInterface('portal_languages', ILanguageTool)
