@@ -1,6 +1,9 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
     xmlns:five="http://namespaces.zope.org/five">
+
+  <include file="profiles.zcml"/>
 
   <five:deprecatedManageAddDelete
       class=".LanguageTool.LanguageTool" />
@@ -8,5 +11,11 @@
   <five:registerPackage
       package="."
       initialize=".initialize" />
+
+  <cmf:registerDirectory
+      name="skins"
+      directory="skins"
+      recursive="True"
+      />
 
 </configure>
