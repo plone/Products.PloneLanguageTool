@@ -2,7 +2,7 @@
 <object name="portal_skins" meta_type="Plone Skins Tool" allow_any="False"
    cookie_persistence="False" default_skin="Plone Default"
    request_varname="plone_skin">
- <object name="mimetypes_icons" meta_type="Filesystem Directory View"
+ <object name="LanguageTool" meta_type="Filesystem Directory View"
     directory="Products.PloneLanguageTool:skins/LanguageTool"/>
   <skin-path name="*">
   <layer name="LanguageTool" insert-after="custom"/>
