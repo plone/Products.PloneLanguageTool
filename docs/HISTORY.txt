@@ -2,6 +2,15 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
+PloneLanguageTool 2.0b2 - Released March 23, 2007
+
+    - Added GS extension profile for product installation.
+      [hannosch]
+
+    - Added Zope3 interface to the language tool and use it for the
+      registerToolInterface method.
+      [hannosch]
+
 PloneLanguageTool 2.0b1 - Released March 5, 2007
 
     - Integration and refactoring into plone.i18n / plone.app.i18n packages.
