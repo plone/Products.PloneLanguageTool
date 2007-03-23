@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '2.0b2'
+version = '2.0b3'
 
 setup(name='Products.PloneLanguageTool',
       version=version,
@@ -30,7 +30,4 @@ setup(name='Products.PloneLanguageTool',
       install_requires=[
         'setuptools',
       ],
-      entry_points="""
-      # -*- Entry points: -*-
-      """,
 )
