@@ -86,7 +86,7 @@ class LanguageTool(UniqueObject, SimpleItem):
                                    setAllowContentLanguageFallback=None,
                                    setUseCombinedLanguageCodes=None,
                                    displayFlags=None, startNeutral=None,
-                                   setCcTLD=None, REQUEST=None):
+                                   setCcTLDN=None, REQUEST=None):
         """Stores the tool settings."""
         if supportedLanguages and type(supportedLanguages) == type([]):
             self.supported_langs = supportedLanguages
