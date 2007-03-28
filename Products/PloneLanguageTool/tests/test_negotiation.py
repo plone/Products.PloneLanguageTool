@@ -107,11 +107,61 @@ class TestCombinedLanguageNegotiation(LanguageNegotiationTestCase):
             in response.getBody())
 
 
+class TestCcTLDLanguageNegotiation(LanguageNegotiationTestCase):
+    def afterSetUp(self):
+        LanguageNegotiationTestCase.afterSetUp(self)
+        self.tool.supported_langs = ['en', 'nl', 'fr']
+        self.tool.use_cctld_negotiation = 1
+        self.tool.display_flags = 0
+
+    def checkLanguage(self, response, language):
+        self.assertEquals(response.getStatus(), 200)
+        self.failUnless('<option selected="selected" value="%s">' % language
+            in response.getBody())
+
+    def testSimpleHostname(self):
+        # For a simple hostname without ccTLD the canonical language is used
+        response = self.publish(self.portal_path, self.basic_auth,
+                                env={'HTTP_HOST': 'localhost'})
+        self.checkLanguage(response, "en")
+
+    def testIPAddress(self):
+        response = self.publish(self.portal_path, self.basic_auth,
+                                env={'HTTP_HOST': '127.0.0.1'})
+        self.checkLanguage(response, "en")
+
+    def testDutchDomain(self):
+        response = self.publish(self.portal_path, self.basic_auth,
+                                env={'HTTP_HOST': 'plone.nl'})
+        self.checkLanguage(response, "nl")
+
+    def testAcceptedLanguages(self):
+        # Brazil uses Portugese, which is not in the accepted languages list
+        response = self.publish(self.portal_path, self.basic_auth,
+                                env={'HTTP_HOST': 'plone.br'})
+        self.checkLanguage(response, "en")
+
+    def testMultiLingualCountries(self):
+        # Some countries refuse to pick a single language. Belgium
+        # uses both Dutch and French, with a preference for Dutch.
+
+        response = self.publish(self.portal_path, self.basic_auth,
+                                env={'HTTP_HOST': 'plone.be'})
+        self.checkLanguage(response, "nl")
+
+        # If we stop allowing Dutch we should now fall back to French
+        self.tool.supported_langs = ['en', 'fr']
+        response = self.publish(self.portal_path, self.basic_auth,
+                                env={'HTTP_HOST': 'plone.be'})
+        self.checkLanguage(response, "fr")
+
+
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
     suite.addTest(makeSuite(TestDefaultLanguageNegotiation))
     suite.addTest(makeSuite(TestNoCombinedLanguageNegotiation))
+    suite.addTest(makeSuite(TestCcTLDLanguageNegotiation))
     return suite
 
 if __name__ == '__main__':

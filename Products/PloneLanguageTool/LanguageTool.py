@@ -1,5 +1,6 @@
 from plone.i18n.locales.interfaces import ICountryAvailability
 from plone.i18n.locales.interfaces import IContentLanguageAvailability
+from plone.i18n.locales.interfaces import ICcTLDInformation
 
 from zope.component import getUtility
 from zope.component import queryUtility
@@ -42,6 +43,7 @@ class LanguageTool(UniqueObject, SimpleItem):
     use_path_negotiation = 1
     use_cookie_negotiation = 1
     use_request_negotiation = 1
+    use_cctld_negotiation = 0
     use_combined_language_codes = 0
     display_flags = 1
     start_neutral = 1
@@ -60,6 +62,7 @@ class LanguageTool(UniqueObject, SimpleItem):
         self.use_path_negotiation = 1
         self.use_cookie_negotiation  = 1
         self.use_request_negotiation = 1
+        use_cctld_negotiation = 0
         self.force_language_urls = 1
         self.allow_content_language_fallback = 0
         self.display_flags = 1
@@ -83,7 +86,7 @@ class LanguageTool(UniqueObject, SimpleItem):
                                    setAllowContentLanguageFallback=None,
                                    setUseCombinedLanguageCodes=None,
                                    displayFlags=None, startNeutral=None,
-                                   REQUEST=None):
+                                   setCcTLD=None, REQUEST=None):
         """Stores the tool settings."""
         if supportedLanguages and type(supportedLanguages) == type([]):
             self.supported_langs = supportedLanguages
@@ -107,6 +110,11 @@ class LanguageTool(UniqueObject, SimpleItem):
             self.use_path_negotiation = 1
         else:
             self.use_path_negotiation = 0
+
+        if setCcTLDN:
+            self.use_cctld_negotiation = 1
+        else:
+            self.use_cctld_negotiation = 0
 
         if setForcelanguageUrls:
             self.force_language_urls = 1
@@ -171,6 +179,11 @@ class LanguageTool(UniqueObject, SimpleItem):
         else:
             languages = util.getLanguages()
         return languages
+
+    security.declarePublic('getCcTLDInformation')
+    def getCcTLDInformation(self):
+        util = queryUtility(ICcTLDInformation)
+        return util.getTLDs()
 
     security.declarePublic('listAvailableLanguages')
     def listAvailableLanguages(self):
@@ -316,7 +329,7 @@ class LanguageTool(UniqueObject, SimpleItem):
             nc = BeforeTraverse.NameCaller(self.getId())
             BeforeTraverse.registerBeforeTraverse(container, nc, handle)
 
-    security.declarePublic('getPathLanguage')
+    security.declareProtected(View, 'getPathLanguage')
     def getPathLanguage(self):
         """Checks if a language is part of the current path."""
         if not hasattr(self, 'REQUEST'):
@@ -332,12 +345,25 @@ class LanguageTool(UniqueObject, SimpleItem):
             pass
         return None
 
+    security.declareProtected(View, 'getCcTLDLanguages')
+    def getCcTLDLanguages(self):
+        if not hasattr(self, 'REQUEST'):
+            return None
+        request = self.REQUEST
+        if not "HTTP_HOST" in request:
+            return None
+        host=request["HTTP_HOST"].split(":")[0].lower()
+        tld=host.split(".")[-1]
+        wanted = self.getCcTLDInformation().get(tld, [])
+        allowed = self.getSupportedLanguages()
+        return [lang for lang in wanted if lang in allowed]
+
     security.declareProtected(View, 'getRequestLanguages')
     def getRequestLanguages(self):
         """Parses the request and return language list."""
 
         if not hasattr(self, 'REQUEST'):
-            return []
+            return None
 
         # Get browser accept languages
         browser_pref_langs = self.REQUEST.get('HTTP_ACCEPT_LANGUAGE', '')
@@ -396,6 +422,7 @@ class LanguageTool(UniqueObject, SimpleItem):
     security.declareProtected(View, 'setLanguageBindings')
     def setLanguageBindings(self):
         """Setups the current language stuff."""
+        useCcTLD = self.use_cctld_negotiation
         usePath = self.use_path_negotiation
         useCookie = self.use_cookie_negotiation
         useRequest = self.use_request_negotiation
@@ -407,7 +434,7 @@ class LanguageTool(UniqueObject, SimpleItem):
             # Create new binding instance
             binding = LanguageBinding(self)
         # Bind languages
-        lang = binding.setLanguageBindings(usePath, useCookie, useRequest, useDefault)
+        lang = binding.setLanguageBindings(usePath, useCookie, useRequest, useDefault, useCcTLD)
         # Set LANGUAGE to request
         self.REQUEST['LANGUAGE'] = lang
         # Set bindings instance to request
@@ -468,14 +495,15 @@ class LanguageBinding:
         self.tool = tool
 
     security.declarePrivate('setLanguageBindings')
-    def setLanguageBindings(self, usePath=1, useCookie=1, useRequest=1, useDefault=1):
+    def setLanguageBindings(self, usePath=1, useCookie=1, useRequest=1, useDefault=1, useCcTLD=0):
         """Setup the current language stuff."""
         langs = []
 
         if usePath:
             # This one is set if there is an allowed language in the current path
             langsPath = [self.tool.getPathLanguage()]
-        else:langsPath = []
+        else:
+            langsPath = []
 
         if useCookie:
             # If we are using the cookie stuff we provide the setter here
@@ -485,8 +513,13 @@ class LanguageBinding:
             else:
                 # Get from cookie
                 langsCookie = [self.tool.getLanguageCookie()]
-        else: langsCookie = []
+        else:
+            langsCookie = []
 
+        if useCcTLD:
+            langsCcTLD = self.tool.getCcTLDLanguages()
+        else:
+            langsCcTLD = []
         # Get langs from request
         if useRequest:
             langsRequest = self.tool.getRequestLanguages()
@@ -500,10 +533,10 @@ class LanguageBinding:
             langsDefault = []
 
         # Build list
-        langs = langsPath + langsCookie + langsRequest + langsDefault
+        langs = langsPath+langsCookie+langsCcTLD+langsRequest+langsDefault
 
         # Filter None languages
-        langs = filter(lambda x: x is not None, langs)
+        langs = [lang for lang in langs if lang is not None]
 
         self.DEFAULT_LANGUAGE = langs[-1]
         self.LANGUAGE = langs[0]
