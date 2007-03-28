@@ -16,6 +16,7 @@ from Products.CMFCore.utils import UniqueObject, getToolByName
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZPublisher import BeforeTraverse
 from ZPublisher.HTTPRequest import HTTPRequest
+from tldmap import tld_to_language
 
 try:
     from Products.CMFPlone.interfaces.Translatable import ITranslatable
@@ -50,6 +51,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     use_path_negotiation = 1
     use_cookie_negotiation = 1
     use_request_negotiation = 1
+    use_cctld_negotiation = 0
     use_combined_language_codes = 0
     display_flags = 1
     start_neutral = 1
@@ -79,6 +81,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         self.use_path_negotiation = 1
         self.use_cookie_negotiation  = 1
         self.use_request_negotiation = 1
+        self.use_cctld_negotiation = 0
         self.force_language_urls = 1
         self.allow_content_language_fallback = 0
         self.display_flags = 1
@@ -102,6 +105,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
                                    setAllowContentLanguageFallback=None,
                                    setUseCombinedLanguageCodes=None,
                                    displayFlags=None, startNeutral=None,
+                                   setCcTLDN=None,
                                    REQUEST=None):
         """Stores the tool settings."""
         if supportedLanguages and type(supportedLanguages) == type([]):
@@ -126,6 +130,11 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             self.use_path_negotiation = 1
         else:
             self.use_path_negotiation = 0
+
+        if setCcTLDN:
+            self.use_cctld_negotiation = 1
+        else:
+            self.use_cctld_negotiation = 0
 
         if setForcelanguageUrls:
             self.force_language_urls = 1
@@ -364,12 +373,25 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             pass
         return None
 
+    security.declareProtected(View, 'getCcTLDLanguages')
+    def getCcTLDLanguages(self):
+        if not hasattr(self, 'REQUEST'):
+            return None
+        request = self.REQUEST
+        if not "HTTP_HOST" in request:
+            return None
+        host=request["HTTP_HOST"].split(":")[0].lower()
+        tld=host.split(".")[-1]
+        wanted = tld_to_language.get(tld, [])
+        allowed = self.getSupportedLanguages()
+        return [lang for lang in wanted if lang in allowed]
+
     security.declareProtected(View, 'getRequestLanguages')
     def getRequestLanguages(self):
         """Parses the request and return language list."""
 
         if not hasattr(self, 'REQUEST'):
-            return []
+            return None
 
         # Get browser accept languages
         browser_pref_langs = self.REQUEST.get('HTTP_ACCEPT_LANGUAGE', '')
@@ -428,6 +450,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     security.declareProtected(View, 'setLanguageBindings')
     def setLanguageBindings(self):
         """Setups the current language stuff."""
+        useCcTLD = self.use_cctld_negotiation
         usePath = self.use_path_negotiation
         useCookie = self.use_cookie_negotiation
         useRequest = self.use_request_negotiation
@@ -439,7 +462,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             # Create new binding instance
             binding = LanguageBinding(self)
         # Bind languages
-        lang = binding.setLanguageBindings(usePath, useCookie, useRequest, useDefault)
+        lang = binding.setLanguageBindings(usePath, useCookie, useRequest, useDefault, useCcTLD)
         # Set LANGUAGE to request
         self.REQUEST['LANGUAGE'] = lang
         # Set bindings instance to request
@@ -521,14 +544,15 @@ class LanguageBinding:
         self.tool = tool
 
     security.declarePrivate('setLanguageBindings')
-    def setLanguageBindings(self, usePath=1, useCookie=1, useRequest=1, useDefault=1):
+    def setLanguageBindings(self, usePath=1, useCookie=1, useRequest=1, useDefault=1, useCcTLD=0):
         """Setup the current language stuff."""
         langs = []
 
         if usePath:
             # This one is set if there is an allowed language in the current path
             langsPath = [self.tool.getPathLanguage()]
-        else:langsPath = []
+        else:
+            langsPath = []
 
         if useCookie:
             # If we are using the cookie stuff we provide the setter here
@@ -538,7 +562,13 @@ class LanguageBinding:
             else:
                 # Get from cookie
                 langsCookie = [self.tool.getLanguageCookie()]
-        else: langsCookie = []
+        else:
+            langsCookie = []
+
+        if useCcTLD:
+            langsCcTLD = self.tool.getCcTLDLanguages()
+        else:
+            langsCcTLD = []
 
         # Get langs from request
         if useRequest:
@@ -553,10 +583,10 @@ class LanguageBinding:
             langsDefault = []
 
         # Build list
-        langs = langsPath + langsCookie + langsRequest + langsDefault
+        langs = langsPath+langsCookie+langsCcTLD+langsRequest+langsDefault
 
         # Filter None languages
-        langs = filter(lambda x: x is not None, langs)
+        langs = [lang for lang in langs if lang is not None]
 
         self.DEFAULT_LANGUAGE = langs[-1]
         self.LANGUAGE = langs[0]
