@@ -460,6 +460,11 @@ class LanguageTool(UniqueObject, SimpleItem):
     security.declarePublic('isTranslatable')
     def isTranslatable(self, obj):
         """Checks if ITranslatable interface is implemented."""
+        try:
+            if obj.checkCreationFlag():
+                return False
+        except NameError:
+            pass
         return ITranslatable.isProvidedBy(obj)
 
     security.declarePublic('getAvailableCountries')
