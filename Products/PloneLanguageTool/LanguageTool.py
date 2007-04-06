@@ -228,7 +228,9 @@ class LanguageTool(UniqueObject, SimpleItem):
     security.declareProtected(View, 'getDefaultLanguage')
     def getDefaultLanguage(self):
         """Returns the default language."""
-        portal_properties = getUtility(IPropertiesTool)
+        portal_properties = queryUtility(IPropertiesTool)
+        if portal_properties is None:
+            return 'en'
         site_properties = portal_properties.site_properties
         if site_properties.hasProperty('default_language'):
             return site_properties.getProperty('default_language')
