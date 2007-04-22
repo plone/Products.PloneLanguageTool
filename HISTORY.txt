@@ -2,7 +2,15 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
-PloneLanguageTool 1.6 - Unreleased
+PloneLanguageTool 1.6 - Released April 22, 2007
+
+    - Fix javascript bug that prevented the 'flagless' language selection
+      drop down from having an effect.  FireBug complained: "this.options is
+      not a function" and indeed it is an array.
+      [maurits]
+
+    - Added a ccTLD based language negotiator.
+      [wichert]
 
     - Added note about deprecation of the local language and country addition
       functionality and the corresponding methods. According to
