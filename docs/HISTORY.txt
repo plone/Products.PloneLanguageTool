@@ -2,6 +2,18 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
+PloneLanguageTool 2.0b3 - Unreleased
+
+    - Use English as default language if we can not find the properties tool.
+      This can occur when browsing an unmigrated site through the ZMI.
+      [wichert]
+
+    - Content which is still being created is not translatable.
+      [wichert]
+
+    - Ported ccTLD negotiation logic over from the 1.x branch.
+      [wichert]
+
 PloneLanguageTool 2.0b2 - Released March 23, 2007
 
     - Added GS extension profile for product installation.
@@ -14,6 +26,22 @@ PloneLanguageTool 2.0b2 - Released March 23, 2007
 PloneLanguageTool 2.0b1 - Released March 5, 2007
 
     - Integration and refactoring into plone.i18n / plone.app.i18n packages.
+      [hannosch]
+
+PloneLanguageTool 1.6 - Released April 22, 2007
+
+    - Fix javascript bug that prevented the 'flagless' language selection
+      drop down from having an effect.  FireBug complained: "this.options is
+      not a function" and indeed it is an array.
+      [maurits]
+
+    - Added a ccTLD based language negotiator.
+      [wichert]
+
+    - Added note about deprecation of the local language and country addition
+      functionality and the corresponding methods. According to
+      http://dev.plone.org/plone/ticket/6006 and
+      http://dev.plone.org/plone/ticket/6007 these never worked anyways.
       [hannosch]
 
 PloneLanguageTool 1.5 - Released December 15, 2006
