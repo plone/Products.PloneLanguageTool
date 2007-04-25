@@ -9,11 +9,11 @@ from zope.interface import implements
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 from OFS.SimpleItem import SimpleItem
-from Products.CMFCore.interfaces import IPropertiesTool
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import registerToolInterface
+from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import UniqueObject
 from Products.CMFPlone.interfaces.Translatable import ITranslatable
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
@@ -228,7 +228,7 @@ class LanguageTool(UniqueObject, SimpleItem):
     security.declareProtected(View, 'getDefaultLanguage')
     def getDefaultLanguage(self):
         """Returns the default language."""
-        portal_properties = queryUtility(IPropertiesTool)
+        portal_properties = getToolByName(self, "portal_properties", None)
         if portal_properties is None:
             return 'en'
         site_properties = portal_properties.site_properties
@@ -242,7 +242,7 @@ class LanguageTool(UniqueObject, SimpleItem):
     security.declareProtected(ManagePortal, 'setDefaultLanguage')
     def setDefaultLanguage(self, langCode):
         """Sets the default language."""
-        portal_properties = getUtility(IPropertiesTool)
+        portal_properties = getToolByName(self, "portal_properties")
         site_properties = portal_properties.site_properties
         if site_properties.hasProperty('default_language'):
             return site_properties._updateProperty('default_language', langCode)
