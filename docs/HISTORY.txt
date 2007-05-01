@@ -2,7 +2,10 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
-PloneLanguageTool 2.0b3 - Unreleased
+PloneLanguageTool 2.0b3 - Released May 1, 2007
+
+    - Use getToolByName to get the portal_properties tool.
+      [wichert]
 
     - Use English as default language if we can not find the properties tool.
       This can occur when browsing an unmigrated site through the ZMI.
