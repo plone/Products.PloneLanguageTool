@@ -2,6 +2,11 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
+PloneLanguageTool 1.7 - Unreleased
+
+    - Backported usability enhancements to the prefs panel from trunk.
+      [hannosch]
+
 PloneLanguageTool 1.6 - Released April 22, 2007
 
     - Fix javascript bug that prevented the 'flagless' language selection
