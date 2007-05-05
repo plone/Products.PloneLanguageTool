@@ -8,10 +8,6 @@
   <five:deprecatedManageAddDelete
       class=".LanguageTool.LanguageTool" />
 
-  <five:registerPackage
-      package="."
-      initialize=".initialize" />
-
   <cmf:registerDirectory
       name="skins"
       directory="skins"

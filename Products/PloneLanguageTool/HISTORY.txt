@@ -2,6 +2,15 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
+PloneLanguageTool 2.0b4 - Released May 5, 2007
+
+    - Removed the five:registerPackage statement again. It causes problems in a
+      ZEO environment.
+      [hannosch]
+
+    - Added missing i18n markup to the prefs panel.
+      [hannosch]
+
 PloneLanguageTool 2.0b3 - Released May 1, 2007
 
     - Use getToolByName to get the portal_properties tool.
