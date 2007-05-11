@@ -1,1 +1,1 @@
-1.7 (svn/unreleased)
+1.7
