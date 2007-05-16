@@ -82,15 +82,26 @@
                 Select the languages that can be added in your portal.
             </p>
 
-            <table class="listing"
+            <table summary="Allowed languages"
+                   i18n:attributes="summary heading_allowed_languages;"
+                   class="listing"
                    id="lang-selection"
                    style="display: block; height: 20em; width: 50em; overflow: auto;">
                 <thead>
                     <tr>
-                        <th class="nosort">Allowed?</th>
-                        <th>Language</th>
-                        <th>Language (English)</th>
-                        <th>Code</th>
+                        <th i18n:translate="heading_language_allowed"
+                            class="nosort">
+                            Allowed?
+                        </th>
+                        <th i18n:translate="heading_language">
+                            Language
+                        </th>
+                        <th i18n:translate="heading_languages_english">
+                            Language (English)
+                        </th>
+                        <th i18n:translate="heading_language_code">
+                            Code
+                        </th>
                     </tr>
                 </thead>
 
@@ -207,20 +218,6 @@
                     </label>
                 </li>
 
-<!-- Content language is not supported in any of the things that work with Plone 3, so disabling this ~limi
-                <li>
-                    <input type="checkbox"
-                           id="AllowContentFallback"
-                           class="noborder"
-                           name="setAllowContentLanguageFallback"
-                           value="1"
-                           tal:attributes="checked here/allow_content_language_fallback| nothing" />
-                    <label for="AllowContentFallback"
-                           i18n:translate="label_allow_content_language_fallback">
-                        Allow content language fallback if the implementation supports it.
-                    </label>
-                </li>
--->
                 <li>
                     <input type="checkbox"
                            id="StartNeutral"
