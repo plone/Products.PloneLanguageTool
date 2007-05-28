@@ -165,8 +165,10 @@ class LanguageTool(UniqueObject, SimpleItem):
     def listSupportedLanguages(self):
         """Returns a list of supported language names."""
         r = []
+        available = self.getAvailableLanguages()
         for i in self.supported_langs:
-            r.append((i,self.getAvailableLanguages()[i][u'name']))
+            if available.get(i):
+                r.append((i,available[i][u'name']))
         return r
 
     security.declarePublic('getAvailableLanguages')
