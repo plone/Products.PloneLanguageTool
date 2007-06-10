@@ -45,6 +45,8 @@ class LanguageTool(UniqueObject, SimpleItem):
     use_request_negotiation = 1
     use_cctld_negotiation = 0
     use_combined_language_codes = 0
+    force_language_urls = 1
+    allow_content_language_fallback = 0
     display_flags = 1
     start_neutral = 1
 
@@ -62,7 +64,8 @@ class LanguageTool(UniqueObject, SimpleItem):
         self.use_path_negotiation = 1
         self.use_cookie_negotiation  = 1
         self.use_request_negotiation = 1
-        use_cctld_negotiation = 0
+        self.use_cctld_negotiation = 0
+        self.use_combined_language_codes = 0
         self.force_language_urls = 1
         self.allow_content_language_fallback = 0
         self.display_flags = 1

@@ -4,6 +4,9 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 2.0b5 - Unreleased
 
+    - Updated some of the attributes on the language tool.
+      [hannosch]
+
     - Fixed a KeyError while disabling country-specific language variants when
       the default language was a combined language code. This closes
       http://dev.plone.org/plone/ticket/6605.
