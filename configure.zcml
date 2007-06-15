@@ -4,7 +4,7 @@
 <adapter
     factory=".exportimport.LanguageToolXMLAdapter"
     provides="Products.GenericSetup.interfaces.IBody"
-    for=".interfaces.IPloneLanguageTool
+    for=".interfaces.ILanguageTool
          Products.GenericSetup.interfaces.ISetupEnviron"
     />
 

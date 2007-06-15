@@ -4,11 +4,11 @@ from Products.GenericSetup.utils import XMLAdapterBase
 
 from Products.CMFCore.utils import getToolByName
 
-from Products.PloneLanguageTool.interfaces import IPloneLanguageTool
+from Products.PloneLanguageTool.interfaces import ILanguageTool
 
 class LanguageToolXMLAdapter(XMLAdapterBase):
 
-    __used_for__ = IPloneLanguageTool
+    __used_for__ = ILanguageTool
 
     _LOGGER_ID = 'portal_languages'
 

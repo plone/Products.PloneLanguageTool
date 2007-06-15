@@ -18,7 +18,7 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZPublisher import BeforeTraverse
 from ZPublisher.HTTPRequest import HTTPRequest
 from Products.PloneLanguageTool.tldmap import tld_to_language
-from Products.PloneLanguageTool.interfaces import IPloneLanguageTool
+from Products.PloneLanguageTool.interfaces import ILanguageTool
 
 try:
     from Products.CMFPlone.interfaces.Translatable import ITranslatable
@@ -40,7 +40,7 @@ import availablelanguages
 class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     """Language Administration Tool For Plone."""
 
-    implements(IPloneLanguageTool)
+    implements(ILanguageTool)
 
     id  = 'portal_languages'
     title = 'Manages available languages'

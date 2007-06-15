@@ -1,8 +1,8 @@
 from zope.interface import Interface as Z3Interface
 from Interface import Interface
 
-class IPloneLanguageTool(Z3Interface):
-    """This tool manages multi-lingual support in a Plone site.
+class ILanguageTool(Z3Interface):
+    """Marker interface for the portal_languages tool
     """
 
 
