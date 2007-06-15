@@ -61,7 +61,7 @@ class LanguageToolXMLAdapter(XMLAdapterBase):
                 else:
                     value = getattr(self.context, child.nodeName)
                 for element in child.childNodes:
-                    if child.nodeName=='element':
+                    if element.nodeName=='element':
                         value.append(str(element.getAttribute('value')))
                 setattr(self.context, child.nodeName, value)
             elif child.nodeName=='default_language':
