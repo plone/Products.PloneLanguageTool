@@ -2,6 +2,7 @@ from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.Expression import Expression
+from zope.interface import implements
 # BBB CMF < 1.5
 try:
     from Products.CMFCore.permissions import ManagePortal
@@ -16,7 +17,8 @@ from Products.CMFCore.utils import UniqueObject, getToolByName
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZPublisher import BeforeTraverse
 from ZPublisher.HTTPRequest import HTTPRequest
-from tldmap import tld_to_language
+from Products.PloneLanguageTool.tldmap import tld_to_language
+from Products.PloneLanguageTool.interfaces import IPloneLanguageTool
 
 try:
     from Products.CMFPlone.interfaces.Translatable import ITranslatable
@@ -37,6 +39,8 @@ import availablelanguages
 
 class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     """Language Administration Tool For Plone."""
+
+    implements(IPloneLanguageTool)
 
     id  = 'portal_languages'
     title = 'Manages available languages'
