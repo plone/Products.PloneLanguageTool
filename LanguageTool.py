@@ -370,9 +370,8 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         # XXX Why this try/except?
         try:
             for item in items:
-                if len(item) == 2:
-                    if item in self.getSupportedLanguages():
-                        return item
+                if item in self.getSupportedLanguages():
+                    return item
         except:
             pass
         return None

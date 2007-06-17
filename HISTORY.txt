@@ -2,6 +2,15 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
+PloneLanguageTool 1.8 - Unreleased
+
+    - Fixed path language negotiator to work with combined language codes.
+      This closes http://dev.plone.org/plone/ticket/6661.
+      [hannosch]
+
+    - Add exportimport code for the language tool.
+      [wichert]
+
 PloneLanguageTool 1.7 - Released May 11, 2007
 
     - Backported usability enhancements to the prefs panel from trunk.
