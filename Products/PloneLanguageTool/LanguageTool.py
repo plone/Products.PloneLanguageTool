@@ -17,6 +17,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import UniqueObject
 from Products.CMFPlone.interfaces.Translatable import ITranslatable
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from ZODB.POSException import ConflictError
 from ZPublisher import BeforeTraverse
 from ZPublisher.HTTPRequest import HTTPRequest
 
@@ -345,9 +346,10 @@ class LanguageTool(UniqueObject, SimpleItem):
         # XXX Why this try/except?
         try:
             for item in items:
-                if len(item) == 2:
-                    if item in self.getSupportedLanguages():
-                        return item
+                if item in self.getSupportedLanguages():
+                    return item
+        except (ConflictError, KeyboardInterrupt):
+            raise
         except:
             pass
         return None

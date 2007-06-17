@@ -4,6 +4,10 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 2.0b5 - Unreleased
 
+    - Fixed path language negotiator to work with combined language codes.
+      This closes http://dev.plone.org/plone/ticket/6661.
+      [hannosch]
+
     - Deprecated the old-style portlet_language portlet. It has been moved to
       the plone_deprecated layer in CMFPlone and will be removed in Plone 3.5.
       [hannosch]
