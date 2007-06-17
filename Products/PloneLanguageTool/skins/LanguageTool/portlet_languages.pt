@@ -66,7 +66,7 @@
 
             <a href=""
                i18n:translate="label_language_settings_link"
-               tal:attributes="href string:${portal_url}/portal_languages/prefs_languages">
+               tal:attributes="href string:${portal_url}/@@language-controlpanel">
                 Language settings&#8230;
             </a>
         </dd>

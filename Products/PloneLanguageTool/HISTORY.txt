@@ -4,6 +4,10 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 2.0b5 - Unreleased
 
+    - Removed the prefs_languages template in favor of a new formlib-based
+      control panel in plone.app.controlpanel.
+      [hannosch]
+
     - Updated some of the attributes on the language tool.
       [hannosch]
 
