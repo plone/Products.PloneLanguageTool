@@ -135,7 +135,7 @@
                     <input type="checkbox"
                            id="ContentLanguage"
                            class="noborder"
-                           name="setCOntentN"
+                           name="setContentN"
                            value="1"
                            tal:attributes="checked here/use_content_negotiation| nothing" />
                     <label for="ContentLanguage"
