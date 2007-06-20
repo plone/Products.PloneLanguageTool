@@ -52,6 +52,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     local_available_langs = {}
     local_available_countries = {}
 
+    use_content_negotiation = 0
     use_path_negotiation = 1
     use_cookie_negotiation = 1
     use_request_negotiation = 1
@@ -82,6 +83,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
     def __init__(self):
         self.id = 'portal_languages'
+        self.use_content_negotiation = 0
         self.use_path_negotiation = 1
         self.use_cookie_negotiation  = 1
         self.use_request_negotiation = 1
@@ -100,7 +102,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         if req.environ.has_key('WEBDAV_SOURCE_PORT'):
             return None
         # Bind the languages
-        self.setLanguageBindings()
+        self.setLanguageBindings(container)
 
     security.declareProtected(ManagePortal, 'manage_setLanguageSettings')
     def manage_setLanguageSettings(self, defaultLanguage, supportedLanguages,
@@ -109,7 +111,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
                                    setAllowContentLanguageFallback=None,
                                    setUseCombinedLanguageCodes=None,
                                    displayFlags=None, startNeutral=None,
-                                   setCcTLDN=None,
+                                   setCcTLDN=None, setContentN=None,
                                    REQUEST=None):
         """Stores the tool settings."""
         if supportedLanguages and type(supportedLanguages) == type([]):
@@ -134,6 +136,11 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             self.use_path_negotiation = 1
         else:
             self.use_path_negotiation = 0
+
+        if setContentN:
+            self.use_content_negotiation = 1
+        else:
+            self.use_content_negotiation = 0
 
         if setCcTLDN:
             self.use_cctld_negotiation = 1
@@ -361,6 +368,17 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             nc = BeforeTraverse.NameCaller(self.getId())
             BeforeTraverse.registerBeforeTraverse(container, nc, handle)
 
+    security.declarePublic('getContentLanguage')
+    def getContentLanguage(self, container):
+        try:
+            lang = container.Language()
+            if lang in self.getSupportedLanguages():
+                return lang
+        except AttributeError, TypeError:
+            pass
+        return None
+
+
     security.declarePublic('getPathLanguage')
     def getPathLanguage(self):
         """Checks if a language is part of the current path."""
@@ -451,9 +469,10 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         return langs
 
     security.declareProtected(View, 'setLanguageBindings')
-    def setLanguageBindings(self):
+    def setLanguageBindings(self, container):
         """Setups the current language stuff."""
         useCcTLD = self.use_cctld_negotiation
+        useContent = self.use_content_negotiation
         usePath = self.use_path_negotiation
         useCookie = self.use_cookie_negotiation
         useRequest = self.use_request_negotiation
@@ -465,7 +484,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             # Create new binding instance
             binding = LanguageBinding(self)
         # Bind languages
-        lang = binding.setLanguageBindings(usePath, useCookie, useRequest, useDefault, useCcTLD)
+        lang = binding.setLanguageBindings(container, usePath, useCookie, useRequest, useDefault, useCcTLD, useContent)
         # Set LANGUAGE to request
         self.REQUEST['LANGUAGE'] = lang
         # Set bindings instance to request
@@ -547,9 +566,14 @@ class LanguageBinding:
         self.tool = tool
 
     security.declarePrivate('setLanguageBindings')
-    def setLanguageBindings(self, usePath=1, useCookie=1, useRequest=1, useDefault=1, useCcTLD=0):
+    def setLanguageBindings(self, container, usePath=1, useCookie=1, useRequest=1, useDefault=1, useCcTLD=0, useContent=0):
         """Setup the current language stuff."""
         langs = []
+
+        if useContent:
+            langsContent = [ self.tool.getContentLanguage(container) ]
+        else:
+            langsContent = []
 
         if usePath:
             # This one is set if there is an allowed language in the current path
@@ -586,7 +610,7 @@ class LanguageBinding:
             langsDefault = []
 
         # Build list
-        langs = langsPath+langsCookie+langsCcTLD+langsRequest+langsDefault
+        langs = langsContent+langsPath+langsCookie+langsCcTLD+langsRequest+langsDefault
 
         # Filter None languages
         langs = [lang for lang in langs if lang is not None]

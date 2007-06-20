@@ -133,6 +133,18 @@
             <ol>
                 <li>
                     <input type="checkbox"
+                           id="ContentLanguage"
+                           class="noborder"
+                           name="setCOntentN"
+                           value="1"
+                           tal:attributes="checked here/use_content_negotiation| nothing" />
+                    <label for="ContentLanguage"
+                           i18n:translate="label_content_language">
+                        Use the language of the current folder/page.
+                    </label>
+                </li>
+                <li>
+                    <input type="checkbox"
                            id="LanguageCodes"
                            class="noborder"
                            name="setPathN"

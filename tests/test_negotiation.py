@@ -11,7 +11,6 @@ PloneTestCase.installProduct('PloneLanguageTool')
 PloneTestCase.setupPloneSite(products=['PloneLanguageTool'])
 from Products.PloneLanguageTool import LanguageTool
 
-
 class LanguageNegotiationTestCase(PloneTestCase.FunctionalTestCase):
 
     def afterSetUp(self):
@@ -158,12 +157,40 @@ class TestCcTLDLanguageNegotiation(LanguageNegotiationTestCase):
         self.checkLanguage(response, "fr")
 
 
+class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
+    def afterSetUp(self):
+        LanguageNegotiationTestCase.afterSetUp(self)
+        self.tool.supported_langs = ['en', 'nl', 'fr']
+        self.tool.use_content_negotiation = 1
+        self.tool.display_flags = 0
+
+    def checkLanguage(self, response, language):
+        self.assertEquals(response.getStatus(), 200)
+        self.failUnless('<option selected="selected" value="%s">' % language
+            in response.getBody())
+
+    def testContentLanguageNegotiation(self):
+        response = self.publish(self.portal_path, self.basic_auth,
+                                env={'HTTP_ACCEPT_LANGUAGE': 'fr'})
+        self.checkLanguage(response, "fr")
+        self.portal.setLanguage('en')
+        response = self.publish(self.portal_path, self.basic_auth,
+                                env={'HTTP_ACCEPT_LANGUAGE': 'fr'})
+        self.checkLanguage(response, "en")
+        self.portal.setLanguage('nl')
+        response = self.publish(self.portal_path, self.basic_auth,
+                                env={'HTTP_ACCEPT_LANGUAGE': 'fr'})
+        self.checkLanguage(response, "nl")
+
+
+
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
     suite.addTest(makeSuite(TestDefaultLanguageNegotiation))
     suite.addTest(makeSuite(TestNoCombinedLanguageNegotiation))
     suite.addTest(makeSuite(TestCcTLDLanguageNegotiation))
+    suite.addTest(makeSuite(TestContentLanguageNegotiation))
     return suite
 
 if __name__ == '__main__':
