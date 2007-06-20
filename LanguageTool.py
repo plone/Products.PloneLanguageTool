@@ -381,11 +381,17 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             try:
                 path.reverse()
                 object=container.unrestrictedTraverse("/".join(path))
-                lang=object.Language()
-                if lang in self.getSupportedLanguages():
-                    return lang
-            except AttributeError, TypeError:
-                pass
+            except AttributeError:
+                return None
+        else:
+            object=container
+
+        try:
+            lang=object.Language()
+            if lang in self.getSupportedLanguages():
+                return lang
+        except AttributeError, TypeError:
+            pass
 
         return None
 
