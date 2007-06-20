@@ -4,10 +4,6 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 1.8 - Unreleased
 
-    - Add an option to select the language based on the language of the
-      current context.
-      [wichert]
-
     - Fixed path language negotiator to work with combined language codes.
       This closes http://dev.plone.org/plone/ticket/6661.
       [hannosch]
