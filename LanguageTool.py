@@ -372,12 +372,21 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     def getContentLanguage(self, container):
         if container is None:
             return None
-        try:
-            lang = container.Language()
-            if lang in self.getSupportedLanguages():
-                return lang
-        except AttributeError, TypeError:
-            pass
+        if not hasattr(self, 'REQUEST'):
+            return []
+
+        path = self.REQUEST['TraversalRequestNameStack']
+
+        if path:
+            try:
+                path.reverse()
+                object=container.unrestrictedTraverse("/".join(path))
+                lang=object.Language()
+                if lang in self.getSupportedLanguages():
+                    return lang
+            except AttributeError, TypeError:
+                pass
+
         return None
 
 
