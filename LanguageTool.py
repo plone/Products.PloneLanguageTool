@@ -344,9 +344,9 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         return None
 
     security.declareProtected(View, 'getPreferredLanguage')
-    def getPreferredLanguage(self):
+    def getPreferredLanguage(self, context=None):
         """Gets the preferred site language."""
-        l = self.getLanguageBindings()
+        l = self.getLanguageBindings(context)
         if l[0]:
             if not self.use_combined_language_codes:
                 return l[0].split('-')[0]
@@ -369,25 +369,9 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             BeforeTraverse.registerBeforeTraverse(container, nc, handle)
 
     security.declarePublic('getContentLanguage')
-    def getContentLanguage(self, container):
-        if container is None:
-            return None
-        if not hasattr(self, 'REQUEST'):
-            return []
-
-        path = self.REQUEST['TraversalRequestNameStack']
-
-        if path:
-            try:
-                path.reverse()
-                object=container.unrestrictedTraverse("/".join(path))
-            except AttributeError:
-                return None
-        else:
-            object=container
-
+    def getContentLanguage(self, context):
         try:
-            lang=object.Language()
+            lang=context.Language()
             if lang in self.getSupportedLanguages():
                 return lang
         except AttributeError, TypeError:
@@ -509,7 +493,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         return lang
 
     security.declareProtected(View, 'getLanguageBindings')
-    def getLanguageBindings(self):
+    def getLanguageBindings(self, context=None):
         """Returns the bound languages.
 
         (language, default_language, languages_list)
@@ -522,7 +506,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
             # Not bound -> bind
             self.setLanguageBindings()
             binding = self.REQUEST.get('LANGUAGE_TOOL')
-        return binding.getLanguageBindings()
+        return binding.getLanguageBindings(context)
 
     security.declarePublic('isTranslatable')
     def isTranslatable(self, obj):
@@ -587,10 +571,7 @@ class LanguageBinding:
         """Setup the current language stuff."""
         langs = []
 
-        if useContent:
-            langsContent = [ self.tool.getContentLanguage(container) ]
-        else:
-            langsContent = []
+        self.useContent=useContent
 
         if usePath:
             # This one is set if there is an allowed language in the current path
@@ -627,11 +608,12 @@ class LanguageBinding:
             langsDefault = []
 
         # Build list
-        langs = langsContent+langsPath+langsCookie+langsCcTLD+langsRequest+langsDefault
+        langs = langsPath+langsCookie+langsCcTLD+langsRequest+langsDefault
 
         # Filter None languages
         langs = [lang for lang in langs if lang is not None]
 
+        self.LANGUAGES = langs
         self.DEFAULT_LANGUAGE = langs[-1]
         self.LANGUAGE = langs[0]
         self.LANGUAGE_LIST = langs[1:-1]
@@ -639,11 +621,20 @@ class LanguageBinding:
         return self.LANGUAGE
 
     security.declarePublic('getLanguageBindings')
-    def getLanguageBindings(self):
+    def getLanguageBindings(self, context=None):
         """Returns the bound languages.
 
         (language, default_language, languages_list)
         """
+        langs = self.LANGUAGES
+        if self.useContent:
+            lang = self.tool.getContentLanguage(context)
+            if lang is not None:
+                langs  = [ lang ] + langs
+
+        self.DEFAULT_LANGUAGE = langs[-1]
+        self.LANGUAGE = langs[0]
+        self.LANGUAGE_LIST = langs[1:-1]
         return (self.LANGUAGE, self.DEFAULT_LANGUAGE, self.LANGUAGE_LIST)
 
 
@@ -655,7 +646,7 @@ class PrefsForPTS:
         binding = context.get('LANGUAGE_TOOL')
         if not isinstance(binding, LanguageBinding):
             return None
-        self.pref = binding.getLanguageBindings()
+        self.pref = binding.getLanguageBindings(context)
         self.languages = [self.pref[0]] + self.pref[2] + [self.pref[1]]
         return None
 
