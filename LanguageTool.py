@@ -370,6 +370,8 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
 
     security.declarePublic('getContentLanguage')
     def getContentLanguage(self, container):
+        if container is None:
+            return None
         try:
             lang = container.Language()
             if lang in self.getSupportedLanguages():
@@ -469,7 +471,7 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
         return langs
 
     security.declareProtected(View, 'setLanguageBindings')
-    def setLanguageBindings(self, container):
+    def setLanguageBindings(self, container=None):
         """Setups the current language stuff."""
         useCcTLD = self.use_cctld_negotiation
         useContent = self.use_content_negotiation
