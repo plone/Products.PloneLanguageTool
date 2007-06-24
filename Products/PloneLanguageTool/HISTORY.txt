@@ -4,6 +4,10 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 2.0b5 - Unreleased
 
+    - Removed registration of the language tool as an utility. It acquires
+      the REQUEST from self.
+      [hannosch]
+
     - Fixed path language negotiator to work with combined language codes.
       This closes http://dev.plone.org/plone/ticket/6661.
       [hannosch]

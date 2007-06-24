@@ -588,4 +588,3 @@ if _hasPTS:
     registerLangPrefsMethod({'klass':PrefsForPTS, 'priority':100 })
 
 InitializeClass(LanguageTool)
-registerToolInterface('portal_languages', ILanguageTool)

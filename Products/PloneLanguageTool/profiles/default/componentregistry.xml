@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<componentregistry>
- <utilities>
-  <utility
-     interface="Products.PloneLanguageTool.interfaces.ILanguageTool"
-     object="/portal_languages"/>
- </utilities>
-</componentregistry>
