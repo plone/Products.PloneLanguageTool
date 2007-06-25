@@ -1,7 +1,9 @@
 <configure 
-    xmlns="http://namespaces.zope.org/zope">
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml">
 
 <adapter
+    zcml:condition="installed Products.GenericSetup.utils"
     factory=".exportimport.LanguageToolXMLAdapter"
     provides="Products.GenericSetup.interfaces.IBody"
     for=".interfaces.ILanguageTool
