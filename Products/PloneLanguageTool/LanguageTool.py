@@ -49,7 +49,7 @@ class LanguageTool(UniqueObject, SimpleItem):
     force_language_urls = 1
     allow_content_language_fallback = 0
     display_flags = 1
-    start_neutral = 1
+    start_neutral = 0
 
     manage_options=(
         ({ 'label'  : 'LanguageConfig',
@@ -70,7 +70,7 @@ class LanguageTool(UniqueObject, SimpleItem):
         self.force_language_urls = 1
         self.allow_content_language_fallback = 0
         self.display_flags = 1
-        self.start_neutral = 1
+        self.start_neutral = 0
 
     def __call__(self, container, req):
         """The __before_publishing_traverse__ hook."""

@@ -4,6 +4,10 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 2.0b5 - Unreleased
 
+    - Changed the default for start_neutral. We don't start with neutral
+      content anymore.
+      [hannosch]
+
     - Removed registration of the language tool as an utility. It acquires
       the REQUEST from self.
       [hannosch]
