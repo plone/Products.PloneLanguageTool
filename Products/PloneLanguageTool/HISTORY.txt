@@ -2,7 +2,7 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
-PloneLanguageTool 2.0b5 - Unreleased
+PloneLanguageTool 2.0rc1 - Released July 9, 2007
 
     - Changed the default for start_neutral. We don't start with neutral
       content anymore.

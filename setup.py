@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '2.0b5'
+version = '2.0rc1'
 
 setup(name='Products.PloneLanguageTool',
       version=version,
