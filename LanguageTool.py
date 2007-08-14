@@ -389,11 +389,13 @@ class LanguageTool(UniqueObject, ActionProviderBase, SimpleItem):
     security.declarePublic('getContentLanguage')
     def getContentLanguage(self):
         """Checks the language of the current content if not folderish."""
-        if not hasattr(self, 'REQUEST'):
-            return []
+        request = getattr(self, 'REQUEST', None)
+        if request is None:
+            return None
         try: # This will actually work nicely with browserdefault as we get attribute error...
-            contentpath = self.REQUEST.get('PATH_TRANSLATED')
-            if contentpath is not None and contentpath.find('portal_factory') == -1:
+            contentpath = request.get('PATH_TRANSLATED')
+            # We have to filter the tools, especially portal_factory and the css and js registries
+            if contentpath is not None and contentpath.find('portal_') == -1:
                 obj = self.unrestrictedTraverse(contentpath, None)
                 if obj is not None:
                     if obj.Language() in self.getSupportedLanguages():
