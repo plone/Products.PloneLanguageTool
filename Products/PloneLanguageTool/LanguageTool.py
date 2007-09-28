@@ -8,6 +8,7 @@ from zope.interface import implements
 
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
+from ZODB.POSException import ConflictError
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.permissions import ManagePortal
@@ -42,6 +43,7 @@ class LanguageTool(UniqueObject, SimpleItem):
 
     supported_langs = ['en']
     use_path_negotiation = 1
+    use_content_negotiation = 1
     use_cookie_negotiation = 1
     use_request_negotiation = 1
     use_cctld_negotiation = 0
@@ -85,6 +87,7 @@ class LanguageTool(UniqueObject, SimpleItem):
 
     security.declareProtected(ManagePortal, 'manage_setLanguageSettings')
     def manage_setLanguageSettings(self, defaultLanguage, supportedLanguages,
+                                   setContentN=None,
                                    setCookieN=None, setRequestN=None,
                                    setPathN=None, setForcelanguageUrls=None,
                                    setAllowContentLanguageFallback=None,
@@ -99,6 +102,11 @@ class LanguageTool(UniqueObject, SimpleItem):
             self.setDefaultLanguage(defaultLanguage)
         else:
             self.setDefaultLanguage(self.supported_langs[0])
+
+        if setContentN:
+            self.use_content_negotiation = 1
+        else:
+            self.use_content_negotiation = 0
 
         if setCookieN:
             self.use_cookie_negotiation = 1
@@ -354,6 +362,24 @@ class LanguageTool(UniqueObject, SimpleItem):
             pass
         return None
 
+    security.declarePublic('getContentLanguage')
+    def getContentLanguage(self):
+        """Checks the language of the current content if not folderish."""
+        if not hasattr(self, 'REQUEST'):
+            return []
+        try: # This will actually work nicely with browserdefault as we get attribute error...
+            contentpath = self.REQUEST.get('PATH_TRANSLATED')
+            if contentpath is not None and contentpath.find('portal_factory') == -1:
+                obj = self.unrestrictedTraverse(contentpath, None)
+                if obj is not None:
+                    if obj.Language() in self.getSupportedLanguages():
+                        return obj.Language()
+        except ConflictError:
+            raise
+        except:
+            pass
+        return None
+
     security.declareProtected(View, 'getCcTLDLanguages')
     def getCcTLDLanguages(self):
         if not hasattr(self, 'REQUEST'):
@@ -431,6 +457,7 @@ class LanguageTool(UniqueObject, SimpleItem):
     security.declareProtected(View, 'setLanguageBindings')
     def setLanguageBindings(self):
         """Setups the current language stuff."""
+        useContent = self.use_content_negotiation
         useCcTLD = self.use_cctld_negotiation
         usePath = self.use_path_negotiation
         useCookie = self.use_cookie_negotiation
@@ -443,7 +470,7 @@ class LanguageTool(UniqueObject, SimpleItem):
             # Create new binding instance
             binding = LanguageBinding(self)
         # Bind languages
-        lang = binding.setLanguageBindings(usePath, useCookie, useRequest, useDefault, useCcTLD)
+        lang = binding.setLanguageBindings(usePath, useContent, useCookie, useRequest, useDefault, useCcTLD)
         # Set LANGUAGE to request
         self.REQUEST['LANGUAGE'] = lang
         # Set bindings instance to request
@@ -509,7 +536,7 @@ class LanguageBinding:
         self.tool = tool
 
     security.declarePrivate('setLanguageBindings')
-    def setLanguageBindings(self, usePath=1, useCookie=1, useRequest=1, useDefault=1, useCcTLD=0):
+    def setLanguageBindings(self, usePath=1, useContent=1, useCookie=1, useRequest=1, useDefault=1, useCcTLD=0):
         """Setup the current language stuff."""
         langs = []
 
@@ -518,6 +545,11 @@ class LanguageBinding:
             langsPath = [self.tool.getPathLanguage()]
         else:
             langsPath = []
+
+        if useContent:
+            langsContent = [self.tool.getContentLanguage()]
+        else:
+            langsContent = []
 
         if useCookie:
             # If we are using the cookie stuff we provide the setter here
@@ -547,10 +579,14 @@ class LanguageBinding:
             langsDefault = []
 
         # Build list
-        langs = langsPath+langsCookie+langsCcTLD+langsRequest+langsDefault
+        langs = langsPath+langsContent+langsCookie+langsCcTLD+langsRequest+langsDefault
 
         # Filter None languages
         langs = [lang for lang in langs if lang is not None]
+
+        # Set cookie language to language
+        if useCookie and langs[0] != langsCookie:
+            self.tool.setLanguageCookie(langs[0], noredir=True)
 
         self.DEFAULT_LANGUAGE = langs[-1]
         self.LANGUAGE = langs[0]

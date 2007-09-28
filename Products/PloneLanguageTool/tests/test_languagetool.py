@@ -25,6 +25,7 @@ class TestLanguageToolSettings(PloneTestCase.PloneTestCase):
         defaultLanguage = 'de'
         supportedLanguages = ['en','de','no']
         self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages,
+                                   setContentN=False,
                                    setCookieN=False, setRequestN=False,
                                    setPathN=False, setForcelanguageUrls=False,
                                    setAllowContentLanguageFallback=True,
@@ -33,6 +34,7 @@ class TestLanguageToolSettings(PloneTestCase.PloneTestCase):
 
         self.failUnless(self.ltool.getDefaultLanguage()==defaultLanguage)
         self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
+        self.failUnless(self.ltool.use_content_negotiation==False)
         self.failUnless(self.ltool.use_cookie_negotiation==False)
         self.failUnless(self.ltool.use_request_negotiation==False)
         self.failUnless(self.ltool.use_path_negotiation==False)

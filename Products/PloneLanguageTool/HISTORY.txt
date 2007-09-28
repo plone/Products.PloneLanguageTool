@@ -3,7 +3,11 @@ Changelog for PloneLanguageTool
     (name of developer listed in brackets)
 
 
-PloneLanguageTool 2.0.1 - UNRELEASED
+PloneLanguageTool 3.0 - UNRELEASED
+
+    - Merge content language-based negotiator from psol-content-language
+      branch from tesdal.
+      [wichert]
 
     - Add missing GenericSetup import and export step registration.
       [wichert]

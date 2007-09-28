@@ -107,6 +107,29 @@ class TestCombinedLanguageNegotiation(LanguageNegotiationTestCase):
             in response.getBody())
 
 
+class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
+    def afterSetUp(self):
+        LanguageNegotiationTestCase.afterSetUp(self)
+        self.tool.supported_langs = ['en', 'nl', 'fr']
+        self.tool.use_content_negotiation = 1
+        self.tool.display_flags = 0
+
+    def checkLanguage(self, response, language):
+        self.assertEquals(response.getStatus(), 200)
+        self.failUnless('<option selected="selected" value="%s">' % language
+            in response.getBody())
+
+    def testContentObject(self):
+        self.folder.invokeFactory('Document', 'doc', language='nl')
+        doc = self.folder.doc
+        self.failUnlessEqual(doc.Language(), 'nl')
+        docpath = '/'.join(doc.getPhysicalPath())
+        # For a simple hostname without ccTLD the canonical language is used
+        response = self.publish(docpath, self.basic_auth,
+                                env={'PATH_TRANSLATED': docpath})
+        self.checkLanguage(response, "nl")
+
+
 class TestCcTLDLanguageNegotiation(LanguageNegotiationTestCase):
     def afterSetUp(self):
         LanguageNegotiationTestCase.afterSetUp(self)
@@ -161,6 +184,7 @@ def test_suite():
     suite = TestSuite()
     suite.addTest(makeSuite(TestDefaultLanguageNegotiation))
     suite.addTest(makeSuite(TestNoCombinedLanguageNegotiation))
+    suite.addTest(makeSuite(TestContentLanguageNegotiation))
     suite.addTest(makeSuite(TestCcTLDLanguageNegotiation))
     return suite
 
