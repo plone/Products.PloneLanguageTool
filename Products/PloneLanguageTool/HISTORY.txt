@@ -2,6 +2,13 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
+
+PloneLanguageTool 2.0.1 - UNRELEASED
+
+    - Add missing GenericSetup import and export step registration.
+      [wichert]
+
+
 PloneLanguageTool 2.0 - Released August 9, 2007
 
     - No changes.
