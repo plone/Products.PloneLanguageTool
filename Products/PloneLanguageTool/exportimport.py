@@ -16,6 +16,7 @@ class LanguageToolXMLAdapter(XMLAdapterBase):
 
     boolean_fields =  [ "use_path_negotiation", "use_cookie_negotiation",
                         "use_request_negotiation", "use_cctld_negotiation",
+                        "use_content_negotiation",
                         "use_combined_language_codes", "display_flags",
                         "start_neutral" ]
     list_fields = [ "supported_langs" ]
