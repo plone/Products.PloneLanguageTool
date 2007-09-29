@@ -2,7 +2,15 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
-PloneLanguageTool 1.8 - Unreleased
+PloneLanguageTool 1.8 - Released September 29, 2007
+
+    - Merge from psol-content-language branch, negotiator based on content
+      language.
+      [tesdal]
+
+    - Fixed wrong usage of the Fiji flag for the Faroese language. Thanks to
+      Gunnar Vestergaard for the report.
+      [deo]
 
     - Fixed path language negotiator to work with combined language codes.
       This closes http://dev.plone.org/plone/ticket/6661.
