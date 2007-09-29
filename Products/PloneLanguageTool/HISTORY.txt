@@ -2,8 +2,10 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
-
 PloneLanguageTool 3.0 - UNRELEASED
+
+    - Added BBB code for the ITranslatable interface now part of LinguaPlone.
+      [hannosch]
 
     - Merge content language-based negotiator from psol-content-language
       branch from tesdal.
@@ -11,7 +13,6 @@ PloneLanguageTool 3.0 - UNRELEASED
 
     - Add missing GenericSetup import and export step registration.
       [wichert]
-
 
 PloneLanguageTool 2.0 - Released August 9, 2007
 

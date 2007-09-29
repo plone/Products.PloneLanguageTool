@@ -16,13 +16,13 @@ from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import registerToolInterface
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import UniqueObject
-from Products.CMFPlone.interfaces.Translatable import ITranslatable
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZODB.POSException import ConflictError
 from ZPublisher import BeforeTraverse
 from ZPublisher.HTTPRequest import HTTPRequest
 
 from Products.PloneLanguageTool.interfaces import ILanguageTool
+from Products.PloneLanguageTool.interfaces import ITranslatable
 
 try:
     from Products.PlacelessTranslationService.Negotiator import registerLangPrefsMethod
