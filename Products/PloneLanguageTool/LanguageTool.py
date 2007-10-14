@@ -233,6 +233,7 @@ class LanguageTool(UniqueObject, SimpleItem):
             languages = util.getLanguages()
 
         for lang in languages:
+            languages[lang]['code'] = lang
             if lang in self.supported_langs:
                 languages[lang]['selected'] = True
             else:
