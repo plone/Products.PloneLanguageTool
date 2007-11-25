@@ -4,6 +4,9 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 3.0 - UNRELEASED
 
+    - Added metadata.xml to GenericSetup profile.
+      [hannosch]
+
     - Added BBB code for the ITranslatable interface now part of LinguaPlone.
       [hannosch]
 
