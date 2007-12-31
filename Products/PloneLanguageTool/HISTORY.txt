@@ -2,6 +2,10 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
+PloneLanguageTool 2.1.1 - Unreleased
+
+
+
 PloneLanguageTool 2.1 - Released December 31, 2007
 
     - Added metadata.xml to GenericSetup profile.
