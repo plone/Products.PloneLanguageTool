@@ -2,7 +2,7 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
-PloneLanguageTool 3.0 - UNRELEASED
+PloneLanguageTool 2.1 - UNRELEASED
 
     - Added metadata.xml to GenericSetup profile.
       [hannosch]
