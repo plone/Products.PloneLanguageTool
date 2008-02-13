@@ -2,6 +2,9 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
+PloneLanguageTool 2.0.3 - Unreleased
+
+
 PloneLanguageTool 2.0.2 - Released February 13, 2008
 
     - Expose the language code in this branch as well.
