@@ -184,6 +184,7 @@ def test_suite():
     suite = TestSuite()
     suite.addTest(makeSuite(TestDefaultLanguageNegotiation))
     suite.addTest(makeSuite(TestNoCombinedLanguageNegotiation))
+    suite.addTest(makeSuite(TestCombinedLanguageNegotiation))
     suite.addTest(makeSuite(TestContentLanguageNegotiation))
     suite.addTest(makeSuite(TestCcTLDLanguageNegotiation))
     return suite
