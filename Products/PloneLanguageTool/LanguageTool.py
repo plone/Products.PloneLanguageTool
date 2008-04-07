@@ -64,6 +64,7 @@ class LanguageTool(UniqueObject, SimpleItem):
 
     def __init__(self):
         self.id = 'portal_languages'
+        self.use_content_negotiation = 1
         self.use_path_negotiation = 1
         self.use_cookie_negotiation  = 1
         self.use_request_negotiation = 1

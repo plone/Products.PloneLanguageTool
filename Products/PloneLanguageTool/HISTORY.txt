@@ -4,7 +4,8 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 3.0 - UNRELEASED
 
-
+    - Added an UI option for setting the content language negotiator.
+      [hannosch]
 
 PloneLanguageTool 2.1 - Released December 31, 2007
 
