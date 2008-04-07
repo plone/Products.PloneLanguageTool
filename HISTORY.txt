@@ -2,6 +2,11 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
+PloneLanguageTool 1.9 - Unreleased
+
+    - Added an UI option for setting the content language negotiator.
+      [hannosch]
+
 PloneLanguageTool 1.8 - Released September 29, 2007
 
     - Merge from psol-content-language branch, negotiator based on content
