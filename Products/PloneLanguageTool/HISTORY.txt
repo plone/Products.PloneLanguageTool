@@ -4,6 +4,10 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 3.0 - UNRELEASED
 
+    - Hide the deprecation warning about the moved ITranslatable interface
+      for our own code.
+      [hannosch]
+
     - Added an UI option for setting the content language negotiator.
       [hannosch]
 
