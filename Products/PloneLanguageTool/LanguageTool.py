@@ -45,11 +45,16 @@ class LanguageTool(UniqueObject, SimpleItem):
     use_cookie_negotiation = 1
     use_request_negotiation = 1
     use_cctld_negotiation = 0
+    use_subdomain_negotiation = 0
     use_combined_language_codes = 0
     force_language_urls = 1
     allow_content_language_fallback = 0
     display_flags = 1
     start_neutral = 0
+
+    # Used by functional tests.
+    # See plone.app.i18n.locales.browser.selector
+    always_show_selector = 0
 
     manage_options=(
         ({ 'label'  : 'LanguageConfig',
@@ -66,6 +71,7 @@ class LanguageTool(UniqueObject, SimpleItem):
         self.use_cookie_negotiation  = 1
         self.use_request_negotiation = 1
         self.use_cctld_negotiation = 0
+        self.use_subdomain_negotiation = 0
         self.use_combined_language_codes = 0
         self.force_language_urls = 1
         self.allow_content_language_fallback = 0
@@ -90,7 +96,8 @@ class LanguageTool(UniqueObject, SimpleItem):
                                    setAllowContentLanguageFallback=None,
                                    setUseCombinedLanguageCodes=None,
                                    displayFlags=None, startNeutral=None,
-                                   setCcTLDN=None, REQUEST=None):
+                                   setCcTLDN=None, setSubdomainN=None,
+                                   REQUEST=None):
         """Stores the tool settings."""
         if supportedLanguages and type(supportedLanguages) == type([]):
             self.supported_langs = supportedLanguages
@@ -119,6 +126,11 @@ class LanguageTool(UniqueObject, SimpleItem):
             self.use_cctld_negotiation = 1
         else:
             self.use_cctld_negotiation = 0
+
+        if setSubdomainN:
+            self.use_subdomain_negotiation = 1
+        else:
+            self.use_subdomain_negotiation = 0
 
         if setForcelanguageUrls:
             self.force_language_urls = 1
@@ -368,6 +380,19 @@ class LanguageTool(UniqueObject, SimpleItem):
         allowed = self.getSupportedLanguages()
         return [lang for lang in wanted if lang in allowed]
 
+    security.declareProtected(View, 'getSubdomainLanguages')
+    def getSubdomainLanguages(self):
+        if not hasattr(self, 'REQUEST'):
+            return None
+        request = self.REQUEST
+        if not "HTTP_HOST" in request:
+            return None
+        host=request["HTTP_HOST"].split(":")[0].lower()
+        tld=host.split(".")[0]
+        wanted = self.getCcTLDInformation().get(tld, [])
+        allowed = self.getSupportedLanguages()
+        return [lang for lang in wanted if lang in allowed]
+
     security.declareProtected(View, 'getRequestLanguages')
     def getRequestLanguages(self):
         """Parses the request and return language list."""
@@ -407,10 +432,10 @@ class LanguageTool(UniqueObject, SimpleItem):
                     quality = float(length-i)
 
                 language = l[0]
-                if self.use_combined_language_codes:
-                    if language in self.getSupportedLanguages():
-                        # If allowed the add language
-                        langs.append((quality, language))
+                if (self.use_combined_language_codes and
+                    language in self.getSupportedLanguages()):
+                    # If allowed add the language
+                    langs.append((quality, language))
                 else:
                     # if we only use simply language codes, we should recognize
                     # combined codes as their base code. So 'de-de' is treated
@@ -433,6 +458,7 @@ class LanguageTool(UniqueObject, SimpleItem):
     def setLanguageBindings(self):
         """Setups the current language stuff."""
         useCcTLD = self.use_cctld_negotiation
+        useSubdomain = self.use_subdomain_negotiation
         usePath = self.use_path_negotiation
         useCookie = self.use_cookie_negotiation
         useRequest = self.use_request_negotiation
@@ -444,7 +470,7 @@ class LanguageTool(UniqueObject, SimpleItem):
             # Create new binding instance
             binding = LanguageBinding(self)
         # Bind languages
-        lang = binding.setLanguageBindings(usePath, useCookie, useRequest, useDefault, useCcTLD)
+        lang = binding.setLanguageBindings(usePath, useCookie, useRequest, useDefault, useCcTLD, useSubdomain)
         # Set LANGUAGE to request
         self.REQUEST['LANGUAGE'] = lang
         # Set bindings instance to request
@@ -510,7 +536,7 @@ class LanguageBinding:
         self.tool = tool
 
     security.declarePrivate('setLanguageBindings')
-    def setLanguageBindings(self, usePath=1, useCookie=1, useRequest=1, useDefault=1, useCcTLD=0):
+    def setLanguageBindings(self, usePath=1, useCookie=1, useRequest=1, useDefault=1, useCcTLD=0, useSubdomain=0):
         """Setup the current language stuff."""
         langs = []
 
@@ -531,10 +557,16 @@ class LanguageBinding:
         else:
             langsCookie = []
 
+        if useSubdomain:
+            langsSubdomain = self.tool.getSubdomainLanguages()
+        else:
+            langsSubdomain = []
+
         if useCcTLD:
             langsCcTLD = self.tool.getCcTLDLanguages()
         else:
             langsCcTLD = []
+
         # Get langs from request
         if useRequest:
             langsRequest = self.tool.getRequestLanguages()
@@ -548,7 +580,7 @@ class LanguageBinding:
             langsDefault = []
 
         # Build list
-        langs = langsPath+langsCookie+langsCcTLD+langsRequest+langsDefault
+        langs = langsPath+langsCookie+langsSubdomain+langsCcTLD+langsRequest+langsDefault
 
         # Filter None languages
         langs = [lang for lang in langs if lang is not None]
