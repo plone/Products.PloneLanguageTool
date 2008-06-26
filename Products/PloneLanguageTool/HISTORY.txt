@@ -4,6 +4,10 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 2.0.4 - Unreleased
 
+    - Added isSelectorAvailable API to tool. This API is called to determine
+      visibility of the language selector viewlet (in plone.app.i18n).
+      [stefan]
+
     - Added subdomain negotiator.
       [stefan]
 
