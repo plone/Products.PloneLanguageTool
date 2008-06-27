@@ -522,8 +522,8 @@ class LanguageTool(UniqueObject, SimpleItem):
         """Returns the name for a country code."""
         return self.getAvailableCountries().get(countryCode, countryCode)
 
-    security.declareProtected(View, 'isSelectorAvailable')
-    def isSelectorAvailable(self):
+    security.declareProtected(View, 'showSelector')
+    def showSelector(self):
         """Returns True if the selector viewlet should be shown."""
         return bool(self.use_cookie_negotiation or self.always_show_selector)
 
