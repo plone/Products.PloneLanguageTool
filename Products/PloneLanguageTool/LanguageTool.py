@@ -8,6 +8,7 @@ from zope.interface import implements
 
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
+from Acquisition import aq_inner
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.permissions import ManagePortal
@@ -43,6 +44,7 @@ class LanguageTool(UniqueObject, SimpleItem):
     supported_langs = ['en']
     use_path_negotiation = 1
     use_cookie_negotiation = 1
+    authenticated_users_only = 0
     use_request_negotiation = 1
     use_cctld_negotiation = 0
     use_subdomain_negotiation = 0
@@ -69,6 +71,7 @@ class LanguageTool(UniqueObject, SimpleItem):
         self.id = 'portal_languages'
         self.use_path_negotiation = 1
         self.use_cookie_negotiation  = 1
+        self.authenticated_users_only = 0
         self.use_request_negotiation = 1
         self.use_cctld_negotiation = 0
         self.use_subdomain_negotiation = 0
@@ -97,7 +100,7 @@ class LanguageTool(UniqueObject, SimpleItem):
                                    setUseCombinedLanguageCodes=None,
                                    displayFlags=None, startNeutral=None,
                                    setCcTLDN=None, setSubdomainN=None,
-                                   REQUEST=None):
+                                   setAuthOnlyN=None, REQUEST=None):
         """Stores the tool settings."""
         if supportedLanguages and type(supportedLanguages) == type([]):
             self.supported_langs = supportedLanguages
@@ -111,6 +114,11 @@ class LanguageTool(UniqueObject, SimpleItem):
             self.use_cookie_negotiation = 1
         else:
             self.use_cookie_negotiation = 0
+
+        if setAuthOnlyN:
+            self.authenticated_users_only = 1
+        else:
+            self.authenticated_users_only = 0
 
         if setRequestN:
             self.use_request_negotiation = 1
@@ -461,6 +469,7 @@ class LanguageTool(UniqueObject, SimpleItem):
         useSubdomain = self.use_subdomain_negotiation
         usePath = self.use_path_negotiation
         useCookie = self.use_cookie_negotiation
+        authOnly = self.authenticated_users_only
         useRequest = self.use_request_negotiation
         useDefault = 1 # This should never be disabled
         if not hasattr(self, 'REQUEST'):
@@ -470,7 +479,8 @@ class LanguageTool(UniqueObject, SimpleItem):
             # Create new binding instance
             binding = LanguageBinding(self)
         # Bind languages
-        lang = binding.setLanguageBindings(usePath, useCookie, useRequest, useDefault, useCcTLD, useSubdomain)
+        lang = binding.setLanguageBindings(usePath, useCookie, useRequest, useDefault,
+                                           useCcTLD, useSubdomain, authOnly)
         # Set LANGUAGE to request
         self.REQUEST['LANGUAGE'] = lang
         # Set bindings instance to request
@@ -522,10 +532,21 @@ class LanguageTool(UniqueObject, SimpleItem):
         """Returns the name for a country code."""
         return self.getAvailableCountries().get(countryCode, countryCode)
 
+    security.declarePrivate('isAnonymousUser')
+    def isAnonymousUser(self):
+        from AccessControl import getSecurityManager
+        user = getSecurityManager().getUser()
+        return not user.has_role('Authenticated')
+
     security.declareProtected(View, 'showSelector')
     def showSelector(self):
         """Returns True if the selector viewlet should be shown."""
-        return bool(self.use_cookie_negotiation or self.always_show_selector)
+        if self.always_show_selector:
+            return True
+        if (self.use_cookie_negotiation and
+            not (self.authenticated_users_only and self.isAnonymousUser())):
+            return True
+        return False
 
 
 class LanguageBinding:
@@ -537,11 +558,13 @@ class LanguageBinding:
     LANGUAGE = None
     LANGUAGE_LIST = []
 
-    def __init__(self, tool):
+    def __init__(self, tool, member=None):
         self.tool = tool
+        self.member = member
 
     security.declarePrivate('setLanguageBindings')
-    def setLanguageBindings(self, usePath=1, useCookie=1, useRequest=1, useDefault=1, useCcTLD=0, useSubdomain=0):
+    def setLanguageBindings(self, usePath=1, useCookie=1, useRequest=1, useDefault=1,
+                            useCcTLD=0, useSubdomain=0, authOnly=0):
         """Setup the current language stuff."""
         langs = []
 
@@ -551,7 +574,7 @@ class LanguageBinding:
         else:
             langsPath = []
 
-        if useCookie:
+        if useCookie and not (authOnly and self.tool.isAnonymousUser()):
             # If we are using the cookie stuff we provide the setter here
             set_language = self.tool.REQUEST.get('set_language', None)
             if set_language:

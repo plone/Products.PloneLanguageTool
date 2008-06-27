@@ -50,7 +50,9 @@
         <p>Check the language negotiation schemes that apply to this site</p>
         <ol>
             <li><p><input type="checkbox" name="setPathN" value="1" tal:attributes="checked here/use_path_negotiation| nothing" /> Use language codes in URL path for manual override.</p></li>
-            <li><p><input type="checkbox" name="setCookieN" value="1" tal:attributes="checked here/use_cookie_negotiation| nothing" /> Use cookie for manual override.</p></li>
+            <li><p><input type="checkbox" name="setCookieN" value="1" tal:attributes="checked here/use_cookie_negotiation| nothing" /> Use cookie for manual override.</p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="setAuthOnlyN" value="1" tal:attributes="checked here/authenticated_users_only| nothing" /> Authenticated users only.</p>
+            </li>
             <li><p><input type="checkbox" name="setSubdomainN" value="1" tal:attributes="checked here/use_subdomain_negotiation| nothing" /> Use subdomain (e.g.: <i>de</i>.plone.org).</p></li>
             <li><p><input type="checkbox" name="setCcTLDN" value="1" tal:attributes="checked here/use_cctld_negotiation| nothing" /> Use top-level domain (e.g.: www.plone.<i>de</i>).</p></li>
             <li><p><input type="checkbox" name="setRequestN" value="1" tal:attributes="checked here/use_request_negotiation | nothing" /> Use browser language request negotiation.</p></li>

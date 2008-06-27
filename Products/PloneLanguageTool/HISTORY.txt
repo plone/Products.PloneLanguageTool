@@ -4,6 +4,9 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 2.0.4 - Unreleased
 
+    - Add option to restrict cookie negotiation to authenticated users.
+      [stefan]
+
     - Added `showSelector` API to tool. This API is called to determine
       visibility of the language selector viewlet. See plone.app.i18n.
       [stefan]

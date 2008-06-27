@@ -30,7 +30,8 @@ class TestLanguageToolSettings(PloneTestCase.PloneTestCase):
                                    setAllowContentLanguageFallback=True,
                                    setUseCombinedLanguageCodes=True,
                                    startNeutral=False, displayFlags=False,
-                                   setCcTLDN=True, setSubdomainN=True)
+                                   setCcTLDN=True, setSubdomainN=True,
+                                   setAuthOnlyN=True)
 
         self.failUnless(self.ltool.getDefaultLanguage()==defaultLanguage)
         self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
@@ -44,6 +45,7 @@ class TestLanguageToolSettings(PloneTestCase.PloneTestCase):
         self.failUnless(self.ltool.showFlags()==False)
         self.failUnless(self.ltool.use_cctld_negotiation==True)
         self.failUnless(self.ltool.use_subdomain_negotiation==True)
+        self.failUnless(self.ltool.authenticated_users_only==True)
 
 
 class TestLanguageTool(PloneTestCase.PloneTestCase):
