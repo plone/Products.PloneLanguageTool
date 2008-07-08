@@ -4,6 +4,9 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 2.0.4 - Unreleased
 
+    - Adjusted deprecation warnings to point to Plone 4.0 instead of Plone 3.5
+      since we changed the version numbering again.
+      [hannosch]
 
 PloneLanguageTool 2.0.3 - Released March 26, 2008
 
@@ -43,7 +46,7 @@ PloneLanguageTool 2.0rc1 - Released July 9, 2007
       [hannosch]
 
     - Deprecated the old-style portlet_language portlet. It has been moved to
-      the plone_deprecated layer in CMFPlone and will be removed in Plone 3.5.
+      the plone_deprecated layer in CMFPlone and will be removed in Plone 4.0.
       [hannosch]
 
     - Removed the prefs_languages template in favor of a new formlib-based
