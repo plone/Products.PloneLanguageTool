@@ -3,8 +3,10 @@
  <default_language value="en"/>
  <use_path_negotiation value="False"/>
  <use_cookie_negotiation value="True"/>
+ <authenticated_users_only value="False"/>
  <use_request_negotiation value="False"/>
  <use_cctld_negotiation value="False"/>
+ <use_subdomain_negotiation value="False"/>
  <use_combined_language_codes value="False"/>
  <display_flags value="True"/>
  <start_neutral value="False"/>
