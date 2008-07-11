@@ -17,8 +17,7 @@ class LanguageToolXMLAdapter(XMLAdapterBase):
     boolean_fields =  [ "use_path_negotiation", "use_cookie_negotiation",
                         "use_request_negotiation", "use_cctld_negotiation",
                         "use_combined_language_codes", "display_flags",
-                        "start_neutral", "use_subdomain_negotiation",
-                        "authenticated_users_only" ]
+                        "start_neutral" ]
     list_fields = [ "supported_langs" ]
 
     def _exportNode(self):
@@ -43,10 +42,8 @@ class LanguageToolXMLAdapter(XMLAdapterBase):
         self.context.supported_langs = [ 'en' ]
         self.context.use_path_negotiation = 1
         self.context.use_cookie_negotiation = 1
-        self.context.authenticated_users_only = 0
         self.context.use_request_negotiation = 1
         self.context.use_cctld_negotiation = 0
-        self.context.use_subdomain_negotiation = 0
         self.context.use_combined_language_codes = 0
         self.context.display_flags = 1
         self.context.start_neutral = 1

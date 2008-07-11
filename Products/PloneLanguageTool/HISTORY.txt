@@ -4,16 +4,6 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 2.0.4 - Unreleased
 
-    - Add option to restrict cookie negotiation to authenticated users.
-      [stefan]
-
-    - Added `showSelector` API to tool. This API is called to determine
-      visibility of the language selector viewlet. See plone.app.i18n.
-      [stefan]
-
-    - Added subdomain negotiator.
-      [stefan]
-
     - Adjusted deprecation warnings to point to Plone 4.0 instead of Plone 3.5
       since we changed the version numbering again.
       [hannosch]
@@ -24,7 +14,7 @@ PloneLanguageTool 2.0.3 - Released March 26, 2008
       [wichert]
 
     - Also run TestCombinedLanguageNegotiation tests. Backported from PLT trunk.
-      [stefan]
+      [shh42]
 
 PloneLanguageTool 2.0.2 - Released February 13, 2008
 
