@@ -8,7 +8,6 @@ from zope.interface import implements
 
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
-from ZODB.POSException import ConflictError
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.permissions import ManagePortal
@@ -45,13 +44,18 @@ class LanguageTool(UniqueObject, SimpleItem):
     use_path_negotiation = 1
     use_content_negotiation = 1
     use_cookie_negotiation = 1
+    authenticated_users_only = 0
     use_request_negotiation = 1
     use_cctld_negotiation = 0
+    use_subdomain_negotiation = 0
     use_combined_language_codes = 0
     force_language_urls = 1
     allow_content_language_fallback = 0
     display_flags = 1
     start_neutral = 0
+
+    # Used by functional tests.
+    always_show_selector = 0
 
     manage_options=(
         ({ 'label'  : 'LanguageConfig',
@@ -67,8 +71,10 @@ class LanguageTool(UniqueObject, SimpleItem):
         self.use_content_negotiation = 1
         self.use_path_negotiation = 1
         self.use_cookie_negotiation  = 1
+        self.authenticated_users_only = 0
         self.use_request_negotiation = 1
         self.use_cctld_negotiation = 0
+        self.use_subdomain_negotiation = 0
         self.use_combined_language_codes = 0
         self.force_language_urls = 1
         self.allow_content_language_fallback = 0
@@ -94,7 +100,8 @@ class LanguageTool(UniqueObject, SimpleItem):
                                    setAllowContentLanguageFallback=None,
                                    setUseCombinedLanguageCodes=None,
                                    displayFlags=None, startNeutral=None,
-                                   setCcTLDN=None, REQUEST=None):
+                                   setCcTLDN=None, setSubdomainN=None,
+                                   setAuthOnlyN=None, REQUEST=None):
         """Stores the tool settings."""
         if supportedLanguages and type(supportedLanguages) == type([]):
             self.supported_langs = supportedLanguages
@@ -114,6 +121,11 @@ class LanguageTool(UniqueObject, SimpleItem):
         else:
             self.use_cookie_negotiation = 0
 
+        if setAuthOnlyN:
+            self.authenticated_users_only = 1
+        else:
+            self.authenticated_users_only = 0
+
         if setRequestN:
             self.use_request_negotiation = 1
         else:
@@ -128,6 +140,11 @@ class LanguageTool(UniqueObject, SimpleItem):
             self.use_cctld_negotiation = 1
         else:
             self.use_cctld_negotiation = 0
+
+        if setSubdomainN:
+            self.use_subdomain_negotiation = 1
+        else:
+            self.use_subdomain_negotiation = 0
 
         if setForcelanguageUrls:
             self.force_language_urls = 1
@@ -395,6 +412,19 @@ class LanguageTool(UniqueObject, SimpleItem):
         allowed = self.getSupportedLanguages()
         return [lang for lang in wanted if lang in allowed]
 
+    security.declareProtected(View, 'getSubdomainLanguages')
+    def getSubdomainLanguages(self):
+        if not hasattr(self, 'REQUEST'):
+            return None
+        request = self.REQUEST
+        if not "HTTP_HOST" in request:
+            return None
+        host=request["HTTP_HOST"].split(":")[0].lower()
+        tld=host.split(".")[0]
+        wanted = self.getCcTLDInformation().get(tld, [])
+        allowed = self.getSupportedLanguages()
+        return [lang for lang in wanted if lang in allowed]
+
     security.declareProtected(View, 'getRequestLanguages')
     def getRequestLanguages(self):
         """Parses the request and return language list."""
@@ -434,10 +464,10 @@ class LanguageTool(UniqueObject, SimpleItem):
                     quality = float(length-i)
 
                 language = l[0]
-                if self.use_combined_language_codes:
-                    if language in self.getSupportedLanguages():
-                        # If allowed the add language
-                        langs.append((quality, language))
+                if (self.use_combined_language_codes and
+                    language in self.getSupportedLanguages()):
+                    # If allowed add the language
+                    langs.append((quality, language))
                 else:
                     # if we only use simply language codes, we should recognize
                     # combined codes as their base code. So 'de-de' is treated
@@ -461,8 +491,10 @@ class LanguageTool(UniqueObject, SimpleItem):
         """Setups the current language stuff."""
         useContent = self.use_content_negotiation
         useCcTLD = self.use_cctld_negotiation
+        useSubdomain = self.use_subdomain_negotiation
         usePath = self.use_path_negotiation
         useCookie = self.use_cookie_negotiation
+        authOnly = self.authenticated_users_only
         useRequest = self.use_request_negotiation
         useDefault = 1 # This should never be disabled
         if not hasattr(self, 'REQUEST'):
@@ -472,7 +504,8 @@ class LanguageTool(UniqueObject, SimpleItem):
             # Create new binding instance
             binding = LanguageBinding(self)
         # Bind languages
-        lang = binding.setLanguageBindings(usePath, useContent, useCookie, useRequest, useDefault, useCcTLD)
+        lang = binding.setLanguageBindings(usePath, useContent, useCookie, useRequest, useDefault,
+                                           useCcTLD, useSubdomain, authOnly)
         # Set LANGUAGE to request
         self.REQUEST['LANGUAGE'] = lang
         # Set bindings instance to request
@@ -524,6 +557,22 @@ class LanguageTool(UniqueObject, SimpleItem):
         """Returns the name for a country code."""
         return self.getAvailableCountries().get(countryCode, countryCode)
 
+    security.declarePrivate('isAnonymousUser')
+    def isAnonymousUser(self):
+        from AccessControl import getSecurityManager
+        user = getSecurityManager().getUser()
+        return not user.has_role('Authenticated')
+
+    security.declarePublic('showSelector')
+    def showSelector(self):
+        """Returns True if the selector viewlet should be shown."""
+        if self.always_show_selector:
+            return True
+        if (self.use_cookie_negotiation and
+            not (self.authenticated_users_only and self.isAnonymousUser())):
+            return True
+        return False
+
 
 class LanguageBinding:
     """Helper which holding language infos in request."""
@@ -538,7 +587,8 @@ class LanguageBinding:
         self.tool = tool
 
     security.declarePrivate('setLanguageBindings')
-    def setLanguageBindings(self, usePath=1, useContent=1, useCookie=1, useRequest=1, useDefault=1, useCcTLD=0):
+    def setLanguageBindings(self, usePath=1, useContent=1, useCookie=1, useRequest=1, useDefault=1,
+                            useCcTLD=0, useSubdomain=0, authOnly=0):
         """Setup the current language stuff."""
         langs = []
 
@@ -553,7 +603,7 @@ class LanguageBinding:
         else:
             langsContent = []
 
-        if useCookie:
+        if useCookie and not (authOnly and self.tool.isAnonymousUser()):
             # If we are using the cookie stuff we provide the setter here
             set_language = self.tool.REQUEST.get('set_language', None)
             if set_language:
@@ -564,10 +614,16 @@ class LanguageBinding:
         else:
             langsCookie = []
 
+        if useSubdomain:
+            langsSubdomain = self.tool.getSubdomainLanguages()
+        else:
+            langsSubdomain = []
+
         if useCcTLD:
             langsCcTLD = self.tool.getCcTLDLanguages()
         else:
             langsCcTLD = []
+
         # Get langs from request
         if useRequest:
             langsRequest = self.tool.getRequestLanguages()
@@ -581,7 +637,7 @@ class LanguageBinding:
             langsDefault = []
 
         # Build list
-        langs = langsPath+langsContent+langsCookie+langsCcTLD+langsRequest+langsDefault
+        langs = langsPath+langsContent+langsCookie+langsSubdomain+langsCcTLD+langsRequest+langsDefault
 
         # Filter None languages
         langs = [lang for lang in langs if lang is not None]
