@@ -42,6 +42,7 @@ class LanguageToolXMLAdapter(XMLAdapterBase):
 
     def _purgeProperties(self):
         self.context.supported_langs = [ 'en' ]
+        self.context.use_content_negotiation = 1
         self.context.use_path_negotiation = 1
         self.context.use_cookie_negotiation = 1
         self.context.authenticated_users_only = 0
