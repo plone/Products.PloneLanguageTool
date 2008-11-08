@@ -4,6 +4,10 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 3.0 - UNRELEASED
 
+    - The ITranslatable interface is gone from CMFPlone. Provide our own
+      dummy version if LinguaPlone is not installed.
+      [hannosch]
+
     - Add option to restrict cookie negotiation to authenticated users.
       [stefan]
 
