@@ -1,1 +1,1 @@
-# PloneLanguageTool tests package
+#

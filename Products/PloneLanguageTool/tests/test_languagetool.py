@@ -1,9 +1,8 @@
-from Products.PloneTestCase import PloneTestCase
-
-PloneTestCase.setupPloneSite()
 from Products.PloneLanguageTool import LanguageTool
+from Products.PloneLanguageTool.tests import base
 
-class TestLanguageToolExists(PloneTestCase.PloneTestCase):
+
+class TestLanguageToolExists(base.TestCase):
 
     def afterSetUp(self):
         self.id = LanguageTool.id
@@ -12,7 +11,7 @@ class TestLanguageToolExists(PloneTestCase.PloneTestCase):
         self.failUnless(self.id in self.portal.objectIds())
 
 
-class TestLanguageToolSettings(PloneTestCase.PloneTestCase):
+class TestLanguageToolSettings(base.TestCase):
 
     def afterSetUp(self):
         self.id = LanguageTool.id
@@ -50,7 +49,7 @@ class TestLanguageToolSettings(PloneTestCase.PloneTestCase):
         self.failUnless(self.ltool.authenticated_users_only==True)
 
 
-class TestLanguageTool(PloneTestCase.PloneTestCase):
+class TestLanguageTool(base.TestCase):
 
     def afterSetUp(self):
         self.id = LanguageTool.id

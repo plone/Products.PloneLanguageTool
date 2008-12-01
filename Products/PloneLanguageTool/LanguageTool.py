@@ -264,9 +264,10 @@ class LanguageTool(UniqueObject, SimpleItem):
         portal_properties = getToolByName(self, "portal_properties", None)
         if portal_properties is None:
             return 'en'
-        site_properties = portal_properties.site_properties
-        if site_properties.hasProperty('default_language'):
-            return site_properties.getProperty('default_language')
+        site_properties = getattr(portal_properties, 'site_properties', None)
+        if site_properties is not None:
+            if site_properties.hasProperty('default_language'):
+                return site_properties.getProperty('default_language')
         portal = getUtility(ISiteRoot)
         if portal.hasProperty('default_language'):
             return portal.getProperty('default_language')
@@ -276,9 +277,10 @@ class LanguageTool(UniqueObject, SimpleItem):
     def setDefaultLanguage(self, langCode):
         """Sets the default language."""
         portal_properties = getToolByName(self, "portal_properties")
-        site_properties = portal_properties.site_properties
-        if site_properties.hasProperty('default_language'):
-            return site_properties._updateProperty('default_language', langCode)
+        site_properties = getattr(portal_properties, 'site_properties', None)
+        if site_properties is not None:
+            if site_properties.hasProperty('default_language'):
+                return site_properties._updateProperty('default_language', langCode)
         portal = getUtility(ISiteRoot)
         if portal.hasProperty('default_language'):
             return portal._updateProperty('default_language', langCode)

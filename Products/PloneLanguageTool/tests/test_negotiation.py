@@ -1,16 +1,11 @@
-import os, sys
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
-
-from Products.PloneTestCase import PloneTestCase
-from Products.PloneTestCase.PloneTestCase import default_user
-from Products.PloneTestCase.PloneTestCase import default_password
-
-PloneTestCase.setupPloneSite()
 from Products.PloneLanguageTool import LanguageTool
+from Products.PloneLanguageTool.tests import base
+
+from Products.CMFTestCase.ctc import default_password
+from Products.CMFTestCase.ctc import default_user
 
 
-class LanguageNegotiationTestCase(PloneTestCase.FunctionalTestCase):
+class LanguageNegotiationTestCase(base.FunctionalTestCase):
 
     def afterSetUp(self):
         self.basic_auth = '%s:%s' % (default_user, default_password)
@@ -18,16 +13,19 @@ class LanguageNegotiationTestCase(PloneTestCase.FunctionalTestCase):
         self.tool = self.portal[LanguageTool.id]
         self.tool.always_show_selector = 1
 
+    def checkLanguage(self, response, language):
+        self.assertEquals(response.getStatus(), 200)
+        cookie = response.getCookie('I18N_LANGUAGE')['value']
+        self.assertEquals(cookie, language)
+
 
 class TestDefaultLanguageNegotiation(LanguageNegotiationTestCase):
 
     def testLanguageNegotiation(self):
+        # Once PLT is installed only English is allowed as a language
         response = self.publish(self.portal_path, self.basic_auth,
                                 env={'HTTP_ACCEPT_LANGUAGE': 'pt'})
-
-        self.assertEquals(response.getStatus(), 200)
-        # Once PLT is installed only English is allowed as a language
-        self.assertEquals(response.headers['content-language'], 'en')
+        self.checkLanguage(response, "en")
 
 
 class TestNoCombinedLanguageNegotiation(LanguageNegotiationTestCase):
@@ -45,25 +43,16 @@ class TestNoCombinedLanguageNegotiation(LanguageNegotiationTestCase):
         # Test simple supported codes
         response = self.publish(self.portal_path, self.basic_auth,
                                 env={'HTTP_ACCEPT_LANGUAGE': 'pt'})
-
-        self.assertEquals(response.getStatus(), 200)
-        self.failUnless('<option selected="selected" value="pt">'
-            in response.getBody())
+        self.checkLanguage(response, "pt")
 
         response = self.publish(self.portal_path, self.basic_auth,
                                 env={'HTTP_ACCEPT_LANGUAGE': 'de'})
-
-        self.assertEquals(response.getStatus(), 200)
-        self.failUnless('<option selected="selected" value="de">'
-            in response.getBody())
+        self.checkLanguage(response, "de")
 
         # Test combined unsupported codes, should fall back
         response = self.publish(self.portal_path, self.basic_auth,
                                 env={'HTTP_ACCEPT_LANGUAGE': 'pt-br'})
-
-        self.assertEquals(response.getStatus(), 200)
-        self.failUnless('<option selected="selected" value="pt">'
-            in response.getBody())
+        self.checkLanguage(response, "pt")
 
 
 class TestCombinedLanguageNegotiation(LanguageNegotiationTestCase):
@@ -81,50 +70,35 @@ class TestCombinedLanguageNegotiation(LanguageNegotiationTestCase):
         # Test simple supported codes
         response = self.publish(self.portal_path, self.basic_auth,
                                 env={'HTTP_ACCEPT_LANGUAGE': 'pt'})
-
-        self.assertEquals(response.getStatus(), 200)
-        self.failUnless('<option selected="selected" value="pt">'
-            in response.getBody())
+        self.checkLanguage(response, "pt")
 
         response = self.publish(self.portal_path, self.basic_auth,
                                 env={'HTTP_ACCEPT_LANGUAGE': 'de'})
-
-        self.assertEquals(response.getStatus(), 200)
-        self.failUnless('<option selected="selected" value="de">'
-            in response.getBody())
+        self.checkLanguage(response, "de")
 
         # Test combined supported codes
         response = self.publish(self.portal_path, self.basic_auth,
                                 env={'HTTP_ACCEPT_LANGUAGE': 'pt-br'})
-
-        self.assertEquals(response.getStatus(), 200)
-        self.failUnless('<option selected="selected" value="pt-br">'
-            in response.getBody())
+        self.checkLanguage(response, "pt-br")
 
         # Test combined unsupported codes, should fall back
         response = self.publish(self.portal_path, self.basic_auth,
                                 env={'HTTP_ACCEPT_LANGUAGE': 'de-de'})
-
-        self.assertEquals(response.getStatus(), 200)
-        self.failUnless('<option selected="selected" value="de">'
-            in response.getBody())
+        self.checkLanguage(response, "de")
 
 
 class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
+
     def afterSetUp(self):
         LanguageNegotiationTestCase.afterSetUp(self)
         self.tool.supported_langs = ['en', 'nl', 'fr']
         self.tool.use_content_negotiation = 1
         self.tool.display_flags = 0
 
-    def checkLanguage(self, response, language):
-        self.assertEquals(response.getStatus(), 200)
-        self.failUnless('<option selected="selected" value="%s">' % language
-            in response.getBody())
-
     def testContentObject(self):
-        self.folder.invokeFactory('Document', 'doc', language='nl')
+        self.folder.invokeFactory('Document', 'doc')
         doc = self.folder.doc
+        doc.setLanguage('nl')
         self.failUnlessEqual(doc.Language(), 'nl')
         docpath = '/'.join(doc.getPhysicalPath())
         # For a simple hostname without ccTLD the canonical language is used
@@ -134,16 +108,12 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
 
 
 class TestCcTLDLanguageNegotiation(LanguageNegotiationTestCase):
+
     def afterSetUp(self):
         LanguageNegotiationTestCase.afterSetUp(self)
         self.tool.supported_langs = ['en', 'nl', 'fr']
         self.tool.use_cctld_negotiation = 1
         self.tool.display_flags = 0
-
-    def checkLanguage(self, response, language):
-        self.assertEquals(response.getStatus(), 200)
-        self.failUnless('<option selected="selected" value="%s">' % language
-            in response.getBody())
 
     def testSimpleHostname(self):
         # For a simple hostname without ccTLD the canonical language is used
@@ -183,16 +153,12 @@ class TestCcTLDLanguageNegotiation(LanguageNegotiationTestCase):
 
 
 class TestSubdomainLanguageNegotiation(LanguageNegotiationTestCase):
+
     def afterSetUp(self):
         LanguageNegotiationTestCase.afterSetUp(self)
         self.tool.supported_langs = ['en', 'nl', 'fr']
         self.tool.use_subdomain_negotiation = 1
         self.tool.display_flags = 0
-
-    def checkLanguage(self, response, language):
-        self.assertEquals(response.getStatus(), 200)
-        self.failUnless('<option selected="selected" value="%s">' % language
-            in response.getBody())
 
     def testSimpleHostname(self):
         # For a simple hostname without ccTLD the canonical language is used
@@ -241,7 +207,3 @@ def test_suite():
     suite.addTest(makeSuite(TestCcTLDLanguageNegotiation))
     suite.addTest(makeSuite(TestSubdomainLanguageNegotiation))
     return suite
-
-if __name__ == '__main__':
-    framework()
-
