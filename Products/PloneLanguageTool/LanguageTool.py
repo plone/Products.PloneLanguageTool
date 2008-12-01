@@ -51,7 +51,7 @@ class LanguageTool(UniqueObject, SimpleItem):
     use_combined_language_codes = 0
     force_language_urls = 1
     allow_content_language_fallback = 0
-    display_flags = 1
+    display_flags = 0
     start_neutral = 0
 
     # Used by functional tests.
@@ -78,7 +78,7 @@ class LanguageTool(UniqueObject, SimpleItem):
         self.use_combined_language_codes = 0
         self.force_language_urls = 1
         self.allow_content_language_fallback = 0
-        self.display_flags = 1
+        self.display_flags = 0
         self.start_neutral = 0
 
     def __call__(self, container, req):

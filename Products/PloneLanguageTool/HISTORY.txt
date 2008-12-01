@@ -4,6 +4,10 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 3.0 - UNRELEASED
 
+    - Changed default value for display_flags to false. In most settings a
+      language to country flag association is not desirable.
+      [hannosch]
+
     - Update tests to be based on a minimal CMFTestCase setup and remove
       dependencies on CMFPlone code.
       [hannosch]
