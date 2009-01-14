@@ -27,7 +27,21 @@ setup(name='Products.PloneLanguageTool',
       include_package_data=True,
       zip_safe=False,
       download_url='http://plone.org/products/plonelanguagetool/releases',
+      extras_require=dict(
+        test=[
+            'Products.CMFTestCase',
+        ]
+      ),
       install_requires=[
         'setuptools',
+        'plone.i18n',
+        'zope.component',
+        'zope.interface',
+        'Products.CMFCore',
+        'Products.CMFDefault',
+        'Products.DCWorkflow',
+        'Products.GenericSetup',
+        'Products.PlacelessTranslationService',
+        # 'Zope2',
       ],
 )

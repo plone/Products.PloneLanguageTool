@@ -4,6 +4,10 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 3.0 - UNRELEASED
 
+    - Declare test dependencies in an extra and fixed deprecation warnings
+      for use of Globals.
+      [hannosch]
+
     - Changed default value for display_flags to false. In most settings a
       language to country flag association is not desirable.
       [hannosch]
