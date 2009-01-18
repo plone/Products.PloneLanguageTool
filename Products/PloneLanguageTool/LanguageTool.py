@@ -4,6 +4,7 @@ from plone.i18n.locales.interfaces import ICcTLDInformation
 
 from zope.component import getUtility
 from zope.component import queryUtility
+from zope.deprecation import deprecate
 from zope.interface import implements
 
 # BBB Zope before 2.12
@@ -17,7 +18,6 @@ from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.permissions import View
-from Products.CMFCore.utils import registerToolInterface
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import UniqueObject
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
@@ -46,8 +46,8 @@ class LanguageTool(UniqueObject, SimpleItem):
     security = ClassSecurityInfo()
 
     supported_langs = ['en']
-    use_path_negotiation = 1
-    use_content_negotiation = 1
+    use_path_negotiation = 0
+    use_content_negotiation = 0
     use_cookie_negotiation = 1
     authenticated_users_only = 0
     use_request_negotiation = 1
@@ -73,8 +73,8 @@ class LanguageTool(UniqueObject, SimpleItem):
 
     def __init__(self):
         self.id = 'portal_languages'
-        self.use_content_negotiation = 1
-        self.use_path_negotiation = 1
+        self.use_content_negotiation = 0
+        self.use_path_negotiation = 0
         self.use_cookie_negotiation  = 1
         self.authenticated_users_only = 0
         self.use_request_negotiation = 1
@@ -536,6 +536,9 @@ class LanguageTool(UniqueObject, SimpleItem):
         return binding.getLanguageBindings()
 
     security.declarePublic('isTranslatable')
+    @deprecate("The isTranslatable method of the language tool is deprecated "
+               "and will be removed in Plone 4. Check for the ITranslatable "
+               "interface instead.")
     def isTranslatable(self, obj):
         """Checks if ITranslatable interface is implemented."""
         try:
