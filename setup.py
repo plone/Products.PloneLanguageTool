@@ -9,8 +9,8 @@ setup(name='Products.PloneLanguageTool',
                   "languages in your Plone site, select various fallback "
                   "mechanisms, and control the use of flags for language "
                   "selection and translations.",
-      long_description="""\
-      """,
+      long_description=open("README.txt").read() + "\n" +
+                       open("CHANGES.txt").read(),
       classifiers=[
         "Framework :: Plone",
         "Framework :: Zope2",
@@ -20,13 +20,12 @@ setup(name='Products.PloneLanguageTool',
       keywords='Zope CMF Plone i18n l10n flags',
       author='Hanno Schlichting',
       author_email='plone-developers@lists.sourceforge.net',
-      url='http://svn.plone.org/svn/collective/PloneLanguageTool/trunk',
+      url='http://pypi.python.org/pypi/Products.PloneLanguageTool',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['Products'],
       include_package_data=True,
       zip_safe=False,
-      download_url='http://plone.org/products/plonelanguagetool/releases',
       install_requires=[
         'setuptools',
       ],
