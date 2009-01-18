@@ -4,6 +4,10 @@ Changelog
 4.0 - Unreleased
 ----------------
 
+- Removed the deprecated isTranslatable method and our dummy version of the
+  ITranslatable interface.
+  [hannosch]
+
 - Declare test dependencies in an extra and fixed deprecation warnings
   for use of Globals.
   [hannosch]

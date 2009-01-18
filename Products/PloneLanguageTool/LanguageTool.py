@@ -4,15 +4,9 @@ from plone.i18n.locales.interfaces import ICcTLDInformation
 
 from zope.component import getUtility
 from zope.component import queryUtility
-from zope.deprecation import deprecate
 from zope.interface import implements
 
-# BBB Zope before 2.12
-try:
-    from App.class_init import InitializeClass
-except ImportError:
-    from Globals import InitializeClass
-
+from App.class_init import InitializeClass
 from AccessControl import ClassSecurityInfo
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.interfaces import ISiteRoot
@@ -26,7 +20,6 @@ from ZPublisher import BeforeTraverse
 from ZPublisher.HTTPRequest import HTTPRequest
 
 from Products.PloneLanguageTool.interfaces import ILanguageTool
-from Products.PloneLanguageTool.interfaces import ITranslatable
 
 try:
     from Products.PlacelessTranslationService.Negotiator import registerLangPrefsMethod
@@ -534,19 +527,6 @@ class LanguageTool(UniqueObject, SimpleItem):
             self.setLanguageBindings()
             binding = self.REQUEST.get('LANGUAGE_TOOL')
         return binding.getLanguageBindings()
-
-    security.declarePublic('isTranslatable')
-    @deprecate("The isTranslatable method of the language tool is deprecated "
-               "and will be removed in Plone 4. Check for the ITranslatable "
-               "interface instead.")
-    def isTranslatable(self, obj):
-        """Checks if ITranslatable interface is implemented."""
-        try:
-            if obj.checkCreationFlag():
-                return False
-        except NameError:
-            pass
-        return ITranslatable.isProvidedBy(obj)
 
     security.declarePublic('getAvailableCountries')
     def getAvailableCountries(self):
