@@ -4,6 +4,10 @@ Changelog
 3.0 - Unreleased
 ----------------
 
+- Deprecated the isTranslatable method of the language tool. This is the
+  only place that relies on LinguaPlone's ITranslatable interface.
+  [hannosch]
+
 - Reformat changelog and update package metadata.
   [hannosch]
 
