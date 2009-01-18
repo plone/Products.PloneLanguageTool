@@ -41,8 +41,8 @@ class LanguageTool(UniqueObject, SimpleItem):
     security = ClassSecurityInfo()
 
     supported_langs = ['en']
-    use_path_negotiation = 1
-    use_content_negotiation = 1
+    use_path_negotiation = 0
+    use_content_negotiation = 0
     use_cookie_negotiation = 1
     authenticated_users_only = 0
     use_request_negotiation = 1
@@ -68,8 +68,8 @@ class LanguageTool(UniqueObject, SimpleItem):
 
     def __init__(self):
         self.id = 'portal_languages'
-        self.use_content_negotiation = 1
-        self.use_path_negotiation = 1
+        self.use_content_negotiation = 0
+        self.use_path_negotiation = 0
         self.use_cookie_negotiation  = 1
         self.authenticated_users_only = 0
         self.use_request_negotiation = 1
