@@ -81,7 +81,7 @@ Changelog
   [hannosch]
 
 - Deprecated the old-style portlet_language portlet. It has been moved to
-  the plone_deprecated layer in CMFPlone and will be removed in Plone 3.5.
+  the plone_deprecated layer in CMFPlone and will be removed in Plone 4.0.
   [hannosch]
 
 - Removed the prefs_languages template in favor of a new formlib-based
