@@ -4,7 +4,8 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 2.1.1 - Unreleased
 
-
+    - Added ZMI option to toggle content negotiator.
+      [elro]
 
 PloneLanguageTool 2.1 - Released December 31, 2007
 
