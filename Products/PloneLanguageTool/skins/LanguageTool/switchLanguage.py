@@ -8,18 +8,15 @@
 ##parameters=set_language=None
 REQUEST=context.REQUEST
 
-if set_language:
-    lang=set_language
-
 here_url=context.absolute_url()
 
 query = {}
-if lang:
+if set_language:
     # no cookie support
-    query['cl']=lang
+    query['cl']=set_language
 
 if set_language:
-    query['set_language']=lang
+    query['set_language']=set_language
 
 qst="?"
 for k, v in query.items():
