@@ -40,7 +40,6 @@ setup(name='Products.PloneLanguageTool',
         'Products.CMFDefault',
         'Products.DCWorkflow',
         'Products.GenericSetup',
-        'Products.PlacelessTranslationService',
         'Zope2',
       ],
 )

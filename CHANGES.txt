@@ -4,6 +4,9 @@ Changelog
 4.0 - Unreleased
 ----------------
 
+- Removed dependency on PlacelessTranslationService.
+  [hannosch]
+
 - Fixed switchLanguage to work when no set_language argument is provided.
   This closes http://dev.plone.org/plone/ticket/8758.
   [hannosch]
