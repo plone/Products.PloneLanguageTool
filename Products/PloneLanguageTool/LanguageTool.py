@@ -4,6 +4,7 @@ from plone.i18n.locales.interfaces import ICcTLDInformation
 
 from zope.component import getUtility
 from zope.component import queryUtility
+from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.interface import implements
 
 from App.class_init import InitializeClass
@@ -21,11 +22,6 @@ from ZPublisher.HTTPRequest import HTTPRequest
 
 from Products.PloneLanguageTool.interfaces import ILanguageTool
 
-try:
-    from Products.PlacelessTranslationService.Negotiator import registerLangPrefsMethod
-    _hasPTS = 1
-except ImportError:
-    _hasPTS = 0
 
 class LanguageTool(UniqueObject, SimpleItem):
     """Language Administration Tool For Plone."""
@@ -651,24 +647,15 @@ class LanguageBinding:
         return (self.LANGUAGE, self.DEFAULT_LANGUAGE, self.LANGUAGE_LIST)
 
 
-class PrefsForPTS:
-    """A preference to hook into PTS."""
+class PLTLanguages(object):
+    """Languages adapter that chooses languages."""
+    implements(IUserPreferredLanguages)
+
     def __init__(self, context):
-        self._env = context
-        self.languages = []
-        binding = context.get('LANGUAGE_TOOL')
-        if not isinstance(binding, LanguageBinding):
-            return None
-        self.pref = binding.getLanguageBindings()
-        self.languages = [self.pref[0]] + self.pref[2] + [self.pref[1]]
-        return None
+        self.context = context
 
     def getPreferredLanguages(self):
-        """Returns the list of the bound languages."""
-        return self.languages
+        return ('en', )
 
-
-if _hasPTS:
-    registerLangPrefsMethod({'klass':PrefsForPTS, 'priority':100 })
 
 InitializeClass(LanguageTool)
