@@ -4,8 +4,8 @@ from plone.i18n.locales.interfaces import ICcTLDInformation
 
 from zope.component import getUtility
 from zope.component import queryUtility
-from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.interface import implements
+from zope.publisher.browser import BrowserLanguages
 
 from App.class_init import InitializeClass
 from AccessControl import ClassSecurityInfo
@@ -647,15 +647,11 @@ class LanguageBinding:
         return (self.LANGUAGE, self.DEFAULT_LANGUAGE, self.LANGUAGE_LIST)
 
 
-class PLTLanguages(object):
+class PLTLanguages(BrowserLanguages):
     """Languages adapter that chooses languages."""
-    implements(IUserPreferredLanguages)
 
-    def __init__(self, context):
-        self.context = context
-
-    def getPreferredLanguages(self):
-        return ('en', )
+    # def getPreferredLanguages(self):
+    #     return ('en', )
 
 
 InitializeClass(LanguageTool)
