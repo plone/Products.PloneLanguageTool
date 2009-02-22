@@ -1,16 +1,25 @@
-from Products.PloneLanguageTool import LanguageTool
+from Testing.ZopeTestCase import user_name
+from Testing.ZopeTestCase import user_password
+
+from OFS.SimpleItem import SimpleItem
 from Products.PloneLanguageTool.tests import base
 
-from Products.CMFTestCase.ctc import default_password
-from Products.CMFTestCase.ctc import default_user
+
+class DummyContent(SimpleItem):
+
+    def setLanguage(self, lang):
+        self.lang = lang
+
+    def Language(self):
+        return self.lang
 
 
 class LanguageNegotiationTestCase(base.FunctionalTestCase):
 
     def afterSetUp(self):
-        self.basic_auth = '%s:%s' % (default_user, default_password)
-        self.portal_path = self.portal.absolute_url(1)
-        self.tool = self.portal[LanguageTool.id]
+        super(LanguageNegotiationTestCase, self).afterSetUp()
+        self.basic_auth = '%s:%s' % (user_name, user_password)
+        self.folder_path = self.folder.absolute_url(1)
         self.tool.always_show_selector = 1
 
     def checkLanguage(self, response, language):
@@ -23,7 +32,7 @@ class TestDefaultLanguageNegotiation(LanguageNegotiationTestCase):
 
     def testLanguageNegotiation(self):
         # Once PLT is installed only English is allowed as a language
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_ACCEPT_LANGUAGE': 'pt'})
         self.checkLanguage(response, "en")
 
@@ -41,16 +50,16 @@ class TestNoCombinedLanguageNegotiation(LanguageNegotiationTestCase):
 
     def testLanguageNegotiation(self):
         # Test simple supported codes
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_ACCEPT_LANGUAGE': 'pt'})
         self.checkLanguage(response, "pt")
 
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_ACCEPT_LANGUAGE': 'de'})
         self.checkLanguage(response, "de")
 
         # Test combined unsupported codes, should fall back
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_ACCEPT_LANGUAGE': 'pt-br'})
         self.checkLanguage(response, "pt")
 
@@ -68,21 +77,21 @@ class TestCombinedLanguageNegotiation(LanguageNegotiationTestCase):
 
     def testLanguageNegotiation(self):
         # Test simple supported codes
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_ACCEPT_LANGUAGE': 'pt'})
         self.checkLanguage(response, "pt")
 
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_ACCEPT_LANGUAGE': 'de'})
         self.checkLanguage(response, "de")
 
         # Test combined supported codes
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_ACCEPT_LANGUAGE': 'pt-br'})
         self.checkLanguage(response, "pt-br")
 
         # Test combined unsupported codes, should fall back
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_ACCEPT_LANGUAGE': 'de-de'})
         self.checkLanguage(response, "de")
 
@@ -96,11 +105,11 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         self.tool.display_flags = 0
 
     def testContentObject(self):
-        self.folder.invokeFactory('Document', 'doc')
+        self.folder._setOb('doc', DummyContent())
         doc = self.folder.doc
         doc.setLanguage('nl')
         self.failUnlessEqual(doc.Language(), 'nl')
-        docpath = '/'.join(doc.getPhysicalPath())
+        docpath = '/'.join(self.folder.getPhysicalPath()) + '/doc'
         # For a simple hostname without ccTLD the canonical language is used
         response = self.publish(docpath, self.basic_auth,
                                 env={'PATH_TRANSLATED': docpath})
@@ -117,23 +126,23 @@ class TestCcTLDLanguageNegotiation(LanguageNegotiationTestCase):
 
     def testSimpleHostname(self):
         # For a simple hostname without ccTLD the canonical language is used
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_HOST': 'localhost'})
         self.checkLanguage(response, "en")
 
     def testIPAddress(self):
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_HOST': '127.0.0.1'})
         self.checkLanguage(response, "en")
 
     def testDutchDomain(self):
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_HOST': 'plone.nl'})
         self.checkLanguage(response, "nl")
 
     def testAcceptedLanguages(self):
         # Brazil uses Portugese, which is not in the accepted languages list
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_HOST': 'plone.br'})
         self.checkLanguage(response, "en")
 
@@ -141,13 +150,13 @@ class TestCcTLDLanguageNegotiation(LanguageNegotiationTestCase):
         # Some countries refuse to pick a single language. Belgium
         # uses both Dutch and French, with a preference for Dutch.
 
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_HOST': 'plone.be'})
         self.checkLanguage(response, "nl")
 
         # If we stop allowing Dutch we should now fall back to French
         self.tool.supported_langs = ['en', 'fr']
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_HOST': 'plone.be'})
         self.checkLanguage(response, "fr")
 
@@ -162,23 +171,23 @@ class TestSubdomainLanguageNegotiation(LanguageNegotiationTestCase):
 
     def testSimpleHostname(self):
         # For a simple hostname without ccTLD the canonical language is used
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_HOST': 'localhost'})
         self.checkLanguage(response, "en")
 
     def testIPAddress(self):
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_HOST': '127.0.0.1'})
         self.checkLanguage(response, "en")
 
     def testDutchDomain(self):
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_HOST': 'nl.plone.org'})
         self.checkLanguage(response, "nl")
 
     def testAcceptedLanguages(self):
         # Brazil uses Portugese, which is not in the accepted languages list
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_HOST': 'br.plone.org'})
         self.checkLanguage(response, "en")
 
@@ -186,13 +195,13 @@ class TestSubdomainLanguageNegotiation(LanguageNegotiationTestCase):
         # Some countries refuse to pick a single language. Belgium
         # uses both Dutch and French, with a preference for Dutch.
 
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_HOST': 'be.plone.org'})
         self.checkLanguage(response, "nl")
 
         # If we stop allowing Dutch we should now fall back to French
         self.tool.supported_langs = ['en', 'fr']
-        response = self.publish(self.portal_path, self.basic_auth,
+        response = self.publish(self.folder_path, self.basic_auth,
                                 env={'HTTP_HOST': 'be.plone.org'})
         self.checkLanguage(response, "fr")
 

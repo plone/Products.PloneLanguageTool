@@ -1,24 +1,22 @@
 from Testing import ZopeTestCase
-from Testing.ZopeTestCase.functional import Functional
 
-from Products.CMFTestCase import CMFTestCase
-from Products.CMFTestCase.ctc import setupCMFSite
+from Products.PloneLanguageTool.LanguageTool import LanguageTool
+from Products.PloneLanguageTool.tests.layer import ZCML
 
-from Products.PloneLanguageTool.tests.layer import SiteLayer
-
-# setup a CMF site
 ZopeTestCase.installProduct('PloneLanguageTool')
 
-setupCMFSite(
-    extension_profiles=['Products.PloneLanguageTool:PloneLanguageTool'])
 
-
-class TestCase(CMFTestCase.CMFTestCase):
+class TestCase(ZopeTestCase.ZopeTestCase):
     """Simple test case
     """
-    layer = SiteLayer
+    layer = ZCML
 
-class FunctionalTestCase(Functional, CMFTestCase.CMFTestCase):
+    def afterSetUp(self):
+        self.folder._setObject(LanguageTool.id, LanguageTool())
+        self.tool = self.folder._getOb(LanguageTool.id)
+
+
+class FunctionalTestCase(TestCase, ZopeTestCase.FunctionalTestCase):
     """Simple test case for functional tests
     """
-    layer = SiteLayer
+    layer = ZCML

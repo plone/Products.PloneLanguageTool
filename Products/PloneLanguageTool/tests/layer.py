@@ -1,22 +1,18 @@
 from zope.testing.cleanup import cleanUp
 
-from Products.CMFCore.testing import FunctionalZCMLLayer
-from Products.CMFTestCase import layer as cmf_layer
 from Products.Five import zcml
+from Testing.ZopeTestCase.layer import ZopeLite
 
 
-class ZCML(FunctionalZCMLLayer):
+class ZCML(ZopeLite):
 
     def setUp(cls):
-        '''Sets up the CA.'''
+        '''Sets up the CA by loading etc/site.zcml.'''
+        cleanUp()
+        zcml.load_site()
+
         import plone.i18n.locales
         zcml.load_config('configure.zcml', plone.i18n.locales)
-
-        import Products.CMFDefault
-        zcml.load_config('configure.zcml', Products.CMFDefault)
-
-        import Products.DCWorkflow
-        zcml.load_config('configure.zcml', Products.DCWorkflow)
 
         import Products.PloneLanguageTool
         zcml.load_config('configure.zcml', Products.PloneLanguageTool)
@@ -29,22 +25,4 @@ class ZCML(FunctionalZCMLLayer):
     def tearDown(cls):
         '''Cleans up the CA.'''
         cleanUp()
-    tearDown = classmethod(tearDown)
-
-
-class SiteLayer(ZCML):
-
-    def setUp(cls):
-        '''Sets up the CA.'''
-        for func, args, kw in cmf_layer._deferred_setup:
-            func(*args, **kw)
-
-    setUp = classmethod(setUp)
-
-    def tearDown(cls):
-        '''Cleans up the CA.'''
-        for func, args, kw in cmf_layer._deferred_cleanup:
-            func(*args, **kw)
-
-        # cleanUp()
     tearDown = classmethod(tearDown)

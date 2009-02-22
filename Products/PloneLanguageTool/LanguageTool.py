@@ -2,7 +2,6 @@ from plone.i18n.locales.interfaces import ICountryAvailability
 from plone.i18n.locales.interfaces import IContentLanguageAvailability
 from plone.i18n.locales.interfaces import ICcTLDInformation
 
-from zope.component import getUtility
 from zope.component import queryUtility
 from zope.interface import implements
 from zope.publisher.browser import BrowserLanguages
@@ -10,7 +9,6 @@ from zope.publisher.browser import BrowserLanguages
 from App.class_init import InitializeClass
 from AccessControl import ClassSecurityInfo
 from OFS.SimpleItem import SimpleItem
-from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
@@ -34,20 +32,6 @@ class LanguageTool(UniqueObject, SimpleItem):
 
     security = ClassSecurityInfo()
 
-    supported_langs = ['en']
-    use_path_negotiation = 0
-    use_content_negotiation = 0
-    use_cookie_negotiation = 1
-    authenticated_users_only = 0
-    use_request_negotiation = 1
-    use_cctld_negotiation = 0
-    use_subdomain_negotiation = 0
-    use_combined_language_codes = 0
-    force_language_urls = 1
-    allow_content_language_fallback = 0
-    display_flags = 0
-    start_neutral = 0
-
     # Used by functional tests.
     always_show_selector = 0
 
@@ -62,6 +46,8 @@ class LanguageTool(UniqueObject, SimpleItem):
 
     def __init__(self):
         self.id = 'portal_languages'
+        self.default_lang = 'en'
+        self.supported_langs = ['en']
         self.use_content_negotiation = 0
         self.use_path_negotiation = 0
         self.use_cookie_negotiation  = 1
@@ -74,6 +60,7 @@ class LanguageTool(UniqueObject, SimpleItem):
         self.allow_content_language_fallback = 0
         self.display_flags = 0
         self.start_neutral = 0
+        self.always_show_selector = 0
 
     def __call__(self, container, req):
         """The __before_publishing_traverse__ hook."""
@@ -256,29 +243,23 @@ class LanguageTool(UniqueObject, SimpleItem):
     def getDefaultLanguage(self):
         """Returns the default language."""
         portal_properties = getToolByName(self, "portal_properties", None)
-        if portal_properties is None:
-            return 'en'
-        site_properties = getattr(portal_properties, 'site_properties', None)
-        if site_properties is not None:
-            if site_properties.hasProperty('default_language'):
-                return site_properties.getProperty('default_language')
-        portal = getUtility(ISiteRoot)
-        if portal.hasProperty('default_language'):
-            return portal.getProperty('default_language')
+        if portal_properties is not None:
+            site_properties = getattr(portal_properties, 'site_properties', None)
+            if site_properties is not None:
+                if site_properties.hasProperty('default_language'):
+                    return site_properties.getProperty('default_language')
         return getattr(self, 'default_lang', 'en')
 
     security.declareProtected(ManagePortal, 'setDefaultLanguage')
     def setDefaultLanguage(self, langCode):
         """Sets the default language."""
-        portal_properties = getToolByName(self, "portal_properties")
-        site_properties = getattr(portal_properties, 'site_properties', None)
-        if site_properties is not None:
-            if site_properties.hasProperty('default_language'):
-                return site_properties._updateProperty('default_language', langCode)
-        portal = getUtility(ISiteRoot)
-        if portal.hasProperty('default_language'):
-            return portal._updateProperty('default_language', langCode)
         self.default_lang = langCode
+        portal_properties = getToolByName(self, "portal_properties", None)
+        if portal_properties is not None:
+            site_properties = getattr(portal_properties, 'site_properties', None)
+            if site_properties is not None:
+                if site_properties.hasProperty('default_language'):
+                    return site_properties._updateProperty('default_language', langCode)
 
     security.declareProtected(View, 'getNameForLanguageCode')
     def getNameForLanguageCode(self, langCode):

@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-import sys, os
 
 version = '4.0'
 
@@ -26,19 +25,12 @@ setup(name='Products.PloneLanguageTool',
       namespace_packages=['Products'],
       include_package_data=True,
       zip_safe=False,
-      extras_require=dict(
-        test=[
-            'Products.CMFTestCase',
-        ]
-      ),
       install_requires=[
         'setuptools',
         'plone.i18n',
         'zope.component',
         'zope.interface',
         'Products.CMFCore',
-        'Products.CMFDefault',
-        'Products.DCWorkflow',
         'Products.GenericSetup',
         'Zope2',
       ],

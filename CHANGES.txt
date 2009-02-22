@@ -4,6 +4,10 @@ Changelog
 4.0 - Unreleased
 ----------------
 
+- Rewrote tests to be based on ZopeTestCase instead of CMFTestCase and
+  removing the dependency on CMFDefault and DCWorkflow as a result.
+  [hannosch]
+
 - Removed dependency on PlacelessTranslationService.
   [hannosch]
 
