@@ -1,18 +1,13 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:cmf="http://namespaces.zope.org/cmf"
-    xmlns:five="http://namespaces.zope.org/five">
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="plone">
 
-  <include file="profiles.zcml"/>
+  <include package=".browser" />
 
   <five:deprecatedManageAddDelete
       class=".LanguageTool.LanguageTool" />
-
-  <cmf:registerDirectory
-      name="skins"
-      directory="skins"
-      recursive="True"
-      />
 
   <adapter
       factory=".exportimport.LanguageToolXMLAdapter"
@@ -20,4 +15,13 @@
       for=".interfaces.ILanguageTool
            Products.GenericSetup.interfaces.ISetupEnviron"
       />
+
+  <genericsetup:registerProfile
+      name="PloneLanguageTool"
+      title="PloneLanguageTool"
+      directory="profiles/default"
+      description="Extension profile for default PloneLanguageTool setup."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
 </configure>

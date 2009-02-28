@@ -4,6 +4,10 @@ Changelog
 4.0 - Unreleased
 ----------------
 
+- Converted switchLanguage skin script to a browser page and removed no longer
+  used skins folder.
+  [hannosch]
+
 - Rewrote tests to be based on ZopeTestCase instead of CMFTestCase and
   removing the dependency on CMFDefault and DCWorkflow as a result.
   [hannosch]
