@@ -33,7 +33,7 @@ class LanguageTool(UniqueObject, SimpleItem):
     security = ClassSecurityInfo()
 
     # Used by functional tests.
-    always_show_selector = 0
+    always_show_selector = False
 
     manage_options=(
         ({ 'label'  : 'LanguageConfig',
@@ -60,7 +60,6 @@ class LanguageTool(UniqueObject, SimpleItem):
         self.allow_content_language_fallback = 0
         self.display_flags = 0
         self.start_neutral = 0
-        self.always_show_selector = 0
 
     def __call__(self, container, req):
         """The __before_publishing_traverse__ hook."""
