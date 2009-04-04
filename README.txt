@@ -14,18 +14,15 @@ PloneLanguageTool was built by:
 
 - Simon Eisenmann, "Struktur AG":http://www.strukturag.com
 
-- Geir Baekholt, "Plone Solutions":http://www.plonesolutions.com
+- Geir Baekholt, "Jarn AS":http://www.jarn.com
 
-- Alexander Limi, "Plone Solutions":http://www.plonesolutions.com
+- Alexander Limi, "Jarn AS":http://www.jarn.com
 
-- Helge Tesdal, "Plone Solutions":http://www.plonesolutions.com
+- Helge Tesdal, "Jarn AS":http://www.jarn.com
 
-- Dorneles Tremea, "Plone Solutions":http://www.plonesolutions.com
+- Dorneles Tremea, "Jarn AS":http://www.jarn.com
 
-- Hanno Schlichting, independent
+- Hanno Schlichting, "Jarn AS":http://www.jarn.com
 
 Parts of development sponsored by Learning Lab Denmark, donated by
 Plone Solutions.
-
-Flags by Jakub Steiner from the GNOME project:
-"Home page":http://jimmac.musichall.cz/ikony.php3

@@ -34,7 +34,7 @@ Changelog
   This closes http://dev.plone.org/plone/ticket/7794.
   [hannosch, erral, wigwam]
 
-3.0 - Unreleased
+3.0 - 2009-02-20
 ----------------
 
 - Deprecated the isTranslatable method of the language tool. This is the
