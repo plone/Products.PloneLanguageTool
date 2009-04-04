@@ -4,6 +4,9 @@ Changelog
 3.0.1 - unreleased
 ------------------
 
+- Fixed content language negotiator to work in a virtual hosting environment.
+  This closes http://dev.plone.org/plone/ticket/7794.
+  [hannosch, erral, wigwam]
 
 3.0 - 2009-02-20
 ----------------
