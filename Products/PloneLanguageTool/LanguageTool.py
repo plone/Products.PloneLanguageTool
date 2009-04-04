@@ -363,7 +363,11 @@ class LanguageTool(UniqueObject, SimpleItem):
         if not hasattr(self, 'REQUEST'):
             return []
         try: # This will actually work nicely with browserdefault as we get attribute error...
-            contentpath = self.REQUEST.get('PATH_TRANSLATED')
+            contentpath = None
+            if self.REQUEST.get('VIRTUAL_URL', None) is not None:
+                contentpath = self.REQUEST.get('VIRTUAL_URL_PARTS')[1]
+            else:
+                contentpath = self.REQUEST.get('PATH_TRANSLATED')
             if contentpath is not None and contentpath.find('portal_factory') == -1:
                 obj = self.unrestrictedTraverse(contentpath, None)
                 if obj is not None:

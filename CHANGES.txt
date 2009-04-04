@@ -27,6 +27,13 @@ Changelog
   for use of Globals.
   [hannosch]
 
+3.0.1 - Unreleased
+------------------
+
+- Fixed content language negotiator to work in a virtual hosting environment.
+  This closes http://dev.plone.org/plone/ticket/7794.
+  [hannosch, erral, wigwam]
+
 3.0 - Unreleased
 ----------------
 
