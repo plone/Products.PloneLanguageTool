@@ -1,24 +1,29 @@
-from Testing import ZopeTestCase
-from Testing.ZopeTestCase.functional import Functional
-
-from Products.CMFTestCase import CMFTestCase
+from Products.CMFTestCase.ctc import CMFTestCase
+from Products.CMFTestCase.ctc import Functional
+from Products.CMFTestCase.ctc import installProduct
 from Products.CMFTestCase.ctc import setupCMFSite
+from Products.CMFTestCase.layer import onsetup
+from Products.Five import zcml
 
-from Products.PloneLanguageTool.tests.layer import SiteLayer
-
-# setup a CMF site
-ZopeTestCase.installProduct('PloneLanguageTool')
+# Setup a CMF site
+installProduct('PloneLanguageTool')
 
 setupCMFSite(
     extension_profiles=['Products.PloneLanguageTool:PloneLanguageTool'])
 
 
-class TestCase(CMFTestCase.CMFTestCase):
+def extraZCML():
+    # XXX: Why isn't this loaded as part of site.zcml?
+    import plone.i18n.locales
+    zcml.load_config('configure.zcml', plone.i18n.locales)
+
+onsetup(extraZCML)()
+
+
+class TestCase(CMFTestCase):
     """Simple test case
     """
-    layer = SiteLayer
 
-class FunctionalTestCase(Functional, CMFTestCase.CMFTestCase):
+class FunctionalTestCase(Functional, TestCase):
     """Simple test case for functional tests
     """
-    layer = SiteLayer
