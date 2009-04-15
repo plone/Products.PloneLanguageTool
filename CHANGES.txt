@@ -1,15 +1,15 @@
 Changelog
 =========
 
-3.0.1 - unreleased
+3.0.1 - 2009-04-15
 ------------------
+
+- Fixed test setup so it doesn't mess with CMFTestCase's default layers.
+  [stefan]
 
 - Fixed content language negotiator to work in a virtual hosting environment.
   This closes http://dev.plone.org/plone/ticket/7794.
   [hannosch, erral, wigwam]
-
-- Fixed test setup so it doesn't mess with CMFTestCase's default layers.
-  [stefan]
 
 3.0 - 2009-02-20
 ----------------
