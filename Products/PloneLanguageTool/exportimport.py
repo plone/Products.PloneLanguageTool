@@ -19,7 +19,8 @@ class LanguageToolXMLAdapter(XMLAdapterBase):
                         "use_content_negotiation",
                         "use_combined_language_codes", "display_flags",
                         "start_neutral", "use_subdomain_negotiation",
-                        "authenticated_users_only" ]
+                        "authenticated_users_only", "force_language_urls",
+                        "allow_content_language_fallback"]
     list_fields = [ "supported_langs" ]
 
     def _exportNode(self):
@@ -52,6 +53,8 @@ class LanguageToolXMLAdapter(XMLAdapterBase):
         self.context.use_combined_language_codes = 0
         self.context.display_flags = 0
         self.context.start_neutral = 0
+        self.force_language_urls = 1
+        self.allow_content_language_fallback = 0
         self.context.setDefaultLanguage("en")
 
     def _initProperties(self, node):
