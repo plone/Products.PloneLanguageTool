@@ -27,6 +27,10 @@ Changelog
   for use of Globals.
   [hannosch]
 
+- Added missing force_language_urls and allow_content_language_fallback to
+  XML import/export
+  [chervol]
+
 3.0.2 - unreleased
 ------------------
 
