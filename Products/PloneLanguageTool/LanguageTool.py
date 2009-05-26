@@ -399,7 +399,7 @@ class LanguageTool(UniqueObject, SimpleItem):
                 obj = False
                 while obj is not None:
                     obj = self.unrestrictedTraverse(contentpath, None)
-                    if not IContentish.providedBy(context):
+                    if not IContentish.providedBy(obj):
                         contentpath = '/'.join(contentpath.split('/')[:-1])
                     elif obj.Language() in self.getSupportedLanguages():
                         return obj.Language()
