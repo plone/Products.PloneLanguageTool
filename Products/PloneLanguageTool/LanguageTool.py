@@ -397,7 +397,7 @@ class LanguageTool(UniqueObject, SimpleItem):
                 contentpath = self.REQUEST.get('PATH_TRANSLATED')
             if contentpath is not None and contentpath.find('portal_factory') == -1:
                 obj = False
-                while obj is not None:
+                while contentpath and obj is not None:
                     obj = self.unrestrictedTraverse(contentpath, None)
                     if not IContentish.providedBy(obj):
                         contentpath = '/'.join(contentpath.split('/')[:-1])
