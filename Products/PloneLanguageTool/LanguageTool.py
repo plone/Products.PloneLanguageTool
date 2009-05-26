@@ -11,6 +11,7 @@ from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.interfaces import ISiteRoot
+from Products.CMFCore.interfaces import IContentish
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
@@ -395,10 +396,15 @@ class LanguageTool(UniqueObject, SimpleItem):
             else:
                 contentpath = self.REQUEST.get('PATH_TRANSLATED')
             if contentpath is not None and contentpath.find('portal_factory') == -1:
-                obj = self.unrestrictedTraverse(contentpath, None)
-                if obj is not None:
-                    if obj.Language() in self.getSupportedLanguages():
+                obj = False
+                while obj is not None:
+                    obj = self.unrestrictedTraverse(contentpath, None)
+                    if not IContentish.providedBy(context):
+                        contentpath = '/'.join(contentpath.split('/')[:-1])
+                    elif obj.Language() in self.getSupportedLanguages():
                         return obj.Language()
+                    else:
+                        return None
         except ConflictError:
             raise
         except:
