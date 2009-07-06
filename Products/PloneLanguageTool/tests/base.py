@@ -3,7 +3,9 @@ from Testing import ZopeTestCase
 from Products.PloneLanguageTool.LanguageTool import LanguageTool
 from Products.PloneLanguageTool.tests.layer import ZCML
 
+
 ZopeTestCase.installProduct('PloneLanguageTool')
+ZopeTestCase.installProduct('SiteAccess')
 
 
 class TestCase(ZopeTestCase.ZopeTestCase):
