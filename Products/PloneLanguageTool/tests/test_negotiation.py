@@ -101,10 +101,48 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         doc.setLanguage('nl')
         self.failUnlessEqual(doc.Language(), 'nl')
         docpath = '/'.join(doc.getPhysicalPath())
-        # For a simple hostname without ccTLD the canonical language is used
         response = self.publish(docpath, self.basic_auth,
                                 env={'PATH_TRANSLATED': docpath})
         self.checkLanguage(response, "nl")
+
+    def testContentObjectVHMPortal(self):
+        adding = self.app.manage_addProduct['SiteAccess']
+        adding.manage_addVirtualHostMonster('vhm')
+        vhmBasePath = "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/" % self.portal.getId()
+        vhmBaseUrl = 'http://example.org/'
+
+        self.folder.invokeFactory('Folder', 'sub')
+        sub = self.folder['sub']
+        sub.setLanguage('nl')
+        sub.invokeFactory('Document', 'doc')
+        doc = sub.doc
+        doc.setLanguage('nl')
+        self.failUnlessEqual(doc.Language(), 'nl')
+        docpath = '/'.join(self.portal.portal_url.getRelativeContentPath(doc))
+        response = self.publish(vhmBasePath + docpath, self.basic_auth)
+        self.checkLanguage(response, "nl")
+
+    def testContentObjectVHMFolder(self):
+        adding = self.app.manage_addProduct['SiteAccess']
+        adding.manage_addVirtualHostMonster('vhm')
+
+        folder_path = '/'.join(self.folder.getPhysicalPath())
+        vhmBasePath = "/VirtualHostBase/http/example.org:80%s/VirtualHostRoot/" % folder_path
+        vhmBaseUrl = 'http://example.org/'
+
+        self.folder.invokeFactory('Folder', 'sub')
+        sub = self.folder['sub']
+        sub.setLanguage('nl')
+        sub.invokeFactory('Document', 'doc')
+        doc = sub.doc
+        doc.setLanguage('nl')
+        self.failUnlessEqual(doc.Language(), 'nl')
+        docpath = '/'.join(doc.getPhysicalPath())
+        docpath = docpath[len(folder_path)+1:]
+        response = self.publish(vhmBasePath + docpath, self.basic_auth)
+        # Virtual hosting into a sub-folder of the portal does not work with
+        # the content negotiator
+        self.checkLanguage(response, "en")
 
 
 class TestCcTLDLanguageNegotiation(LanguageNegotiationTestCase):

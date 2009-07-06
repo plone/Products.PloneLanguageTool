@@ -4,6 +4,11 @@ Changelog
 3.0.2 - unreleased
 ------------------
 
+* Added tests for virtual hosting and content negotiator. Noted
+  incompatibility between content based negotiator and virtual hosting for
+  anything except the Plone site object itself.
+  [hannosch]
+
 * In content negotiator, check for IContentish before looking up Language, 
   otherwise chop off url parts and try again.
   [tesdal]

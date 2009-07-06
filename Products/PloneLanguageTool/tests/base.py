@@ -7,6 +7,7 @@ from Products.Five import zcml
 
 # Setup a CMF site
 installProduct('PloneLanguageTool')
+installProduct('SiteAccess')
 
 setupCMFSite(
     extension_profiles=['Products.PloneLanguageTool:PloneLanguageTool'])
