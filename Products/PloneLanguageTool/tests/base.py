@@ -5,6 +5,7 @@ from Products.PloneLanguageTool.tests.layer import ZCML
 
 
 ZopeTestCase.installProduct('PloneLanguageTool')
+ZopeTestCase.installProduct('GenericSetup')
 ZopeTestCase.installProduct('SiteAccess')
 
 

@@ -4,6 +4,9 @@ Changelog
 4.0 - Unreleased
 ----------------
 
+- Get the tests working again in the new minimal ZopeTestCase environment.
+  [hannosch]
+
 - Converted switchLanguage skin script to a browser page and removed no longer
   used skins folder.
   [hannosch]

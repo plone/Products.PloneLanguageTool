@@ -1,17 +1,30 @@
 from Testing.ZopeTestCase import user_name
 from Testing.ZopeTestCase import user_password
 
+from zope.interface import alsoProvides
+
+from OFS.Folder import Folder
 from OFS.SimpleItem import SimpleItem
+from Products.CMFCore.interfaces import IContentish
+
 from Products.PloneLanguageTool.tests import base
 
 
-class DummyContent(SimpleItem):
+class LanguageAware(object):
 
     def setLanguage(self, lang):
         self.lang = lang
 
     def Language(self):
         return self.lang
+
+
+class DummyContent(SimpleItem, LanguageAware):
+    pass
+
+
+class DummyFolder(Folder, LanguageAware):
+    pass
 
 
 class LanguageNegotiationTestCase(base.FunctionalTestCase):
@@ -106,8 +119,10 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
 
     def testContentObject(self):
         self.folder._setOb('doc', DummyContent())
-        doc = self.folder.doc
+        doc = self.folder['doc']
         doc.setLanguage('nl')
+        alsoProvides(doc, IContentish)
+
         self.failUnlessEqual(doc.Language(), 'nl')
         docpath = '/'.join(self.folder.getPhysicalPath()) + '/doc'
         response = self.publish(docpath, self.basic_auth,
@@ -117,38 +132,51 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
     def testContentObjectVHMPortal(self):
         adding = self.app.manage_addProduct['SiteAccess']
         adding.manage_addVirtualHostMonster('vhm')
-        vhmBasePath = "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/" % self.portal.getId()
+        vhmBasePath = "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/" % self.folder.getId()
         vhmBaseUrl = 'http://example.org/'
 
-        self.folder.invokeFactory('Folder', 'sub')
+        self.folder['sub'] = DummyFolder('sub')
         sub = self.folder['sub']
         sub.setLanguage('nl')
-        sub.invokeFactory('Document', 'doc')
-        doc = sub.doc
+        alsoProvides(sub, IContentish)
+
+        sub['doc'] = DummyContent('doc')
+        doc = sub['doc']
         doc.setLanguage('nl')
+        alsoProvides(doc, IContentish)
+
         self.failUnlessEqual(doc.Language(), 'nl')
-        docpath = '/'.join(self.portal.portal_url.getRelativeContentPath(doc))
-        response = self.publish(vhmBasePath + docpath, self.basic_auth)
+        docpath = vhmBasePath + '/'.join(sub.getPhysicalPath()) + '/doc'
+        response = self.publish(docpath, self.basic_auth)
         self.checkLanguage(response, "nl")
 
     def testContentObjectVHMFolder(self):
         adding = self.app.manage_addProduct['SiteAccess']
         adding.manage_addVirtualHostMonster('vhm')
 
-        folder_path = '/'.join(self.folder.getPhysicalPath())
-        vhmBasePath = "/VirtualHostBase/http/example.org:80%s/VirtualHostRoot/" % folder_path
-        vhmBaseUrl = 'http://example.org/'
-
-        self.folder.invokeFactory('Folder', 'sub')
+        self.folder['sub'] = DummyFolder('sub')
         sub = self.folder['sub']
         sub.setLanguage('nl')
-        sub.invokeFactory('Document', 'doc')
-        doc = sub.doc
+        alsoProvides(sub, IContentish)
+
+        sub_path = '/'.join(sub.getPhysicalPath())
+        vhmBasePath = "/VirtualHostBase/http/example.org:80%s/VirtualHostRoot/" % sub_path
+        vhmBaseUrl = 'http://example.org/'
+
+        sub['sub2'] = DummyFolder('sub2')
+        sub2 = sub['sub2']
+        sub2.setLanguage('nl')
+        alsoProvides(sub2, IContentish)
+
+        sub2['doc'] = DummyContent('doc')
+        doc = sub2['doc']
         doc.setLanguage('nl')
+        alsoProvides(doc, IContentish)
+
         self.failUnlessEqual(doc.Language(), 'nl')
         docpath = '/'.join(doc.getPhysicalPath())
-        docpath = docpath[len(folder_path)+1:]
-        response = self.publish(vhmBasePath + docpath, self.basic_auth)
+        docpath = vhmBasePath + docpath[len(sub_path)+1:]
+        response = self.publish(docpath, self.basic_auth)
         # Virtual hosting into a sub-folder of the portal does not work with
         # the content negotiator
         self.checkLanguage(response, "en")
