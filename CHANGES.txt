@@ -4,16 +4,18 @@ Changelog
 3.0.3 - unreleased
 ------------------
 
+- Backported c79174 from trunk. Avoid deprecation warnings for InitializeClass.
+  [hannosch]
 
 3.0.2 - 2009-07-06
 ------------------
 
-* Added tests for virtual hosting and content negotiator. Noted
+- Added tests for virtual hosting and content negotiator. Noted
   incompatibility between content based negotiator and virtual hosting for
   anything except the Plone site object itself.
   [hannosch]
 
-* In content negotiator, check for IContentish before looking up Language, 
+- In content negotiator, check for IContentish before looking up Language, 
   otherwise chop off url parts and try again.
   [tesdal]
 

@@ -7,8 +7,13 @@ from zope.component import queryUtility
 from zope.deprecation import deprecate
 from zope.interface import implements
 
+# BBB Zope before 2.12
+try:
+    from App.class_init import InitializeClass
+except ImportError:
+    from Globals import InitializeClass
+
 from AccessControl import ClassSecurityInfo
-from Globals import InitializeClass
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.interfaces import IContentish
