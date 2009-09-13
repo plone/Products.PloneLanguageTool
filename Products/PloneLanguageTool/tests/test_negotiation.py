@@ -36,6 +36,7 @@ class TestNoCombinedLanguageNegotiation(LanguageNegotiationTestCase):
         # set some allowed languages and make sure we don't use combined
         # language codes
         self.tool.supported_langs = ['en', 'pt', 'de']
+        self.tool.use_request_negotiation = 1
         self.tool.use_combined_language_codes = 0
         self.tool.display_flags = 0
 
@@ -71,6 +72,7 @@ class TestCombinedLanguageNegotiation(LanguageNegotiationTestCase):
         # set some allowed languages and make sure we don't use combined
         # language codes
         self.tool.supported_langs = ['en', 'pt', 'de', 'pt-br']
+        self.tool.use_request_negotiation = 1
         self.tool.use_combined_language_codes = 1
         self.tool.display_flags = 0
 
