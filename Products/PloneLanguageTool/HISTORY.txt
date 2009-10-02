@@ -4,6 +4,9 @@ Changelog for PloneLanguageTool
 
 PloneLanguageTool 2.0.4 - Unreleased
 
+    - Backported language fallback fix (de-de -> de) from 3.0 branch.
+      [stefan]
+
     - Adjusted deprecation warnings to point to Plone 4.0 instead of Plone 3.5
       since we changed the version numbering again.
       [hannosch]
