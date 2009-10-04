@@ -2,6 +2,9 @@ Changelog for PloneLanguageTool
 
     (name of developer listed in brackets)
 
+PloneLanguageTool 2.0.5 - Unreleased
+
+
 PloneLanguageTool 2.0.4 - Released October 4, 2009
 
     - Backported language fallback fix (de-de -> de) from 3.0 branch.
