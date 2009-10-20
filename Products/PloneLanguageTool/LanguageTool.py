@@ -520,13 +520,13 @@ class LanguageTool(UniqueObject, SimpleItem):
         if not isinstance(binding, LanguageBinding):
             # Create new binding instance
             binding = LanguageBinding(self)
+            # Set bindings instance to request here to avoid infinite recursion
+            self.REQUEST['LANGUAGE_TOOL'] = binding
         # Bind languages
         lang = binding.setLanguageBindings(usePath, useContent, useCookie, useRequest, useDefault,
                                            useCcTLD, useSubdomain, authOnly)
         # Set LANGUAGE to request
         self.REQUEST['LANGUAGE'] = lang
-        # Set bindings instance to request
-        self.REQUEST['LANGUAGE_TOOL'] = binding
         return lang
 
     security.declareProtected(View, 'getLanguageBindings')

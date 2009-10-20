@@ -4,6 +4,8 @@ Changelog
 3.0.4 - unreleased
 ------------------
 
+- Remove possibility of infinite recursion in setLanguageBindings.
+  [lrowe]
 
 3.0.3 - 2009-09-05
 ------------------
