@@ -4,6 +4,9 @@ Changelog
 3.0.4 - unreleased
 ------------------
 
+- Use PATH_INFO instead of PATH_TRANSLATED in the content language negotiator.
+  [hannosch]
+
 - Remove possibility of infinite recursion in setLanguageBindings.
   [lrowe]
 

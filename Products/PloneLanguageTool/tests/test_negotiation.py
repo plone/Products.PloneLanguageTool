@@ -102,7 +102,7 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         self.failUnlessEqual(doc.Language(), 'nl')
         docpath = '/'.join(doc.getPhysicalPath())
         response = self.publish(docpath, self.basic_auth,
-                                env={'PATH_TRANSLATED': docpath})
+                                env={'PATH_INFO': docpath})
         self.checkLanguage(response, "nl")
 
     def testContentObjectVHMPortal(self):
