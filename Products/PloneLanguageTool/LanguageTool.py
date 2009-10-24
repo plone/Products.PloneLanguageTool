@@ -402,11 +402,12 @@ class LanguageTool(UniqueObject, SimpleItem):
                 contentpath = self.REQUEST.get('PATH_INFO')
             if contentpath is not None and 'portal_factory' not in contentpath:
                 obj = False
+                supported = self.getSupportedLanguages()
                 while contentpath and obj is not None:
                     obj = self.unrestrictedTraverse(contentpath, None)
                     if not IContentish.providedBy(obj):
                         contentpath = '/'.join(contentpath.split('/')[:-1])
-                    elif obj.Language() in self.getSupportedLanguages():
+                    elif obj.Language() in supported:
                         return obj.Language()
                     else:
                         return None
