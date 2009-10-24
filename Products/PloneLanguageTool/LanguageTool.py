@@ -405,7 +405,9 @@ class LanguageTool(UniqueObject, SimpleItem):
                 supported = self.getSupportedLanguages()
                 while contentpath and obj is not None:
                     obj = self.unrestrictedTraverse(contentpath, None)
-                    if not IContentish.providedBy(obj):
+                    if ISiteRoot.providedBy(obj):
+                        return obj.Language()
+                    elif not IContentish.providedBy(obj):
                         contentpath = '/'.join(contentpath.split('/')[:-1])
                     elif obj.Language() in supported:
                         return obj.Language()
