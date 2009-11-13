@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.0.4 - unreleased
+3.0.4 - 2009-11-13
 ------------------
 
 - Let the content language negotiator handle an ISiteRoot.
