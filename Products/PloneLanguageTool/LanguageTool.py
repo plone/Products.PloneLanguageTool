@@ -666,7 +666,7 @@ class LanguageBinding:
         langs = [lang for lang in langs if lang is not None]
 
         # Set cookie language to language
-        if useCookie and langs[0] != langsCookie:
+        if useCookie and langs[0] not in langsCookie:
             self.tool.setLanguageCookie(langs[0], noredir=True)
 
         self.DEFAULT_LANGUAGE = langs[-1]
