@@ -68,7 +68,7 @@
             <li><p><input type="checkbox" name="startNeutral" value="1" tal:attributes="checked here/start_neutral | nothing" /> Create content initially as neutral language.</p></li>
         </ol>
 
-        <input type=submit i18n:attributes="value" value="Save" />
+        <input type="submit" i18n:attributes="value" value="Save" />
     </form>
 
 <div tal:replace="structure here/manage_page_footer"/>
