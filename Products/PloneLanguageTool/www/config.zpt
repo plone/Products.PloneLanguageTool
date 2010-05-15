@@ -20,7 +20,7 @@
 
         <h2>Allowed languages</h2>
         <p><i>Use the ctlr/alt/option key to select / deselect single items</i><br />
-            <select name="supportedLanguages:list" size="10" multiple>
+            <select name="supportedLanguages:list" size="10" multiple="multiple">
                 <option value="en"
                         tal:repeat="lang here/listAvailableLanguages"
                         tal:attributes="value python: lang[0];

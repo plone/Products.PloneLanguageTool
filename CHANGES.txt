@@ -4,9 +4,13 @@ Changelog
 3.0.5 - Unreleased
 ------------------
 
+- Fix html syntax error (Chameleon compatibility).
+  [wichert]
+
 - Fix condition to not call setLanguageCookie() if the cookie language
   is already set. Cosmetic fix as setLanguageCookie() does the same check
   already. [csenger]
+
 
 3.0.4 - 2009-11-13
 ------------------
