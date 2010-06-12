@@ -4,6 +4,10 @@ Changelog
 3.0.6 - Unreleased
 ------------------
 
+- Use the canonical ``VHM`` as the id of the virtual host monster. In
+  Zope >= 2.12.7 the id is not configurable anymore.
+  [hannosch]
+
 3.0.5 - 2010-06-03
 ------------------
 
