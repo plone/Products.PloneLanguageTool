@@ -4,6 +4,9 @@ Changelog
 3.0.6 - Unreleased
 ------------------
 
+- Avoid deprecation warnings under Zope 2.13.
+  [hannosch]
+
 - Use the canonical ``VHM`` as the id of the virtual host monster. In
   Zope >= 2.12.7 the id is not configurable anymore.
   [hannosch]

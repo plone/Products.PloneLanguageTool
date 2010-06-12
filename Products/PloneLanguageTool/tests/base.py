@@ -3,7 +3,12 @@ from Products.CMFTestCase.ctc import Functional
 from Products.CMFTestCase.ctc import installProduct
 from Products.CMFTestCase.ctc import setupCMFSite
 from Products.CMFTestCase.layer import onsetup
-from Products.Five import zcml
+
+# BBB Zope 2.12
+try:
+    from Zope2.App import zcml
+except ImportError:
+    from Products.Five import zcml
 
 # Setup a CMF site
 installProduct('PloneLanguageTool')
