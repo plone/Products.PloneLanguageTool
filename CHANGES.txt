@@ -4,6 +4,9 @@ Changelog
 3.0.7 - unreleased
 ------------------
 
+- Added "(Required for the language selector viewlet to be rendered.)" to the
+  label "Use cookie for manual override.".
+  [kleist]
 
 3.0.6 - 2010-06-13
 ------------------
