@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.0.7 - unreleased
+3.0.7 - 2010-07-28
 ------------------
 
 - Added "(Required for the language selector viewlet to be rendered.)" to the
