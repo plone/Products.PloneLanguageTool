@@ -4,6 +4,8 @@ Changelog
 3.0.8 - unreleased
 ------------------
 
+- Update tests to avoid using reserved `id` attribute on the test case.
+  [davisagli]
 
 3.0.7 - 2010-07-28
 ------------------

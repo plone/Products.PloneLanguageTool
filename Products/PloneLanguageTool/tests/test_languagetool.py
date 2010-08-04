@@ -5,17 +5,17 @@ from Products.PloneLanguageTool.tests import base
 class TestLanguageToolExists(base.TestCase):
 
     def afterSetUp(self):
-        self.id = LanguageTool.id
+        self.tool_id = LanguageTool.id
 
     def testLanguageToolExists(self):
-        self.failUnless(self.id in self.portal.objectIds())
+        self.failUnless(self.tool_id in self.portal.objectIds())
 
 
 class TestLanguageToolSettings(base.TestCase):
 
     def afterSetUp(self):
-        self.id = LanguageTool.id
-        self.ltool = self.portal._getOb(self.id)
+        self.tool_id = LanguageTool.id
+        self.ltool = self.portal._getOb(self.tool_id)
 
     def testLanguageToolType(self):
         self.failUnless(self.ltool.meta_type == LanguageTool.meta_type)
@@ -52,8 +52,8 @@ class TestLanguageToolSettings(base.TestCase):
 class TestLanguageTool(base.TestCase):
 
     def afterSetUp(self):
-        self.id = LanguageTool.id
-        self.ltool = self.portal._getOb(self.id)
+        self.tool_id = LanguageTool.id
+        self.ltool = self.portal._getOb(self.tool_id)
 
     def testLanguageSettings(self):
         defaultLanguage = 'de'
