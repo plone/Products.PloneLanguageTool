@@ -54,6 +54,8 @@
             <li><p><input type="checkbox" name="setCookieN" value="1" tal:attributes="checked here/use_cookie_negotiation| nothing" /> Use cookie for manual override. (Required for the language selector viewlet to be rendered.)</p>
               <p>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="setAuthOnlyN" value="1" tal:attributes="checked here/authenticated_users_only| nothing" /> Authenticated users only.</p>
             </li>
+            <li><p><input type="checkbox" name="setCookieEverywhere" value="1" tal:attributes="checked here/set_cookie_everywhere| nothing" /> Set the language cookie always, i.e. also when the 'set_language' request parameter is absent.</p>
+            </li>
             <li><p><input type="checkbox" name="setSubdomainN" value="1" tal:attributes="checked here/use_subdomain_negotiation| nothing" /> Use subdomain (e.g.: <i>de</i>.plone.org).</p></li>
             <li><p><input type="checkbox" name="setCcTLDN" value="1" tal:attributes="checked here/use_cctld_negotiation| nothing" /> Use top-level domain (e.g.: www.plone.<i>de</i>).</p></li>
             <li><p><input type="checkbox" name="setRequestN" value="1" tal:attributes="checked here/use_request_negotiation | nothing" /> Use browser language request negotiation.</p></li>

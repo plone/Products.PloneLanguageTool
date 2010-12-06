@@ -15,6 +15,7 @@ class LanguageToolXMLAdapter(XMLAdapterBase):
     name = 'portal_languages'
 
     boolean_fields =  [ "use_path_negotiation", "use_cookie_negotiation",
+                        "set_cookie_everywhere",
                         "use_request_negotiation", "use_cctld_negotiation",
                         "use_content_negotiation",
                         "use_combined_language_codes", "display_flags",

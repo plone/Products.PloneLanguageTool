@@ -4,6 +4,10 @@ Changelog
 3.0.9 - unreleased
 ------------------
 
+- Add option ``set_cookie_everywhere``.  This allows us to set cookies
+  only if 'set_language' is present as a request parameter, i.e. if an
+  explicit request was made by the user to set their language.
+  [nouri]
 
 3.0.8 - 2010-08-04
 ------------------

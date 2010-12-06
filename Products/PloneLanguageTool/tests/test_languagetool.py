@@ -25,7 +25,8 @@ class TestLanguageToolSettings(base.TestCase):
         supportedLanguages = ['en','de','no']
         self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages,
                                    setContentN=False,
-                                   setCookieN=False, setRequestN=False,
+                                   setCookieN=False, setCookieEverywhere=False,
+                                   setRequestN=False,
                                    setPathN=False, setForcelanguageUrls=False,
                                    setAllowContentLanguageFallback=True,
                                    setUseCombinedLanguageCodes=True,
@@ -37,6 +38,7 @@ class TestLanguageToolSettings(base.TestCase):
         self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
         self.failUnless(self.ltool.use_content_negotiation==False)
         self.failUnless(self.ltool.use_cookie_negotiation==False)
+        self.failUnless(self.ltool.set_cookie_everywhere==False)
         self.failUnless(self.ltool.use_request_negotiation==False)
         self.failUnless(self.ltool.use_path_negotiation==False)
         self.failUnless(self.ltool.force_language_urls==False)

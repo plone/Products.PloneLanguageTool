@@ -50,6 +50,7 @@ class LanguageTool(UniqueObject, SimpleItem):
     use_path_negotiation = 0
     use_content_negotiation = 0
     use_cookie_negotiation = 1
+    set_cookie_everywhere = 1
     authenticated_users_only = 0
     use_request_negotiation = 1
     use_cctld_negotiation = 0
@@ -77,6 +78,7 @@ class LanguageTool(UniqueObject, SimpleItem):
         self.use_content_negotiation = 0
         self.use_path_negotiation = 0
         self.use_cookie_negotiation  = 1
+        self.set_cookie_everywhere  = 1
         self.authenticated_users_only = 0
         self.use_request_negotiation = 1
         self.use_cctld_negotiation = 0
@@ -101,7 +103,8 @@ class LanguageTool(UniqueObject, SimpleItem):
     security.declareProtected(ManagePortal, 'manage_setLanguageSettings')
     def manage_setLanguageSettings(self, defaultLanguage, supportedLanguages,
                                    setContentN=None,
-                                   setCookieN=None, setRequestN=None,
+                                   setCookieN=None, setCookieEverywhere=None,
+                                   setRequestN=None,
                                    setPathN=None, setForcelanguageUrls=None,
                                    setAllowContentLanguageFallback=None,
                                    setUseCombinedLanguageCodes=None,
@@ -126,6 +129,11 @@ class LanguageTool(UniqueObject, SimpleItem):
             self.use_cookie_negotiation = 1
         else:
             self.use_cookie_negotiation = 0
+
+        if setCookieEverywhere:
+            self.set_cookie_everywhere = 1
+        else:
+            self.set_cookie_everywhere = 0
 
         if setAuthOnlyN:
             self.authenticated_users_only = 1
@@ -514,6 +522,7 @@ class LanguageTool(UniqueObject, SimpleItem):
         useSubdomain = self.use_subdomain_negotiation
         usePath = self.use_path_negotiation
         useCookie = self.use_cookie_negotiation
+        setCookieEverywhere = self.set_cookie_everywhere
         authOnly = self.authenticated_users_only
         useRequest = self.use_request_negotiation
         useDefault = 1 # This should never be disabled
@@ -526,8 +535,10 @@ class LanguageTool(UniqueObject, SimpleItem):
             # Set bindings instance to request here to avoid infinite recursion
             self.REQUEST['LANGUAGE_TOOL'] = binding
         # Bind languages
-        lang = binding.setLanguageBindings(usePath, useContent, useCookie, useRequest, useDefault,
-                                           useCcTLD, useSubdomain, authOnly)
+        lang = binding.setLanguageBindings(
+            usePath, useContent, useCookie, useRequest, useDefault, useCcTLD,
+            useSubdomain, authOnly, setCookieEverywhere,
+            )
         # Set LANGUAGE to request
         self.REQUEST['LANGUAGE'] = lang
         return lang
@@ -611,7 +622,7 @@ class LanguageBinding:
 
     security.declarePrivate('setLanguageBindings')
     def setLanguageBindings(self, usePath=1, useContent=1, useCookie=1, useRequest=1, useDefault=1,
-                            useCcTLD=0, useSubdomain=0, authOnly=0):
+                            useCcTLD=0, useSubdomain=0, authOnly=0, setCookieEverywhere=1):
         """Setup the current language stuff."""
         langs = []
 
@@ -666,7 +677,7 @@ class LanguageBinding:
         langs = [lang for lang in langs if lang is not None]
 
         # Set cookie language to language
-        if useCookie and langs[0] not in langsCookie:
+        if setCookieEverywhere and useCookie and langs[0] not in langsCookie:
             self.tool.setLanguageCookie(langs[0], noredir=True)
 
         self.DEFAULT_LANGUAGE = langs[-1]
