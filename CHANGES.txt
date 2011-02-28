@@ -1,7 +1,12 @@
 Changelog
 =========
 
-3.0.9 - unreleased
+3.0.10 - Unreleased
+-------------------
+
+- No changes yet
+
+3.0.9 - 2011-02-28
 ------------------
 
 - Add option ``set_cookie_everywhere``.  This allows us to set cookies
