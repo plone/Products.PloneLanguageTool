@@ -47,6 +47,7 @@ class LanguageTool(UniqueObject, SimpleItem):
     security = ClassSecurityInfo()
 
     # These apply to existing instances when code is upgraded
+    # Mutable class default explains careful copying of list below...
     supported_langs = ['en']
     use_path_negotiation = 0
     use_content_negotiation = 0
@@ -77,6 +78,7 @@ class LanguageTool(UniqueObject, SimpleItem):
     def __init__(self):
         # These apply to new instances
         self.id = 'portal_languages'
+        self.supported_langs = ['en']
         self.use_content_negotiation = 0
         self.use_path_negotiation = 0
         self.use_cookie_negotiation  = 1
