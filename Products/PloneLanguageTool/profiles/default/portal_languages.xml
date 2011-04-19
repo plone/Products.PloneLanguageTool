@@ -4,7 +4,7 @@
  <use_content_negotiation value="False"/>
  <use_path_negotiation value="False"/>
  <use_cookie_negotiation value="True"/>
- <set_cookie_everywhere value="True"/>
+ <set_cookie_everywhere value="False"/>
  <authenticated_users_only value="False"/>
  <use_request_negotiation value="False"/>
  <use_cctld_negotiation value="False"/>

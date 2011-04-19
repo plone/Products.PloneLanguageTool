@@ -12,6 +12,7 @@ class LanguageNegotiationTestCase(base.FunctionalTestCase):
         self.portal_path = self.portal.absolute_url(1)
         self.tool = self.portal[LanguageTool.id]
         self.tool.always_show_selector = 1
+        self.tool.set_cookie_everywhere = 1
 
     def checkLanguage(self, response, language):
         self.assertEquals(response.getStatus(), 200)

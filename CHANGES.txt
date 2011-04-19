@@ -4,7 +4,10 @@ Changelog
 3.0.10 - Unreleased
 -------------------
 
-- No changes yet
+- Make ``set_cookie_everywhere`` default to False on new sites. Most sites
+  have only a single language and setting cookies for anonymous users hurts
+  cacheing.
+  [elro]
 
 3.0.9 - 2011-02-28
 ------------------
