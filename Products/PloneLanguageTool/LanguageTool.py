@@ -46,6 +46,7 @@ class LanguageTool(UniqueObject, SimpleItem):
 
     security = ClassSecurityInfo()
 
+    # These apply to existing instances when code is upgraded
     supported_langs = ['en']
     use_path_negotiation = 0
     use_content_negotiation = 0
@@ -74,17 +75,18 @@ class LanguageTool(UniqueObject, SimpleItem):
     manage_configForm = PageTemplateFile('www/config', globals())
 
     def __init__(self):
+        # These apply to new instances
         self.id = 'portal_languages'
         self.use_content_negotiation = 0
         self.use_path_negotiation = 0
         self.use_cookie_negotiation  = 1
-        self.set_cookie_everywhere  = 1
+        self.set_cookie_everywhere  = 0
         self.authenticated_users_only = 0
-        self.use_request_negotiation = 1
+        self.use_request_negotiation = 0
         self.use_cctld_negotiation = 0
         self.use_subdomain_negotiation = 0
         self.use_combined_language_codes = 0
-        self.force_language_urls = 1
+        self.force_language_urls = 0
         self.allow_content_language_fallback = 0
         self.display_flags = 0
         self.start_neutral = 0
