@@ -1,8 +1,8 @@
 Changelog
 =========
 
-3.0.10 - Unreleased
--------------------
+3.1.0 - 2011-05-12
+------------------
 
 - Make ``set_cookie_everywhere`` default to False on new sites. Most sites
   have only a single language and setting cookies for anonymous users hurts
