@@ -2,6 +2,8 @@ from plone.i18n.locales.interfaces import ICountryAvailability
 from plone.i18n.locales.interfaces import IContentLanguageAvailability
 from plone.i18n.locales.interfaces import ICcTLDInformation
 
+from zope.app.component.hooks import getSite
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component import queryUtility
 from zope.deprecation import deprecate
@@ -28,6 +30,7 @@ from ZPublisher.HTTPRequest import HTTPRequest
 
 from Products.PloneLanguageTool.interfaces import ILanguageTool
 from Products.PloneLanguageTool.interfaces import ITranslatable
+from Products.PloneLanguageTool.interfaces import INegotiateLanguage
 
 try:
     from Products.PlacelessTranslationService.Negotiator import registerLangPrefsMethod
@@ -521,17 +524,9 @@ class LanguageTool(UniqueObject, SimpleItem):
     security.declareProtected(View, 'setLanguageBindings')
     def setLanguageBindings(self):
         """Setups the current language stuff."""
-        useContent = self.use_content_negotiation
-        useCcTLD = self.use_cctld_negotiation
-        useSubdomain = self.use_subdomain_negotiation
-        usePath = self.use_path_negotiation
-        useCookie = self.use_cookie_negotiation
-        setCookieEverywhere = self.set_cookie_everywhere
-        authOnly = self.authenticated_users_only
-        useRequest = self.use_request_negotiation
-        useDefault = 1 # This should never be disabled
         if not hasattr(self, 'REQUEST'):
             return
+        settings = getMultiAdapter((getSite(), self.REQUEST), INegotiateLanguage)
         binding = self.REQUEST.get('LANGUAGE_TOOL', None)
         if not isinstance(binding, LanguageBinding):
             # Create new binding instance
@@ -539,10 +534,9 @@ class LanguageTool(UniqueObject, SimpleItem):
             # Set bindings instance to request here to avoid infinite recursion
             self.REQUEST['LANGUAGE_TOOL'] = binding
         # Bind languages
-        lang = binding.setLanguageBindings(
-            usePath, useContent, useCookie, useRequest, useDefault, useCcTLD,
-            useSubdomain, authOnly, setCookieEverywhere,
-            )
+        binding.LANGUAGE = lang = settings.language
+        binding.DEFAULT_LANGUAGE = settings.default_language
+        binding.LANGUAGE_LIST = settings.language_list
         # Set LANGUAGE to request
         self.REQUEST['LANGUAGE'] = lang
         return lang
@@ -624,56 +618,6 @@ class LanguageBinding:
     def __init__(self, tool):
         self.tool = tool
 
-    security.declarePrivate('setLanguageBindings')
-    def setLanguageBindings(self, usePath=1, useContent=1, useCookie=1, useRequest=1, useDefault=1,
-                            useCcTLD=0, useSubdomain=0, authOnly=0, setCookieEverywhere=1):
-        """Setup the current language stuff."""
-        langs = []
-
-        if usePath:
-            # This one is set if there is an allowed language in the current path
-            langs.append(self.tool.getPathLanguage())
-
-        if useContent:
-            langs.append(self.tool.getContentLanguage())
-
-        if useCookie and not (authOnly and self.tool.isAnonymousUser()):
-            # If we are using the cookie stuff we provide the setter here
-            set_language = self.tool.REQUEST.get('set_language', None)
-            if set_language:
-                langsCookie = self.tool.setLanguageCookie(set_language)
-            else:
-                # Get from cookie
-                langsCookie = self.tool.getLanguageCookie() 
-            langs.append(langsCookie)
-
-        if useSubdomain:
-            langs.extend(self.tool.getSubdomainLanguages())
-
-        if useCcTLD:
-            langs.extend(self.tool.getCcTLDLanguages())
-
-        # Get langs from request
-        if useRequest:
-            langs.extend(self.tool.getRequestLanguages())
-
-        # Get default
-        if useDefault:
-            langs.append(self.tool.getDefaultLanguage())
-
-        # Filter None languages
-        langs = [lang for lang in langs if lang is not None]
-
-        # Set cookie language to language
-        if setCookieEverywhere and useCookie and langs[0] != langsCookie:
-            self.tool.setLanguageCookie(langs[0], noredir=True)
-
-        self.DEFAULT_LANGUAGE = langs[-1]
-        self.LANGUAGE = langs[0]
-        self.LANGUAGE_LIST = langs[1:-1]
-
-        return self.LANGUAGE
-
     security.declarePublic('getLanguageBindings')
     def getLanguageBindings(self):
         """Returns the bound languages.
@@ -681,6 +625,67 @@ class LanguageBinding:
         (language, default_language, languages_list)
         """
         return (self.LANGUAGE, self.DEFAULT_LANGUAGE, self.LANGUAGE_LIST)
+
+
+class NegotiateLanguage(object):
+    """Perform default language negotiation"""
+    implements(INegotiateLanguage)
+    
+    def __init__(self, site, request):
+        """Setup the current language stuff."""
+        tool = getToolByName(site, 'portal_languages')
+        langs = []
+        useContent = tool.use_content_negotiation
+        useCcTLD = tool.use_cctld_negotiation
+        useSubdomain = tool.use_subdomain_negotiation
+        usePath = tool.use_path_negotiation
+        useCookie = tool.use_cookie_negotiation
+        setCookieEverywhere = tool.set_cookie_everywhere
+        authOnly = tool.authenticated_users_only
+        useRequest = tool.use_request_negotiation
+        useDefault = 1 # This should never be disabled
+
+        if usePath:
+            # This one is set if there is an allowed language in the current path
+            langs.append(tool.getPathLanguage())
+
+        if useContent:
+            langs.append(tool.getContentLanguage())
+
+        if useCookie and not (authOnly and tool.isAnonymousUser()):
+            # If we are using the cookie stuff we provide the setter here
+            set_language = tool.REQUEST.get('set_language', None)
+            if set_language:
+                langsCookie = tool.setLanguageCookie(set_language)
+            else:
+                # Get from cookie
+                langsCookie = tool.getLanguageCookie() 
+            langs.append(langsCookie)
+
+        if useSubdomain:
+            langs.extend(tool.getSubdomainLanguages())
+
+        if useCcTLD:
+            langs.extend(tool.getCcTLDLanguages())
+
+        # Get langs from request
+        if useRequest:
+            langs.extend(tool.getRequestLanguages())
+
+        # Get default
+        if useDefault:
+            langs.append(tool.getDefaultLanguage())
+
+        # Filter None languages
+        langs = [lang for lang in langs if lang is not None]
+
+        # Set cookie language to language
+        if setCookieEverywhere and useCookie and langs[0] != langsCookie:
+            tool.setLanguageCookie(langs[0], noredir=True)
+
+        self.default_language = langs[-1]
+        self.language = langs[0]
+        self.language_list= langs[1:-1]
 
 
 class PrefsForPTS:

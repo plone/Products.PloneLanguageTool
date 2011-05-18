@@ -20,4 +20,10 @@
       for=".interfaces.ILanguageTool
            Products.GenericSetup.interfaces.ISetupEnviron"
       />
+
+  <adapter
+      factory=".LanguageTool.NegotiateLanguage"
+      for="* *"
+      />
+
 </configure>
