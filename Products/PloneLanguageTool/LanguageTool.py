@@ -536,7 +536,7 @@ class LanguageTool(UniqueObject, SimpleItem):
         # Bind languages
         binding.LANGUAGE = lang = settings.language
         binding.DEFAULT_LANGUAGE = settings.default_language
-        binding.LANGUAGE_LIST = settings.language_list
+        binding.LANGUAGE_LIST = list(settings.language_list)
         # Set LANGUAGE to request
         self.REQUEST['LANGUAGE'] = lang
         return lang
