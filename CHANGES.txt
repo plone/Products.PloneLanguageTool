@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.2.0 - unreleased
+3.2.0 - 2011-05-18
 ------------------
 
 - Factor out language negotiation to a multi-adapter on (site, request) to
