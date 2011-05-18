@@ -4,6 +4,8 @@ Changelog
 3.1.1 - unreleased
 ------------------
 
+- Simplify LanguageBinding.setLanguageBindings with list.append.
+  [elro]
 
 3.1.0 - 2011-05-12
 ------------------

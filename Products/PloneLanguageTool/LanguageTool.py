@@ -632,56 +632,40 @@ class LanguageBinding:
 
         if usePath:
             # This one is set if there is an allowed language in the current path
-            langsPath = [self.tool.getPathLanguage()]
-        else:
-            langsPath = []
+            langs.append(self.tool.getPathLanguage())
 
         if useContent:
-            langsContent = [self.tool.getContentLanguage()]
-        else:
-            langsContent = []
+            langs.append(self.tool.getContentLanguage())
 
         if useCookie and not (authOnly and self.tool.isAnonymousUser()):
             # If we are using the cookie stuff we provide the setter here
             set_language = self.tool.REQUEST.get('set_language', None)
             if set_language:
-                langsCookie = [self.tool.setLanguageCookie(set_language)]
+                langsCookie = self.tool.setLanguageCookie(set_language)
             else:
                 # Get from cookie
-                langsCookie = [self.tool.getLanguageCookie()]
-        else:
-            langsCookie = []
+                langsCookie = self.tool.getLanguageCookie() 
+            langs.append(langsCookie)
 
         if useSubdomain:
-            langsSubdomain = self.tool.getSubdomainLanguages()
-        else:
-            langsSubdomain = []
+            langs.extend(self.tool.getSubdomainLanguages())
 
         if useCcTLD:
-            langsCcTLD = self.tool.getCcTLDLanguages()
-        else:
-            langsCcTLD = []
+            langs.extend(self.tool.getCcTLDLanguages())
 
         # Get langs from request
         if useRequest:
-            langsRequest = self.tool.getRequestLanguages()
-        else:
-            langsRequest = []
+            langs.extend(self.tool.getRequestLanguages())
 
         # Get default
         if useDefault:
-            langsDefault = [self.tool.getDefaultLanguage()]
-        else:
-            langsDefault = []
-
-        # Build list
-        langs = langsPath+langsContent+langsCookie+langsSubdomain+langsCcTLD+langsRequest+langsDefault
+            langs.append(self.tool.getDefaultLanguage())
 
         # Filter None languages
         langs = [lang for lang in langs if lang is not None]
 
         # Set cookie language to language
-        if setCookieEverywhere and useCookie and langs[0] not in langsCookie:
+        if setCookieEverywhere and useCookie and langs[0] != langsCookie:
             self.tool.setLanguageCookie(langs[0], noredir=True)
 
         self.DEFAULT_LANGUAGE = langs[-1]
