@@ -4,6 +4,8 @@ Changelog
 3.2.1 - unreleased
 ------------------
 
+- Avoid setting up the language twice when virtual hosting at the site root.
+  [elro]
 
 3.2.0 - 2011-05-18
 ------------------

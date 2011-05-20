@@ -98,6 +98,10 @@ class LanguageTool(UniqueObject, SimpleItem):
 
     def __call__(self, container, req):
         """The __before_publishing_traverse__ hook."""
+        # Virtual hosting with the portal as the root causes traversal hooks
+        # to be called twice.
+        if req.other.has_key('LANGUAGE_TOOL'):
+            return None
         if req.__class__ is not HTTPRequest:
             return None
         if not req['REQUEST_METHOD'] in ('HEAD', 'GET', 'PUT', 'POST'):
