@@ -18,12 +18,13 @@ except ImportError:
 from AccessControl import ClassSecurityInfo
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.interfaces import ISiteRoot
-from Products.CMFCore.interfaces import IContentish
+from Products.CMFCore.interfaces import IDublinCore
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import UniqueObject
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.SiteAccess.VirtualHostMonster import VirtualHostMonster
 from ZODB.POSException import ConflictError
 from ZPublisher import BeforeTraverse
 from ZPublisher.HTTPRequest import HTTPRequest
@@ -414,22 +415,31 @@ class LanguageTool(UniqueObject, SimpleItem):
         if not hasattr(self, 'REQUEST'):
             return []
         try: # This will actually work nicely with browserdefault as we get attribute error...
-            contentpath = None
-            if self.REQUEST.get('VIRTUAL_URL', None) is not None:
-                contentpath = self.REQUEST.get('VIRTUAL_URL_PARTS')[-1]
-            else:
-                contentpath = self.REQUEST.get('PATH_INFO')
-            if contentpath is not None and 'portal_factory' not in contentpath:
-                obj = False
-                supported = self.getSupportedLanguages()
-                while contentpath and obj is not None:
-                    obj = self.unrestrictedTraverse(contentpath, None)
-                    if ISiteRoot.providedBy(obj):
-                        return obj.Language()
-                    elif not IContentish.providedBy(obj):
-                        contentpath = '/'.join(contentpath.split('/')[:-1])
-                    elif obj.Language() in supported:
-                        return obj.Language()
+            contentpath = self.REQUEST.path[:]
+            if 'portal_factory' in contentpath:
+                return None
+            obj = self.aq_parent
+            traversed = []
+            while contentpath:
+                name = contentpath.pop()
+                if name[0] in '@+':
+                    break
+                next = obj.unrestrictedTraverse(name, None)
+                if next is None:
+                    break
+                if isinstance(next, VirtualHostMonster):
+                    # next element is the VH subpath
+                    contentpath.pop()
+                    continue
+                obj = next
+                traversed.append(obj)
+            for obj in reversed(traversed):
+                if IDublinCore.providedBy(obj):
+                    lang = obj.Language()
+                    if lang is None:
+                        continue
+                    if lang in self.getSupportedLanguages():
+                        return lang
                     else:
                         return None
         except ConflictError:

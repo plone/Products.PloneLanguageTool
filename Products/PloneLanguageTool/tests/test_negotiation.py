@@ -159,9 +159,7 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         docpath = '/'.join(doc.getPhysicalPath())
         docpath = docpath[len(folder_path)+1:]
         response = self.publish(vhmBasePath + docpath, self.basic_auth)
-        # Virtual hosting into a sub-folder of the portal does not work with
-        # the content negotiator
-        self.checkLanguage(response, "en")
+        self.checkLanguage(response, "nl")
 
 
 class TestCcTLDLanguageNegotiation(LanguageNegotiationTestCase):
