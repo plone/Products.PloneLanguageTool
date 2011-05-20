@@ -4,6 +4,10 @@ Changelog
 3.2.1 - unreleased
 ------------------
 
+- Support content language negotiation using virtual host subpath (_vh_name)
+  urls.
+  [elro]
+
 - Avoid setting up the language twice when virtual hosting at the site root.
   [elro]
 

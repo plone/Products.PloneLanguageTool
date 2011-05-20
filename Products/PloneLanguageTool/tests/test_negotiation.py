@@ -123,6 +123,24 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         response = self.publish(vhmBasePath + docpath, self.basic_auth)
         self.checkLanguage(response, "nl")
 
+    def testContentObjectVHMPortalVHSubpath(self):
+        adding = self.app.manage_addProduct['SiteAccess']
+        adding.manage_addVirtualHostMonster('VHM')
+        vhmBasePath = "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/_vh_one/_vh_two/" % self.portal.getId()
+        vhmBaseUrl = 'http://example.org/'
+
+        self.folder.invokeFactory('Folder', 'sub')
+        sub = self.folder['sub']
+        sub.setLanguage('nl')
+        sub.invokeFactory('Document', 'doc')
+        doc = sub.doc
+        doc.setLanguage('nl')
+        self.failUnlessEqual(doc.Language(), 'nl')
+        docpath = '/'.join(self.portal.portal_url.getRelativeContentPath(doc))
+        response = self.publish(vhmBasePath + docpath, self.basic_auth)
+        self.checkLanguage(response, "nl")
+
+
     def testContentObjectVHMFolder(self):
         adding = self.app.manage_addProduct['SiteAccess']
         adding.manage_addVirtualHostMonster('VHM')

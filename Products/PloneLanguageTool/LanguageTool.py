@@ -416,7 +416,7 @@ class LanguageTool(UniqueObject, SimpleItem):
         try: # This will actually work nicely with browserdefault as we get attribute error...
             contentpath = None
             if self.REQUEST.get('VIRTUAL_URL', None) is not None:
-                contentpath = self.REQUEST.get('VIRTUAL_URL_PARTS')[1]
+                contentpath = self.REQUEST.get('VIRTUAL_URL_PARTS')[-1]
             else:
                 contentpath = self.REQUEST.get('PATH_INFO')
             if contentpath is not None and 'portal_factory' not in contentpath:
