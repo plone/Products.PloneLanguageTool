@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.2.1 - unreleased
+3.2.1 - 2011-05-20
 ------------------
 
 - Support content language negotiation when virtual hosting beneath the site
