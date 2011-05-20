@@ -1,6 +1,12 @@
 Changelog
 =========
 
+3.2.2 - 2011-05-20
+------------------
+
+- Handle Language() returning an empty string (for dexterity objects).
+  [elro]
+
 3.2.1 - 2011-05-20
 ------------------
 

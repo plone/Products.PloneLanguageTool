@@ -436,7 +436,7 @@ class LanguageTool(UniqueObject, SimpleItem):
             for obj in reversed(traversed):
                 if IDublinCore.providedBy(obj):
                     lang = obj.Language()
-                    if lang is None:
+                    if not lang:
                         continue
                     if lang in self.getSupportedLanguages():
                         return lang
