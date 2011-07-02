@@ -658,6 +658,7 @@ class NegotiateLanguage(object):
         authOnly = tool.authenticated_users_only
         useRequest = tool.use_request_negotiation
         useDefault = 1 # This should never be disabled
+        langsCookie = None
 
         if usePath:
             # This one is set if there is an allowed language in the current path

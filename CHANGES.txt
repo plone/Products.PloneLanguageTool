@@ -1,6 +1,13 @@
 Changelog
 =========
 
+3.2.3 - unreleased
+------------------
+
+- Avoid UnboundLocalError on langsCookie.
+  Fixes http://dev.plone.org/plone/ticket/11976
+  [WouterVH]
+
 3.2.2 - 2011-05-20
 ------------------
 
