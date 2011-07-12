@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '3.2.3dev'
+version = '3.2.3'
 
 setup(name='Products.PloneLanguageTool',
       version=version,
