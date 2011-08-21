@@ -4,6 +4,8 @@ Changelog
 3.2.4 - Unreleased
 ------------------
 
+- Remove versions.txt.
+  [esteele]
 
 3.2.3 - 2011-07-12
 ------------------
