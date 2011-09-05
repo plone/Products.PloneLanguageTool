@@ -132,70 +132,19 @@ class LanguageTool(UniqueObject, SimpleItem):
         else:
             self.setDefaultLanguage(self.supported_langs[0])
 
-        if setContentN:
-            self.use_content_negotiation = 1
-        else:
-            self.use_content_negotiation = 0
-
-        if setCookieN:
-            self.use_cookie_negotiation = 1
-        else:
-            self.use_cookie_negotiation = 0
-
-        if setCookieEverywhere:
-            self.set_cookie_everywhere = 1
-        else:
-            self.set_cookie_everywhere = 0
-
-        if setAuthOnlyN:
-            self.authenticated_users_only = 1
-        else:
-            self.authenticated_users_only = 0
-
-        if setRequestN:
-            self.use_request_negotiation = 1
-        else:
-            self.use_request_negotiation = 0
-
-        if setPathN:
-            self.use_path_negotiation = 1
-        else:
-            self.use_path_negotiation = 0
-
-        if setCcTLDN:
-            self.use_cctld_negotiation = 1
-        else:
-            self.use_cctld_negotiation = 0
-
-        if setSubdomainN:
-            self.use_subdomain_negotiation = 1
-        else:
-            self.use_subdomain_negotiation = 0
-
-        if setForcelanguageUrls:
-            self.force_language_urls = 1
-        else:
-            self.force_language_urls = 0
-
-        if setAllowContentLanguageFallback:
-            self.allow_content_language_fallback = 1
-        else:
-            self.allow_content_language_fallback = 0
-
-        if setUseCombinedLanguageCodes:
-            self.use_combined_language_codes = 1
-        else:
-            self.use_combined_language_codes = 0
-
-        if displayFlags:
-            self.display_flags = 1
-        else:
-            self.display_flags = 0
-
-        if startNeutral:
-            self.start_neutral = 1
-        else:
-            self.start_neutral = 0
+        self.use_content_negotiation = bool(setContentN)
+        self.use_cookie_negotiation = bool(setCookieN)
+        self.set_cookie_everywhere = bool(setCookieEverywhere)
+        self.authenticated_users_only = bool(setAuthOnlyN)
+        self.use_request_negotiation = bool(setRequestN)
+        self.use_path_negotiation = bool(setPathN)
+        self.use_cctld_negotiation = bool(setCcTLDN)
+        self.use_subdomain_negotiation = bool(setSubdomainN)
+        self.force_language_urls = bool(setForcelanguageUrls)
+        self.allow_content_language_fallback = bool(setAllowContentLanguageFallback)
+        self.use_combined_language_codes = bool(setUseCombinedLanguageCodes)
+        self.display_flags = bool(displayFlags)
+        self.start_neutral = bool(startNeutral)
 
         if REQUEST:
             REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
