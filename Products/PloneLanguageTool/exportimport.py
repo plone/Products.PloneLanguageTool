@@ -61,7 +61,7 @@ class LanguageToolXMLAdapter(XMLAdapterBase):
                 value = self._convertToBoolean(child.getAttribute('value'))
                 setattr(self.context, child.nodeName, value)
             elif child.nodeName in self.list_fields:
-                purge = self._convertToBoolean(child.getAttribute('purge') or 'True') 
+                purge = self._convertToBoolean(child.getAttribute('purge') or 'True')
                 if purge:
                     value = []
                 else:

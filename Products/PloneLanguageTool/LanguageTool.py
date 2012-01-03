@@ -593,7 +593,7 @@ class LanguageBinding:
 class NegotiateLanguage(object):
     """Perform default language negotiation"""
     implements(INegotiateLanguage)
-    
+
     def __init__(self, site, request):
         """Setup the current language stuff."""
         tool = getToolByName(site, 'portal_languages')
@@ -623,7 +623,7 @@ class NegotiateLanguage(object):
                 langsCookie = tool.setLanguageCookie(set_language)
             else:
                 # Get from cookie
-                langsCookie = tool.getLanguageCookie() 
+                langsCookie = tool.getLanguageCookie()
             langs.append(langsCookie)
 
         if useSubdomain:
