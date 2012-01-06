@@ -4,6 +4,10 @@ Changelog
 3.2.4 - Unreleased
 ------------------
 
+- Prevent UnboundLocalError for unassigned variable lang when
+  switchLanguage is called without parameters.
+  [weberlar]
+
 - Remove versions.txt.
   [esteele]
 
