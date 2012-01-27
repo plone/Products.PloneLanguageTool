@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.2.4 - Unreleased
+3.2.4 (2012-01-26)
 ------------------
 
 - Prevent UnboundLocalError for unassigned variable lang when
