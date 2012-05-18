@@ -4,7 +4,8 @@ Changelog
 3.2.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Update getSite import location.
+  [hannosch]
 
 
 3.2.4 (2012-01-26)

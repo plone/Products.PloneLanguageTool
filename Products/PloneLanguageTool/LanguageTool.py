@@ -2,7 +2,7 @@ from plone.i18n.locales.interfaces import ICountryAvailability
 from plone.i18n.locales.interfaces import IContentLanguageAvailability
 from plone.i18n.locales.interfaces import ICcTLDInformation
 
-from zope.app.component.hooks import getSite
+from zope.component.hooks import getSite
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component import queryUtility
