@@ -2,6 +2,8 @@ from setuptools import setup, find_packages
 
 version = '3.2.5'
 
+tests_require = ['Products.CMFTestCase',]
+
 setup(name='Products.PloneLanguageTool',
       version=version,
       description="PloneLanguageTool allows you to set the available "
@@ -28,4 +30,6 @@ setup(name='Products.PloneLanguageTool',
       install_requires=[
         'setuptools',
       ],
+      tests_require=tests_require,
+      extras_require=dict(test=tests_require),
 )
