@@ -10,8 +10,8 @@ setup(name='Products.PloneLanguageTool',
                   "languages in your Plone site, select various fallback "
                   "mechanisms, and control the use of flags for language "
                   "selection and translations.",
-      long_description=open("README.txt").read() + "\n" +
-                       open("CHANGES.txt").read(),
+      long_description=open("README.rst").read() + "\n" +
+                       open("CHANGES.rst").read(),
       classifiers=[
         "Framework :: Plone",
         "Framework :: Zope2",
