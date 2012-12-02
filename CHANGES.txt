@@ -4,7 +4,9 @@ Changelog
 3.2.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- do not try to get content language for resources that are not
+  content (see #11263)
+  [keul]
 
 
 3.2.5 (2012-07-02)

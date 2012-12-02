@@ -1,3 +1,6 @@
+from zope.interface import alsoProvides
+from Products.CMFCore.interfaces import IDublinCore
+
 from Products.PloneLanguageTool import LanguageTool
 from Products.PloneLanguageTool.tests import base
 
@@ -99,6 +102,24 @@ class TestLanguageTool(base.TestCase):
         for lang in availableLanguages:
             if lang in supportedLanguages:
                 self.failUnless(availableLanguages[lang]['selected'] == True)
+
+    def testGetContentLanguage(self):
+        # tests for issue #11263
+        defaultLanguage = 'de'
+        supportedLanguages = ['en','de','no']
+        self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages)
+        self.ltool.REQUEST.path = ['Members',]
+        content = self.portal.Members
+        content.setLanguage('de')
+        alsoProvides(content, IDublinCore)
+        self.ltool.getContentLanguage()
+        self.failUnless(self.ltool.getContentLanguage()=='de')
+        self.ltool.REQUEST.path = ['view', 'foo.jpg', 'Members',]
+        self.failUnless(self.ltool.getContentLanguage()=='de')
+        self.ltool.REQUEST.path = ['foo.jpg', 'Members',]
+        self.failUnless(self.ltool.getContentLanguage()==None)
+        self.ltool.REQUEST.path = ['foo', 'portal_javascript',]
+        self.failUnless(self.ltool.getContentLanguage()==None)        
 
 
 def test_suite():

@@ -69,6 +69,24 @@ class LanguageTool(UniqueObject, SimpleItem):
 
     # Used by functional tests.
     always_show_selector = 0
+    
+    # resources that must not use language specific URLs
+    exclude_paths = frozenset((
+                     'portal_css',
+                     'portal_javascripts',
+                     'portal_kss',
+                     'portal_factory'
+                 ))
+    exclude_exts = frozenset((
+         'css',
+         'js',
+         'kss',
+         'xml',
+         'gif',
+         'jpg',
+         'png',
+         'jpeg',
+     ))
 
     manage_options=(
         ({ 'label'  : 'LanguageConfig',
@@ -365,8 +383,14 @@ class LanguageTool(UniqueObject, SimpleItem):
             return []
         try: # This will actually work nicely with browserdefault as we get attribute error...
             contentpath = self.REQUEST.path[:]
-            if 'portal_factory' in contentpath:
+
+            # Now check if we need to exclude from using language specific path
+            # See https://dev.plone.org/ticket/11263
+            if (bool([1 for p in self.exclude_paths if p in contentpath]) or 
+                bool([1 for p in self.exclude_exts if contentpath[0].endswith(p)]) 
+                ):
                 return None
+
             obj = self.aq_parent
             traversed = []
             while contentpath:
