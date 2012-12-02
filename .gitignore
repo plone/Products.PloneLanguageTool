@@ -1,0 +1,4 @@
+*.py?
+*.sw?
+
+/Products.PloneLanguageTool.egg-info/
