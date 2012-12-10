@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.2.6 (unreleased)
+3.2.6 (2012-12-09)
 ------------------
 
 - Do not try to get content language for resources that are not
