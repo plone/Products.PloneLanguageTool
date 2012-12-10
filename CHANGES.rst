@@ -4,8 +4,8 @@ Changelog
 3.2.6 (unreleased)
 ------------------
 
-- do not try to get content language for resources that are not
-  content (see #11263)
+- Do not try to get content language for resources that are not
+  content. Fixes http://dev.plone.org/plone/ticket/11263
   [keul]
 
 
