@@ -1,7 +1,9 @@
 from zope.interface import alsoProvides
 from Products.CMFCore.interfaces import IDublinCore
+from Products.CMFCore.utils import getToolInterface
 
 from Products.PloneLanguageTool import LanguageTool
+from Products.PloneLanguageTool.interfaces import ILanguageTool
 from Products.PloneLanguageTool.tests import base
 
 
@@ -119,7 +121,11 @@ class TestLanguageTool(base.TestCase):
         self.ltool.REQUEST.path = ['foo.jpg', 'Members',]
         self.failUnless(self.ltool.getContentLanguage()==None)
         self.ltool.REQUEST.path = ['foo', 'portal_javascript',]
-        self.failUnless(self.ltool.getContentLanguage()==None)        
+        self.failUnless(self.ltool.getContentLanguage()==None)
+
+    def testRegisterInterface(self):
+        iface = getToolInterface('portal_languages')
+        self.assertEqual(iface, ILanguageTool)
 
 
 def test_suite():

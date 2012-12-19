@@ -4,7 +4,9 @@ Changelog
 3.2.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Registered ILanguageTool interface to LanguageTool
+  by CMFCore.utils.registerToolInterface
+  [gborelli]
 
 
 3.2.6 (2012-12-09)
@@ -148,7 +150,7 @@ Changelog
   anything except the Plone site object itself.
   [hannosch]
 
-- In content negotiator, check for IContentish before looking up Language, 
+- In content negotiator, check for IContentish before looking up Language,
   otherwise chop off url parts and try again.
   [tesdal]
 
@@ -332,7 +334,7 @@ Changelog
 - Removed obsolete testSkeleton.
   [hannosch]
 
-- Changed the native Name of 'rm' to 'Rumantsch'. 
+- Changed the native Name of 'rm' to 'Rumantsch'.
   [jensens]
 
 1.4 - 2006-09-08
