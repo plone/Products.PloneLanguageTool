@@ -23,6 +23,7 @@ from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import UniqueObject
+from Products.CMFCore.utils import registerToolInterface
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.SiteAccess.VirtualHostMonster import VirtualHostMonster
 from ZODB.POSException import ConflictError
@@ -32,6 +33,7 @@ from ZPublisher.HTTPRequest import HTTPRequest
 from Products.PloneLanguageTool.interfaces import ILanguageTool
 from Products.PloneLanguageTool.interfaces import ITranslatable
 from Products.PloneLanguageTool.interfaces import INegotiateLanguage
+
 
 try:
     from Products.PlacelessTranslationService.Negotiator import registerLangPrefsMethod
@@ -69,7 +71,7 @@ class LanguageTool(UniqueObject, SimpleItem):
 
     # Used by functional tests.
     always_show_selector = 0
-    
+
     # resources that must not use language specific URLs
     exclude_paths = frozenset((
                      'portal_css',
@@ -386,8 +388,8 @@ class LanguageTool(UniqueObject, SimpleItem):
 
             # Now check if we need to exclude from using language specific path
             # See https://dev.plone.org/ticket/11263
-            if (bool([1 for p in self.exclude_paths if p in contentpath]) or 
-                bool([1 for p in self.exclude_exts if contentpath[0].endswith(p)]) 
+            if (bool([1 for p in self.exclude_paths if p in contentpath]) or
+                bool([1 for p in self.exclude_exts if contentpath[0].endswith(p)])
                 ):
                 return None
 
@@ -697,3 +699,5 @@ if _hasPTS:
     registerLangPrefsMethod({'klass':PrefsForPTS, 'priority':100 })
 
 InitializeClass(LanguageTool)
+registerToolInterface('portal_languages', ILanguageTool)
+
