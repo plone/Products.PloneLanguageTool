@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.2.7 (unreleased)
+3.2.7 (2013-01-17)
 ------------------
 
 - Registered ILanguageTool interface to LanguageTool
