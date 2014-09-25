@@ -10,7 +10,7 @@ from zope.deprecation import deprecate
 from zope.interface import implements
 
 from AccessControl import ClassSecurityInfo
-from AccessControl import InitializeClass
+from AccessControl.class_init import InitializeClass
 
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.interfaces import ISiteRoot
