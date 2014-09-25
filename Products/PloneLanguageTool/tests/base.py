@@ -1,35 +1,31 @@
-from Products.CMFTestCase.ctc import CMFTestCase
-from Products.CMFTestCase.ctc import Functional
-from Products.CMFTestCase.ctc import installProduct
-from Products.CMFTestCase.ctc import setupCMFSite
-from Products.CMFTestCase.layer import onsetup
+from plone.app.testing import bbb
+from plone.app import testing
+from plone.testing import z2
 
-# BBB Zope 2.12
-try:
-    from Zope2.App import zcml
-except ImportError:
-    from Products.Five import zcml
+class PloneTestCaseFixture(bbb.PloneTestCaseFixture):
 
-# Setup a CMF site
-installProduct('PloneLanguageTool')
-installProduct('SiteAccess')
+    defaultBases = (bbb.PTC_FIXTURE,)
 
-setupCMFSite(
-    extension_profiles=['Products.PloneLanguageTool:PloneLanguageTool'])
+    def setUpZope(self, app, configurationContext):
+        z2.installProduct(app, 'Products.PloneLanguageTool')
+        import plone.i18n.locales
+        self.loadZCML(package=plone.i18n.locales)
 
+    def setUpPloneSite(self, portal):
+        self.applyProfile(portal, 'Products.PloneLanguageTool:PloneLanguageTool')
 
-def extraZCML():
-    # XXX: Why isn't this loaded as part of site.zcml?
-    import plone.i18n.locales
-    zcml.load_config('configure.zcml', plone.i18n.locales)
+    def tearDownZope(self, app):
+        z2.uninstallProduct(app, 'Products.PloneLanguageTool')
 
-onsetup(extraZCML)()
+PLT_FIXTURE = PloneTestCaseFixture()
+PLT_FUNCTIONAL_TESTING = testing.FunctionalTesting(
+    bases=(PLT_FIXTURE,), name='PloneLanguageToolTestCase:Functional')
 
-
-class TestCase(CMFTestCase):
+class TestCase(bbb.PloneTestCase):
     """Simple test case
     """
+    layer = PLT_FUNCTIONAL_TESTING
 
-class FunctionalTestCase(Functional, TestCase):
+class FunctionalTestCase(TestCase):
     """Simple test case for functional tests
     """

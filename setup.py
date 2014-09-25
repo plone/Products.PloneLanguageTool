@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 version = '3.2.8.dev0'
 
-tests_require = ['Products.CMFTestCase',]
+tests_require = ['plone.app.testing',]
 
 setup(name='Products.PloneLanguageTool',
       version=version,
