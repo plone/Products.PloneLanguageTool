@@ -154,7 +154,7 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         doc.setLanguage('nl')
         self.failUnlessEqual(doc.Language(), 'nl')
         docpath = '/'.join(doc.getPhysicalPath())
-        docpath = docpath[len(folder_path)+1:]
+        docpath = docpath[len(folder_path) + 1:]
 
         response = self.publish(vhmBasePath + docpath, self.basic_auth,
                                 env={'diazo.off': "1"})

@@ -27,7 +27,7 @@ class TestLanguageToolSettings(base.TestCase):
 
     def testSetLanguageSettings(self):
         defaultLanguage = 'de'
-        supportedLanguages = ['en','de','no']
+        supportedLanguages = ['en', 'de', 'no']
         self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages,
                                    setContentN=False,
                                    setCookieN=False, setCookieEverywhere=False,
@@ -39,21 +39,21 @@ class TestLanguageToolSettings(base.TestCase):
                                    setCcTLDN=True, setSubdomainN=True,
                                    setAuthOnlyN=True)
 
-        self.failUnless(self.ltool.getDefaultLanguage()==defaultLanguage)
-        self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
-        self.failUnless(self.ltool.use_content_negotiation==False)
-        self.failUnless(self.ltool.use_cookie_negotiation==False)
-        self.failUnless(self.ltool.set_cookie_everywhere==False)
-        self.failUnless(self.ltool.use_request_negotiation==False)
-        self.failUnless(self.ltool.use_path_negotiation==False)
-        self.failUnless(self.ltool.force_language_urls==False)
-        self.failUnless(self.ltool.allow_content_language_fallback==True)
-        self.failUnless(self.ltool.use_combined_language_codes==True)
-        self.failUnless(self.ltool.startNeutral()==False)
-        self.failUnless(self.ltool.showFlags()==False)
-        self.failUnless(self.ltool.use_cctld_negotiation==True)
-        self.failUnless(self.ltool.use_subdomain_negotiation==True)
-        self.failUnless(self.ltool.authenticated_users_only==True)
+        self.failUnless(self.ltool.getDefaultLanguage() == defaultLanguage)
+        self.failUnless(self.ltool.getSupportedLanguages() == supportedLanguages)
+        self.failUnless(self.ltool.use_content_negotiation == False)
+        self.failUnless(self.ltool.use_cookie_negotiation == False)
+        self.failUnless(self.ltool.set_cookie_everywhere == False)
+        self.failUnless(self.ltool.use_request_negotiation == False)
+        self.failUnless(self.ltool.use_path_negotiation == False)
+        self.failUnless(self.ltool.force_language_urls == False)
+        self.failUnless(self.ltool.allow_content_language_fallback == True)
+        self.failUnless(self.ltool.use_combined_language_codes == True)
+        self.failUnless(self.ltool.startNeutral() == False)
+        self.failUnless(self.ltool.showFlags() == False)
+        self.failUnless(self.ltool.use_cctld_negotiation == True)
+        self.failUnless(self.ltool.use_subdomain_negotiation == True)
+        self.failUnless(self.ltool.authenticated_users_only == True)
 
 
 class TestLanguageTool(base.TestCase):
@@ -64,41 +64,41 @@ class TestLanguageTool(base.TestCase):
 
     def testLanguageSettings(self):
         defaultLanguage = 'de'
-        supportedLanguages = ['en','de','no']
+        supportedLanguages = ['en', 'de', 'no']
         self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages,
                                               setUseCombinedLanguageCodes=False)
-        self.failUnless(self.ltool.getDefaultLanguage()==defaultLanguage)
-        self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
+        self.failUnless(self.ltool.getDefaultLanguage() == defaultLanguage)
+        self.failUnless(self.ltool.getSupportedLanguages() == supportedLanguages)
 
     def testSupportedLanguages(self):
         defaultLanguage = 'de'
-        supportedLanguages = ['en','de','no']
+        supportedLanguages = ['en', 'de', 'no']
         self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages)
-        self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
+        self.failUnless(self.ltool.getSupportedLanguages() == supportedLanguages)
 
         self.ltool.removeSupportedLanguages(supportedLanguages)
-        self.failUnless(self.ltool.getSupportedLanguages()==[])
+        self.failUnless(self.ltool.getSupportedLanguages() == [])
 
         for lang in supportedLanguages:
             self.ltool.addSupportedLanguage(lang)
-        self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
+        self.failUnless(self.ltool.getSupportedLanguages() == supportedLanguages)
 
     def testDefaultLanguage(self):
-        supportedLanguages = ['de','no']
+        supportedLanguages = ['de', 'no']
 
         self.ltool.manage_setLanguageSettings('no', supportedLanguages)
-        self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
-        self.failUnless(self.ltool.getDefaultLanguage()=='no')
+        self.failUnless(self.ltool.getSupportedLanguages() == supportedLanguages)
+        self.failUnless(self.ltool.getDefaultLanguage() == 'no')
 
         # default not in supported languages, should set to first supported
         self.ltool.manage_setLanguageSettings('nl', supportedLanguages)
 
-        self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
-        self.failUnless(self.ltool.getDefaultLanguage()=='de')
+        self.failUnless(self.ltool.getSupportedLanguages() == supportedLanguages)
+        self.failUnless(self.ltool.getDefaultLanguage() == 'de')
 
     def testAvailableLanguage(self):
         defaultLanguage = 'de'
-        supportedLanguages = ['en','de','no']
+        supportedLanguages = ['en', 'de', 'no']
         self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages)
         availableLanguages = self.ltool.getAvailableLanguageInformation()
         for lang in availableLanguages:
@@ -108,20 +108,20 @@ class TestLanguageTool(base.TestCase):
     def testGetContentLanguage(self):
         # tests for issue #11263
         defaultLanguage = 'de'
-        supportedLanguages = ['en','de','no']
+        supportedLanguages = ['en', 'de', 'no']
         self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages)
-        self.ltool.REQUEST.path = ['Members',]
+        self.ltool.REQUEST.path = ['Members', ]
         content = self.portal.Members
         content.setLanguage('de')
         alsoProvides(content, IDublinCore)
         self.ltool.getContentLanguage()
-        self.failUnless(self.ltool.getContentLanguage()=='de')
-        self.ltool.REQUEST.path = ['view', 'foo.jpg', 'Members',]
-        self.failUnless(self.ltool.getContentLanguage()=='de')
-        self.ltool.REQUEST.path = ['foo.jpg', 'Members',]
-        self.failUnless(self.ltool.getContentLanguage()==None)
-        self.ltool.REQUEST.path = ['foo', 'portal_javascript',]
-        self.failUnless(self.ltool.getContentLanguage()==None)
+        self.failUnless(self.ltool.getContentLanguage() == 'de')
+        self.ltool.REQUEST.path = ['view', 'foo.jpg', 'Members', ]
+        self.failUnless(self.ltool.getContentLanguage() == 'de')
+        self.ltool.REQUEST.path = ['foo.jpg', 'Members', ]
+        self.failUnless(self.ltool.getContentLanguage() == None)
+        self.ltool.REQUEST.path = ['foo', 'portal_javascript', ]
+        self.failUnless(self.ltool.getContentLanguage() == None)
 
     def testRegisterInterface(self):
         iface = getToolInterface('portal_languages')

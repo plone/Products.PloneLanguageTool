@@ -6,9 +6,11 @@ except ImportError:
     class ITranslatable(Interface):
         pass
 
+
 class ILanguageTool(Interface):
     """Marker interface for the portal_languages tool.
     """
+
 
 class INegotiateLanguage(Interface):
     """Result of language negotiation
