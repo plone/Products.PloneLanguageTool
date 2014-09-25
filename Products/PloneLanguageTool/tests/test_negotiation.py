@@ -110,7 +110,6 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         adding = self.app.manage_addProduct['SiteAccess']
         adding.manage_addVirtualHostMonster('VHM')
         vhmBasePath = "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/" % self.portal.getId()
-        vhmBaseUrl = 'http://example.org/'
 
         self.folder.invokeFactory('Folder', 'sub')
         sub = self.folder['sub']
@@ -127,7 +126,6 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         adding = self.app.manage_addProduct['SiteAccess']
         adding.manage_addVirtualHostMonster('VHM')
         vhmBasePath = "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/_vh_one/_vh_two/" % self.portal.getId()
-        vhmBaseUrl = 'http://example.org/'
 
         self.folder.invokeFactory('Folder', 'sub')
         sub = self.folder['sub']
@@ -147,7 +145,6 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
 
         folder_path = '/'.join(self.folder.getPhysicalPath())
         vhmBasePath = "/VirtualHostBase/http/example.org:80%s/VirtualHostRoot/" % folder_path
-        vhmBaseUrl = 'http://example.org/'
 
         self.folder.invokeFactory('Folder', 'sub')
         sub = self.folder['sub']
