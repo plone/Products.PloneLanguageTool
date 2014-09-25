@@ -6,8 +6,9 @@ lang_globals = globals()
 
 PKG_NAME = 'PloneLanguageTool'
 
+
 def initialize(context):
     ToolInit('Plone Language Tool',
-             tools=(LanguageTool,),
+             tools=(LanguageTool, ),
              icon='tool.gif',
     ).initialize(context)

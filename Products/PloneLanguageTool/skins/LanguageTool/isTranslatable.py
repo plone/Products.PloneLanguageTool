@@ -7,7 +7,7 @@
 ##parameters=
 ##title=
 ##
-try :
+try:
     return context.portal_url.getPortalObject().portal_languages.isTranslatable(context)
 except:
     return 0

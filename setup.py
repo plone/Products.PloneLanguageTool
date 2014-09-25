@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 version = '3.2.8.dev0'
 
-tests_require = ['Products.CMFTestCase',]
+tests_require = ['plone.app.testing',]
 
 setup(name='Products.PloneLanguageTool',
       version=version,
@@ -14,9 +14,11 @@ setup(name='Products.PloneLanguageTool',
                        open("CHANGES.rst").read(),
       classifiers=[
         "Framework :: Plone",
+        "Framework :: Plone :: 5.0",
         "Framework :: Zope2",
         "License :: OSI Approved :: GNU General Public License (GPL)",
         "Programming Language :: Python",
+        "Programming Language :: Python :: 2.7",
       ],
       keywords='Zope CMF Plone i18n l10n flags',
       author='Hanno Schlichting',
@@ -29,6 +31,13 @@ setup(name='Products.PloneLanguageTool',
       zip_safe=False,
       install_requires=[
         'setuptools',
+        'AccessControl',
+        'plone.i18n.locales',
+        'Products.CMFCore',
+        'Zope2',
+        'ZODB3',
+        'zope.component',
+        'zope.interface',
       ],
       tests_require=tests_require,
       extras_require=dict(test=tests_require),

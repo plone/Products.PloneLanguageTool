@@ -1,14 +1,14 @@
 from Products.PloneLanguageTool import LanguageTool
 from Products.PloneLanguageTool.tests import base
 
-from Products.CMFTestCase.ctc import default_password
-from Products.CMFTestCase.ctc import default_user
+from plone.app.testing import TEST_USER_PASSWORD
+from plone.app.testing import TEST_USER_NAME
 
 
 class LanguageNegotiationTestCase(base.FunctionalTestCase):
 
     def afterSetUp(self):
-        self.basic_auth = '%s:%s' % (default_user, default_password)
+        self.basic_auth = '%s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD)
         self.portal_path = self.portal.absolute_url(1)
         self.tool = self.portal[LanguageTool.id]
         self.tool.always_show_selector = 1
@@ -110,7 +110,6 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         adding = self.app.manage_addProduct['SiteAccess']
         adding.manage_addVirtualHostMonster('VHM')
         vhmBasePath = "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/" % self.portal.getId()
-        vhmBaseUrl = 'http://example.org/'
 
         self.folder.invokeFactory('Folder', 'sub')
         sub = self.folder['sub']
@@ -127,7 +126,6 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         adding = self.app.manage_addProduct['SiteAccess']
         adding.manage_addVirtualHostMonster('VHM')
         vhmBasePath = "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/_vh_one/_vh_two/" % self.portal.getId()
-        vhmBaseUrl = 'http://example.org/'
 
         self.folder.invokeFactory('Folder', 'sub')
         sub = self.folder['sub']
@@ -137,9 +135,9 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         doc.setLanguage('nl')
         self.failUnlessEqual(doc.Language(), 'nl')
         docpath = '/'.join(self.portal.portal_url.getRelativeContentPath(doc))
-        response = self.publish(vhmBasePath + docpath, self.basic_auth)
+        response = self.publish(vhmBasePath + docpath, self.basic_auth,
+                                env={'diazo.off': "1"})
         self.checkLanguage(response, "nl")
-
 
     def testContentObjectVHMFolder(self):
         adding = self.app.manage_addProduct['SiteAccess']
@@ -147,7 +145,6 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
 
         folder_path = '/'.join(self.folder.getPhysicalPath())
         vhmBasePath = "/VirtualHostBase/http/example.org:80%s/VirtualHostRoot/" % folder_path
-        vhmBaseUrl = 'http://example.org/'
 
         self.folder.invokeFactory('Folder', 'sub')
         sub = self.folder['sub']
@@ -157,8 +154,10 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         doc.setLanguage('nl')
         self.failUnlessEqual(doc.Language(), 'nl')
         docpath = '/'.join(doc.getPhysicalPath())
-        docpath = docpath[len(folder_path)+1:]
-        response = self.publish(vhmBasePath + docpath, self.basic_auth)
+        docpath = docpath[len(folder_path) + 1:]
+
+        response = self.publish(vhmBasePath + docpath, self.basic_auth,
+                                env={'diazo.off': "1"})
         self.checkLanguage(response, "nl")
 
 
