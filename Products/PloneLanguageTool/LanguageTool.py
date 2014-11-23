@@ -1,6 +1,7 @@
 from plone.i18n.locales.interfaces import ICountryAvailability
 from plone.i18n.locales.interfaces import IContentLanguageAvailability
 from plone.i18n.locales.interfaces import ICcTLDInformation
+from plone.registry.interfaces import IRegistry
 
 from zope.component.hooks import getSite
 from zope.component import getMultiAdapter
@@ -13,13 +14,13 @@ from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 
 from OFS.SimpleItem import SimpleItem
-from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.interfaces import IDublinCore
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import UniqueObject
 from Products.CMFCore.utils import registerToolInterface
+from Products.CMFPlone.interfaces import ILanguageSchema
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.SiteAccess.VirtualHostMonster import VirtualHostMonster
 from ZODB.POSException import ConflictError
@@ -264,31 +265,27 @@ class LanguageTool(UniqueObject, SimpleItem):
 
     def getDefaultLanguage(self):
         """Returns the default language."""
-        portal_properties = getToolByName(self, "portal_properties", None)
-        if portal_properties is None:
+        registry = queryUtility(IRegistry)
+        if not registry:
             return 'en'
-        site_properties = getattr(portal_properties, 'site_properties', None)
-        if site_properties is not None:
-            if site_properties.hasProperty('default_language'):
-                return site_properties.getProperty('default_language')
-        portal = getUtility(ISiteRoot)
-        if portal.hasProperty('default_language'):
-            return portal.getProperty('default_language')
-        return getattr(self, 'default_lang', 'en')
+        language_settings = registry.forInterface(
+            ILanguageSchema,
+            prefix='plone'
+        )
+        return language_settings.default_language
 
     security.declareProtected(ManagePortal, 'setDefaultLanguage')
 
     def setDefaultLanguage(self, langCode):
         """Sets the default language."""
-        portal_properties = getToolByName(self, "portal_properties")
-        site_properties = getattr(portal_properties, 'site_properties', None)
-        if site_properties is not None:
-            if site_properties.hasProperty('default_language'):
-                return site_properties._updateProperty('default_language', langCode)
-        portal = getUtility(ISiteRoot)
-        if portal.hasProperty('default_language'):
-            return portal._updateProperty('default_language', langCode)
-        self.default_lang = langCode
+        registry = queryUtility(IRegistry)
+        if not registry:
+            return
+        language_settings = registry.forInterface(
+            ILanguageSchema,
+            prefix='plone'
+        )
+        language_settings.default_language = langCode
 
     security.declareProtected(View, 'getNameForLanguageCode')
 
