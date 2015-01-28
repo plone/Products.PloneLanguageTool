@@ -126,3 +126,12 @@ class TestLanguageTool(base.TestCase):
     def testRegisterInterface(self):
         iface = getToolInterface('portal_languages')
         self.assertEqual(iface, ILanguageTool)
+
+
+def test_suite():
+    from unittest import TestSuite, makeSuite
+    suite = TestSuite()
+    suite.addTest(makeSuite(TestLanguageToolExists))
+    suite.addTest(makeSuite(TestLanguageToolSettings))
+    suite.addTest(makeSuite(TestLanguageTool))
+    return suite

@@ -4,9 +4,6 @@ from Products.PloneLanguageTool.tests import base
 from plone.app.testing import TEST_USER_PASSWORD
 from plone.app.testing import TEST_USER_NAME
 
-from plone.registry.interfaces import IRegistry
-from zope.component import getUtility
-
 
 class LanguageNegotiationTestCase(base.FunctionalTestCase):
 
@@ -98,10 +95,6 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         self.tool.supported_langs = ['en', 'nl', 'fr']
         self.tool.use_content_negotiation = 1
         self.tool.display_flags = 0
-        registry = getUtility(IRegistry)
-        # disable cooking of assets because this gives unwanted
-        # sideeffects in the request handling
-        registry['plone.resources.development'] = True
 
     def testContentObject(self):
         self.folder.invokeFactory('Document', 'doc')
@@ -142,7 +135,8 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         doc.setLanguage('nl')
         self.failUnlessEqual(doc.Language(), 'nl')
         docpath = '/'.join(self.portal.portal_url.getRelativeContentPath(doc))
-        response = self.publish(vhmBasePath + docpath, self.basic_auth)
+        response = self.publish(vhmBasePath + docpath, self.basic_auth,
+                                env={'diazo.off': "1"})
         self.checkLanguage(response, "nl")
 
     def testContentObjectVHMFolder(self):
@@ -255,3 +249,15 @@ class TestSubdomainLanguageNegotiation(LanguageNegotiationTestCase):
         response = self.publish(self.portal_path, self.basic_auth,
                                 env={'HTTP_HOST': 'be.plone.org'})
         self.checkLanguage(response, "fr")
+
+
+def test_suite():
+    from unittest import TestSuite, makeSuite
+    suite = TestSuite()
+    suite.addTest(makeSuite(TestDefaultLanguageNegotiation))
+    suite.addTest(makeSuite(TestNoCombinedLanguageNegotiation))
+    suite.addTest(makeSuite(TestCombinedLanguageNegotiation))
+    suite.addTest(makeSuite(TestContentLanguageNegotiation))
+    suite.addTest(makeSuite(TestCcTLDLanguageNegotiation))
+    suite.addTest(makeSuite(TestSubdomainLanguageNegotiation))
+    return suite
