@@ -32,7 +32,7 @@ setup(name='Products.PloneLanguageTool',
       install_requires=[
         'setuptools',
         'AccessControl',
-        'plone.i18n',
+        'plone.i18n.locales',
         'Products.CMFCore',
         'Zope2',
         'ZODB3',
