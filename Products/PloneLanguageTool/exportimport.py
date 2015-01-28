@@ -6,7 +6,6 @@ from Products.CMFCore.utils import getToolByName
 
 from Products.PloneLanguageTool.interfaces import ILanguageTool
 
-
 class LanguageToolXMLAdapter(XMLAdapterBase):
 
     __used_for__ = ILanguageTool
@@ -15,19 +14,19 @@ class LanguageToolXMLAdapter(XMLAdapterBase):
 
     name = 'portal_languages'
 
-    boolean_fields = ["use_path_negotiation", "use_cookie_negotiation",
+    boolean_fields =  [ "use_path_negotiation", "use_cookie_negotiation",
                         "set_cookie_everywhere",
                         "use_request_negotiation", "use_cctld_negotiation",
                         "use_content_negotiation",
                         "use_combined_language_codes", "display_flags",
                         "start_neutral", "use_subdomain_negotiation",
-                        "authenticated_users_only"]
-    list_fields = ["supported_langs"]
+                        "authenticated_users_only" ]
+    list_fields = [ "supported_langs" ]
 
     def _exportNode(self):
         """Export the object as a DOM node"""
 
-        node = self._extractProperties()
+        node=self._extractProperties()
         self._logger.info('Plone language tool exported.')
 
         return node
@@ -43,7 +42,7 @@ class LanguageToolXMLAdapter(XMLAdapterBase):
         self._logger.info('Plone language tool imported.')
 
     def _purgeProperties(self):
-        self.context.supported_langs = ['en']
+        self.context.supported_langs = [ 'en' ]
         self.context.use_content_negotiation = 0
         self.context.use_path_negotiation = 0
         self.context.use_cookie_negotiation = 1
@@ -68,26 +67,26 @@ class LanguageToolXMLAdapter(XMLAdapterBase):
                 else:
                     value = getattr(self.context, child.nodeName)
                 for element in child.childNodes:
-                    if element.nodeName == 'element':
+                    if element.nodeName=='element':
                         value.append(str(element.getAttribute('value')))
                 setattr(self.context, child.nodeName, value)
-            elif child.nodeName == 'default_language':
+            elif child.nodeName=='default_language':
                 self.context.setDefaultLanguage(str(child.getAttribute('value')))
 
     def _extractProperties(self):
-        node = self._doc.createElement('object')
-        child = self._doc.createElement('default_language')
+        node=self._doc.createElement('object')
+        child=self._doc.createElement('default_language')
         child.setAttribute('value', self.context.getDefaultLanguage())
         node.appendChild(child)
 
         for field in self.boolean_fields:
-            child = self._doc.createElement(field)
+            child=self._doc.createElement(field)
             child.setAttribute('value', str(bool(getattr(self.context, field))))
             node.appendChild(child)
 
         for field in self.list_fields:
-            child = self._doc.createElement(field)
-            value = getattr(self.context, field)
+            child=self._doc.createElement(field)
+            value=getattr(self.context, field)
             for item in value:
                 element = self._doc.createElement('element')
                 element.setAttribute('value', item)
@@ -97,6 +96,7 @@ class LanguageToolXMLAdapter(XMLAdapterBase):
         return node
 
 
+
 def importLanguageTool(context):
     """Import Plone language tool settings from an XML file.
     """
@@ -104,7 +104,6 @@ def importLanguageTool(context):
     tool = getToolByName(site, 'portal_languages')
 
     importObjects(tool, '', context)
-
 
 def exportLanguageTool(context):
     """Export Plone language tool settings as an XML file.
@@ -117,3 +116,5 @@ def exportLanguageTool(context):
         return
 
     exportObjects(tool, '', context)
+
+
