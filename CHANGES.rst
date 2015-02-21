@@ -1,14 +1,10 @@
 Changelog
 =========
 
-3.3 (unreleased)
-----------------
+3.2.8 (unreleased)
+------------------
 
-- Ported tests to plone.app.testing
-  [tomgross]
-
-- Depend on Zope 2.13
-  [tomgross]
+- Nothing changed yet.
 
 
 3.2.7 (2013-01-17)

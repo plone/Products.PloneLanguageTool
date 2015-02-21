@@ -10,9 +10,13 @@ from zope.component import queryUtility
 from zope.deprecation import deprecate
 from zope.interface import implements
 
-from AccessControl import ClassSecurityInfo
-from AccessControl.class_init import InitializeClass
+# BBB Zope before 2.12
+try:
+    from App.class_init import InitializeClass
+except ImportError:
+    from Globals import InitializeClass
 
+from AccessControl import ClassSecurityInfo
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.interfaces import IDublinCore
 from Products.CMFCore.permissions import ManagePortal
@@ -38,11 +42,10 @@ try:
 except ImportError:
     _hasPTS = 0
 
-
 class LanguageTool(UniqueObject, SimpleItem):
     """Language Administration Tool For Plone."""
 
-    id = 'portal_languages'
+    id  = 'portal_languages'
     title = 'Manages available languages'
     meta_type = 'Plone Language Tool'
 
@@ -88,9 +91,9 @@ class LanguageTool(UniqueObject, SimpleItem):
          'jpeg',
      ))
 
-    manage_options = (
-        ({'label': 'LanguageConfig',
-           'action': 'manage_configForm',
+    manage_options=(
+        ({ 'label'  : 'LanguageConfig',
+           'action' : 'manage_configForm',
            },
          ) + SimpleItem.manage_options
         )
@@ -103,8 +106,8 @@ class LanguageTool(UniqueObject, SimpleItem):
         self.supported_langs = ['en']
         self.use_content_negotiation = 0
         self.use_path_negotiation = 0
-        self.use_cookie_negotiation = 1
-        self.set_cookie_everywhere = 0
+        self.use_cookie_negotiation  = 1
+        self.set_cookie_everywhere  = 0
         self.authenticated_users_only = 0
         self.use_request_negotiation = 0
         self.use_cctld_negotiation = 0
@@ -131,7 +134,6 @@ class LanguageTool(UniqueObject, SimpleItem):
         self.setLanguageBindings()
 
     security.declareProtected(ManagePortal, 'manage_setLanguageSettings')
-
     def manage_setLanguageSettings(self, defaultLanguage, supportedLanguages,
                                    setContentN=None,
                                    setCookieN=None, setCookieEverywhere=None,
@@ -169,7 +171,6 @@ class LanguageTool(UniqueObject, SimpleItem):
             REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
 
     security.declarePublic('startNeutral')
-
     def startNeutral(self):
         """Checks if the content start as language neutral or using the
         preferred language.
@@ -177,30 +178,26 @@ class LanguageTool(UniqueObject, SimpleItem):
         return self.start_neutral
 
     security.declarePublic('showFlags')
-
     def showFlags(self):
         """Shows the flags in language listings or not."""
         return self.display_flags
 
     security.declareProtected(View, 'getSupportedLanguages')
-
     def getSupportedLanguages(self):
         """Returns a list of supported language codes."""
         return self.supported_langs
 
     security.declareProtected(View, 'listSupportedLanguages')
-
     def listSupportedLanguages(self):
         """Returns a list of supported language names."""
         r = []
         available = self.getAvailableLanguages()
         for i in self.supported_langs:
             if available.get(i):
-                r.append((i, available[i][u'name']))
+                r.append((i,available[i][u'name']))
         return r
 
     security.declarePublic('getAvailableLanguages')
-
     def getAvailableLanguages(self):
         """Returns the dictionary of available languages.
         """
@@ -212,13 +209,11 @@ class LanguageTool(UniqueObject, SimpleItem):
         return languages
 
     security.declarePublic('getCcTLDInformation')
-
     def getCcTLDInformation(self):
         util = queryUtility(ICcTLDInformation)
         return util.getTLDs()
 
     security.declarePublic('listAvailableLanguages')
-
     def listAvailableLanguages(self):
         """Returns sorted list of available languages (code, name)."""
         util = queryUtility(IContentLanguageAvailability)
@@ -230,7 +225,6 @@ class LanguageTool(UniqueObject, SimpleItem):
         return languages
 
     security.declarePublic('listAvailableLanguageInformation')
-
     def listAvailableLanguageInformation(self):
         """Returns list of available languages."""
         langs = self.getAvailableLanguageInformation()
@@ -244,7 +238,6 @@ class LanguageTool(UniqueObject, SimpleItem):
         return new_langs
 
     security.declarePublic('getAvailableLanguageInformation')
-
     def getAvailableLanguageInformation(self):
         """Returns the dictionary of available languages."""
         util = queryUtility(IContentLanguageAvailability)
@@ -262,7 +255,6 @@ class LanguageTool(UniqueObject, SimpleItem):
         return languages
 
     security.declareProtected(View, 'getDefaultLanguage')
-
     def getDefaultLanguage(self):
         """Returns the default language."""
         registry = queryUtility(IRegistry)
@@ -275,7 +267,6 @@ class LanguageTool(UniqueObject, SimpleItem):
         return language_settings.default_language
 
     security.declareProtected(ManagePortal, 'setDefaultLanguage')
-
     def setDefaultLanguage(self, langCode):
         """Sets the default language."""
         registry = queryUtility(IRegistry)
@@ -288,7 +279,6 @@ class LanguageTool(UniqueObject, SimpleItem):
         language_settings.default_language = langCode
 
     security.declareProtected(View, 'getNameForLanguageCode')
-
     def getNameForLanguageCode(self, langCode):
         """Returns the name for a language code."""
         info = self.getAvailableLanguageInformation().get(langCode, None)
@@ -297,7 +287,6 @@ class LanguageTool(UniqueObject, SimpleItem):
         return None
 
     security.declareProtected(View, 'getFlagForLanguageCode')
-
     def getFlagForLanguageCode(self, langCode):
         """Returns the name of the flag for a language code."""
         info = self.getAvailableLanguageInformation().get(langCode, None)
@@ -306,7 +295,6 @@ class LanguageTool(UniqueObject, SimpleItem):
         return None
 
     security.declareProtected(ManagePortal, 'addSupportedLanguage')
-
     def addSupportedLanguage(self, langCode):
         """Registers a language code as supported."""
         alist = self.supported_langs[:]
@@ -315,7 +303,6 @@ class LanguageTool(UniqueObject, SimpleItem):
             self.supported_langs = alist
 
     security.declareProtected(ManagePortal, 'removeSupportedLanguages')
-
     def removeSupportedLanguages(self, langCodes):
         """Unregisters language codes from supported."""
         alist = self.supported_langs[:]
@@ -324,7 +311,6 @@ class LanguageTool(UniqueObject, SimpleItem):
         self.supported_langs = alist
 
     security.declareProtected(View, 'setLanguageCookie')
-
     def setLanguageCookie(self, lang=None, REQUEST=None, noredir=None):
         """Sets a cookie for overriding language negotiation."""
         res = None
@@ -338,7 +324,6 @@ class LanguageTool(UniqueObject, SimpleItem):
         return res
 
     security.declareProtected(View, 'getLanguageCookie')
-
     def getLanguageCookie(self):
         """Gets the preferred cookie language."""
         if not hasattr(self, 'REQUEST'):
@@ -349,7 +334,6 @@ class LanguageTool(UniqueObject, SimpleItem):
         return None
 
     security.declareProtected(View, 'getPreferredLanguage')
-
     def getPreferredLanguage(self):
         """Gets the preferred site language."""
         l = self.getLanguageBindings()
@@ -375,7 +359,6 @@ class LanguageTool(UniqueObject, SimpleItem):
             BeforeTraverse.registerBeforeTraverse(container, nc, handle)
 
     security.declareProtected(View, 'getPathLanguage')
-
     def getPathLanguage(self):
         """Checks if a language is part of the current path."""
         if not hasattr(self, 'REQUEST'):
@@ -393,12 +376,11 @@ class LanguageTool(UniqueObject, SimpleItem):
         return None
 
     security.declarePublic('getContentLanguage')
-
     def getContentLanguage(self):
         """Checks the language of the current content if not folderish."""
         if not hasattr(self, 'REQUEST'):
             return []
-        try:  # This will actually work nicely with browserdefault as we get attribute error...
+        try: # This will actually work nicely with browserdefault as we get attribute error...
             contentpath = self.REQUEST.path[:]
 
             # Now check if we need to exclude from using language specific path
@@ -439,35 +421,32 @@ class LanguageTool(UniqueObject, SimpleItem):
         return None
 
     security.declareProtected(View, 'getCcTLDLanguages')
-
     def getCcTLDLanguages(self):
         if not hasattr(self, 'REQUEST'):
             return None
         request = self.REQUEST
         if not "HTTP_HOST" in request:
             return None
-        host = request["HTTP_HOST"].split(":")[0].lower()
-        tld = host.split(".")[-1]
+        host=request["HTTP_HOST"].split(":")[0].lower()
+        tld=host.split(".")[-1]
         wanted = self.getCcTLDInformation().get(tld, [])
         allowed = self.getSupportedLanguages()
         return [lang for lang in wanted if lang in allowed]
 
     security.declareProtected(View, 'getSubdomainLanguages')
-
     def getSubdomainLanguages(self):
         if not hasattr(self, 'REQUEST'):
             return None
         request = self.REQUEST
         if not "HTTP_HOST" in request:
             return None
-        host = request["HTTP_HOST"].split(":")[0].lower()
-        tld = host.split(".")[0]
+        host=request["HTTP_HOST"].split(":")[0].lower()
+        tld=host.split(".")[0]
         wanted = self.getCcTLDInformation().get(tld, [])
         allowed = self.getSupportedLanguages()
         return [lang for lang in wanted if lang in allowed]
 
     security.declareProtected(View, 'getRequestLanguages')
-
     def getRequestLanguages(self):
         """Parses the request and return language list."""
 
@@ -503,7 +482,7 @@ class LanguageTool(UniqueObject, SimpleItem):
                         pass
 
                 if quality == []:
-                    quality = float(length - i)
+                    quality = float(length-i)
 
                 language = l[0]
                 if (self.use_combined_language_codes and
@@ -529,7 +508,6 @@ class LanguageTool(UniqueObject, SimpleItem):
         return langs
 
     security.declareProtected(View, 'setLanguageBindings')
-
     def setLanguageBindings(self):
         """Setups the current language stuff."""
         if not hasattr(self, 'REQUEST'):
@@ -550,7 +528,6 @@ class LanguageTool(UniqueObject, SimpleItem):
         return lang
 
     security.declareProtected(View, 'getLanguageBindings')
-
     def getLanguageBindings(self):
         """Returns the bound languages.
 
@@ -567,7 +544,6 @@ class LanguageTool(UniqueObject, SimpleItem):
         return binding.getLanguageBindings()
 
     security.declarePublic('isTranslatable')
-
     @deprecate("The isTranslatable method of the language tool is deprecated "
                "and will be removed in Plone 4. Check for the ITranslatable "
                "interface instead.")
@@ -581,14 +557,12 @@ class LanguageTool(UniqueObject, SimpleItem):
         return ITranslatable.isProvidedBy(obj)
 
     security.declarePublic('getAvailableCountries')
-
     def getAvailableCountries(self):
         """Returns the dictionary of available countries."""
         util = queryUtility(ICountryAvailability)
         return util.getCountries()
 
     security.declarePublic('listAvailableCountries')
-
     def listAvailableCountries(self):
         """Returns the sorted list of available countries (code, name)."""
         util = queryUtility(ICountryAvailability)
@@ -597,20 +571,17 @@ class LanguageTool(UniqueObject, SimpleItem):
         return countries
 
     security.declareProtected(View, 'getNameForCountryCode')
-
     def getNameForCountryCode(self, countryCode):
         """Returns the name for a country code."""
         return self.getAvailableCountries().get(countryCode, countryCode)
 
     security.declarePrivate('isAnonymousUser')
-
     def isAnonymousUser(self):
         from AccessControl import getSecurityManager
         user = getSecurityManager().getUser()
         return not user.has_role('Authenticated')
 
     security.declarePublic('showSelector')
-
     def showSelector(self):
         """Returns True if the selector viewlet should be shown."""
         if self.always_show_selector:
@@ -634,7 +605,6 @@ class LanguageBinding:
         self.tool = tool
 
     security.declarePublic('getLanguageBindings')
-
     def getLanguageBindings(self):
         """Returns the bound languages.
 
@@ -659,7 +629,7 @@ class NegotiateLanguage(object):
         setCookieEverywhere = tool.set_cookie_everywhere
         authOnly = tool.authenticated_users_only
         useRequest = tool.use_request_negotiation
-        useDefault = 1  # This should never be disabled
+        useDefault = 1 # This should never be disabled
         langsCookie = None
 
         if usePath:
@@ -702,12 +672,11 @@ class NegotiateLanguage(object):
 
         self.default_language = langs[-1]
         self.language = langs[0]
-        self.language_list = langs[1:-1]
+        self.language_list= langs[1:-1]
 
 
 class PrefsForPTS:
     """A preference to hook into PTS."""
-
     def __init__(self, context):
         self._env = context
         self.languages = []
@@ -724,7 +693,8 @@ class PrefsForPTS:
 
 
 if _hasPTS:
-    registerLangPrefsMethod({'klass': PrefsForPTS, 'priority': 100})
+    registerLangPrefsMethod({'klass':PrefsForPTS, 'priority':100 })
 
 InitializeClass(LanguageTool)
 registerToolInterface('portal_languages', ILanguageTool)
+
