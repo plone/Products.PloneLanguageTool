@@ -1,12 +1,28 @@
-from plone.i18n.locales.interfaces import ICountryAvailability
-from plone.i18n.locales.interfaces import IContentLanguageAvailability
+from AccessControl import ClassSecurityInfo
+from OFS.SimpleItem import SimpleItem
+from Products.CMFCore.interfaces import IDublinCore
+from Products.CMFCore.permissions import ManagePortal
+from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import UniqueObject
+from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.utils import registerToolInterface
+from Products.CMFPlone.interfaces import ILanguageSchema
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PloneLanguageTool.interfaces import ILanguageTool
+from Products.PloneLanguageTool.interfaces import INegotiateLanguage
+from Products.PloneLanguageTool.interfaces import ITranslatable
+from Products.SiteAccess.VirtualHostMonster import VirtualHostMonster
+from ZODB.POSException import ConflictError
+from ZPublisher import BeforeTraverse
+from ZPublisher.HTTPRequest import HTTPRequest
 from plone.i18n.locales.interfaces import ICcTLDInformation
+from plone.i18n.locales.interfaces import IContentLanguageAvailability
+from plone.i18n.locales.interfaces import ICountryAvailability
 from plone.registry.interfaces import IRegistry
-
-from zope.component.hooks import getSite
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component import queryUtility
+from zope.component.hooks import getSite
 from zope.deprecation import deprecate
 from zope.interface import implements
 
@@ -15,25 +31,6 @@ try:
     from App.class_init import InitializeClass
 except ImportError:
     from Globals import InitializeClass
-
-from AccessControl import ClassSecurityInfo
-from OFS.SimpleItem import SimpleItem
-from Products.CMFCore.interfaces import IDublinCore
-from Products.CMFCore.permissions import ManagePortal
-from Products.CMFCore.permissions import View
-from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.utils import UniqueObject
-from Products.CMFCore.utils import registerToolInterface
-from Products.CMFPlone.interfaces import ILanguageSchema
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.SiteAccess.VirtualHostMonster import VirtualHostMonster
-from ZODB.POSException import ConflictError
-from ZPublisher import BeforeTraverse
-from ZPublisher.HTTPRequest import HTTPRequest
-
-from Products.PloneLanguageTool.interfaces import ILanguageTool
-from Products.PloneLanguageTool.interfaces import ITranslatable
-from Products.PloneLanguageTool.interfaces import INegotiateLanguage
 
 
 try:
@@ -52,23 +49,6 @@ class LanguageTool(UniqueObject, SimpleItem):
     implements(ILanguageTool)
 
     security = ClassSecurityInfo()
-
-    # These apply to existing instances when code is upgraded
-    # Mutable class default explains careful copying of list below...
-    supported_langs = ['en']
-    use_path_negotiation = 0
-    use_content_negotiation = 0
-    use_cookie_negotiation = 1
-    set_cookie_everywhere = 1
-    authenticated_users_only = 0
-    use_request_negotiation = 1
-    use_cctld_negotiation = 0
-    use_subdomain_negotiation = 0
-    use_combined_language_codes = 0
-    force_language_urls = 1
-    allow_content_language_fallback = 0
-    display_flags = 0
-    start_neutral = 0
 
     # Used by functional tests.
     always_show_selector = 0
@@ -103,11 +83,12 @@ class LanguageTool(UniqueObject, SimpleItem):
     def __init__(self):
         # These apply to new instances
         self.id = 'portal_languages'
+        # these can be removed, after finished refactoring
         self.supported_langs = ['en']
         self.use_content_negotiation = 0
         self.use_path_negotiation = 0
-        self.use_cookie_negotiation  = 1
-        self.set_cookie_everywhere  = 0
+        self.use_cookie_negotiation = 1
+        self.set_cookie_everywhere = 0
         self.authenticated_users_only = 0
         self.use_request_negotiation = 0
         self.use_cctld_negotiation = 0
@@ -134,65 +115,62 @@ class LanguageTool(UniqueObject, SimpleItem):
         self.setLanguageBindings()
 
     security.declareProtected(ManagePortal, 'manage_setLanguageSettings')
+
+    @property
+    def settings(self):
+        registry = getUtility(IRegistry)
+        return registry.forInterface(ILanguageSchema, prefix="plone")
+
     def manage_setLanguageSettings(self, defaultLanguage, supportedLanguages,
                                    setContentN=None,
                                    setCookieN=None, setCookieEverywhere=None,
                                    setRequestN=None,
-                                   setPathN=None, setForcelanguageUrls=None,
-                                   setAllowContentLanguageFallback=None,
+                                   setPathN=None,
                                    setUseCombinedLanguageCodes=None,
-                                   displayFlags=None, startNeutral=None,
+                                   displayFlags=None,
                                    setCcTLDN=None, setSubdomainN=None,
-                                   setAuthOnlyN=None, REQUEST=None):
+                                   setAuthOnlyN=None, startNeutral=None,
+                                   REQUEST=None):
         """Stores the tool settings."""
         if supportedLanguages and type(supportedLanguages) == type([]):
-            self.supported_langs = supportedLanguages
+            self.settings.available_languages = supportedLanguages
 
-        if defaultLanguage in self.supported_langs:
+        if defaultLanguage in self.settings.available_languages:
             self.setDefaultLanguage(defaultLanguage)
         else:
-            self.setDefaultLanguage(self.supported_langs[0])
+            self.setDefaultLanguage(self.settings.available_languages[0])
 
-        self.use_content_negotiation = bool(setContentN)
-        self.use_cookie_negotiation = bool(setCookieN)
-        self.set_cookie_everywhere = bool(setCookieEverywhere)
-        self.authenticated_users_only = bool(setAuthOnlyN)
-        self.use_request_negotiation = bool(setRequestN)
-        self.use_path_negotiation = bool(setPathN)
-        self.use_cctld_negotiation = bool(setCcTLDN)
-        self.use_subdomain_negotiation = bool(setSubdomainN)
-        self.force_language_urls = bool(setForcelanguageUrls)
-        self.allow_content_language_fallback = bool(setAllowContentLanguageFallback)
-        self.use_combined_language_codes = bool(setUseCombinedLanguageCodes)
-        self.display_flags = bool(displayFlags)
-        self.start_neutral = bool(startNeutral)
+        self.settings.use_content_negotiation = bool(setContentN)
+        self.settings.use_cookie_negotiation = bool(setCookieN)
+        self.settings.set_cookie_always = bool(setCookieEverywhere)
+        self.settings.authenticated_users_only = bool(setAuthOnlyN)
+        self.settings.use_request_negotiation = bool(setRequestN)
+        self.settings.use_path_negotiation = bool(setPathN)
+        self.settings.use_cctld_negotiation = bool(setCcTLDN)
+        self.settings.use_subdomain_negotiation = bool(setSubdomainN)
+        self.settings.use_combined_language_codes = bool(
+            setUseCombinedLanguageCodes)
+        self.settings.display_flags = bool(displayFlags)
 
         if REQUEST:
             REQUEST.RESPONSE.redirect(REQUEST['HTTP_REFERER'])
 
-    security.declarePublic('startNeutral')
-    def startNeutral(self):
-        """Checks if the content start as language neutral or using the
-        preferred language.
-        """
-        return self.start_neutral
-
     security.declarePublic('showFlags')
     def showFlags(self):
         """Shows the flags in language listings or not."""
-        return self.display_flags
+        return self.settings.display_flags
 
     security.declareProtected(View, 'getSupportedLanguages')
     def getSupportedLanguages(self):
         """Returns a list of supported language codes."""
-        return self.supported_langs
+        return self.settings.available_languages
 
     security.declareProtected(View, 'listSupportedLanguages')
     def listSupportedLanguages(self):
         """Returns a list of supported language names."""
         r = []
         available = self.getAvailableLanguages()
-        for i in self.supported_langs:
+        for i in self.settings.available_languages:
             if available.get(i):
                 r.append((i,available[i][u'name']))
         return r
@@ -202,7 +180,7 @@ class LanguageTool(UniqueObject, SimpleItem):
         """Returns the dictionary of available languages.
         """
         util = queryUtility(IContentLanguageAvailability)
-        if self.use_combined_language_codes:
+        if self.settings.use_combined_language_codes:
             languages = util.getLanguages(combined=True)
         else:
             languages = util.getLanguages()
@@ -217,7 +195,7 @@ class LanguageTool(UniqueObject, SimpleItem):
     def listAvailableLanguages(self):
         """Returns sorted list of available languages (code, name)."""
         util = queryUtility(IContentLanguageAvailability)
-        if self.use_combined_language_codes:
+        if self.settings.use_combined_language_codes:
             languages = util.getLanguageListing(combined=True)
         else:
             languages = util.getLanguageListing()
@@ -234,21 +212,23 @@ class LanguageTool(UniqueObject, SimpleItem):
             langs[lang][u'code'] = lang
             # flatten outer dict to list to make it sortable
             new_langs.append(langs[lang])
-        new_langs.sort(lambda x, y: cmp(x.get(u'native', x.get(u'name')), y.get(u'native', y.get(u'name'))))
+        new_langs.sort(lambda x, y: cmp(
+            x.get(u'native', x.get(u'name')),
+            y.get(u'native', y.get(u'name'))))
         return new_langs
 
     security.declarePublic('getAvailableLanguageInformation')
     def getAvailableLanguageInformation(self):
         """Returns the dictionary of available languages."""
         util = queryUtility(IContentLanguageAvailability)
-        if self.use_combined_language_codes:
+        if self.settings.use_combined_language_codes:
             languages = util.getLanguages(combined=True)
         else:
             languages = util.getLanguages()
 
         for lang in languages:
             languages[lang]['code'] = lang
-            if lang in self.supported_langs:
+            if lang in self.settings.available_languages:
                 languages[lang]['selected'] = True
             else:
                 languages[lang]['selected'] = False
@@ -297,18 +277,19 @@ class LanguageTool(UniqueObject, SimpleItem):
     security.declareProtected(ManagePortal, 'addSupportedLanguage')
     def addSupportedLanguage(self, langCode):
         """Registers a language code as supported."""
-        alist = self.supported_langs[:]
-        if (langCode in self.getAvailableLanguages().keys()) and not langCode in alist:
+        alist = self.settings.available_languages[:]
+        if (langCode in self.getAvailableLanguages().keys()) \
+                and langCode not in alist:
             alist.append(langCode)
-            self.supported_langs = alist
+            self.settings.available_languages = alist
 
     security.declareProtected(ManagePortal, 'removeSupportedLanguages')
     def removeSupportedLanguages(self, langCodes):
         """Unregisters language codes from supported."""
-        alist = self.supported_langs[:]
+        alist = self.settings.available_languages[:]
         for i in langCodes:
             alist.remove(i)
-        self.supported_langs = alist
+        self.settings.available_languages = alist
 
     security.declareProtected(View, 'setLanguageCookie')
     def setLanguageCookie(self, lang=None, REQUEST=None, noredir=None):
@@ -316,7 +297,8 @@ class LanguageTool(UniqueObject, SimpleItem):
         res = None
         if lang and lang in self.getSupportedLanguages():
             if lang != self.getLanguageCookie():
-                self.REQUEST.RESPONSE.setCookie('I18N_LANGUAGE', lang, path='/')
+                self.REQUEST.RESPONSE.setCookie(
+                    'I18N_LANGUAGE', lang, path='/')
             res = lang
         if noredir is None:
             if REQUEST:
@@ -338,7 +320,7 @@ class LanguageTool(UniqueObject, SimpleItem):
         """Gets the preferred site language."""
         l = self.getLanguageBindings()
         if l[0]:
-            if not self.use_combined_language_codes:
+            if not self.settings.use_combined_language_codes:
                 return l[0].split('-')[0]
             else:
                 return l[0]
@@ -380,14 +362,17 @@ class LanguageTool(UniqueObject, SimpleItem):
         """Checks the language of the current content if not folderish."""
         if not hasattr(self, 'REQUEST'):
             return []
-        try: # This will actually work nicely with browserdefault as we get attribute error...
+        try:  # This will actually work nicely with browserdefault
+            # as we get attribute error...
             contentpath = self.REQUEST.path[:]
 
             # Now check if we need to exclude from using language specific path
             # See https://dev.plone.org/ticket/11263
-            if (bool([1 for p in self.exclude_paths if p in contentpath]) or
-                bool([1 for p in self.exclude_exts if contentpath[0].endswith(p)])
-                ):
+            if (
+                bool([1 for p in self.exclude_paths if p in contentpath]) or
+                bool([1 for p in self.exclude_exts
+                      if contentpath[0].endswith(p)])
+                    ):
                 return None
 
             obj = self.aq_parent
@@ -425,7 +410,7 @@ class LanguageTool(UniqueObject, SimpleItem):
         if not hasattr(self, 'REQUEST'):
             return None
         request = self.REQUEST
-        if not "HTTP_HOST" in request:
+        if "HTTP_HOST" not in request:
             return None
         host=request["HTTP_HOST"].split(":")[0].lower()
         tld=host.split(".")[-1]
@@ -438,7 +423,7 @@ class LanguageTool(UniqueObject, SimpleItem):
         if not hasattr(self, 'REQUEST'):
             return None
         request = self.REQUEST
-        if not "HTTP_HOST" in request:
+        if "HTTP_HOST" not in request:
             return None
         host=request["HTTP_HOST"].split(":")[0].lower()
         tld=host.split(".")[0]
@@ -485,8 +470,8 @@ class LanguageTool(UniqueObject, SimpleItem):
                     quality = float(length-i)
 
                 language = l[0]
-                if (self.use_combined_language_codes and
-                    language in self.getSupportedLanguages()):
+                if (self.settings.use_combined_language_codes and
+                        language in self.getSupportedLanguages()):
                     # If allowed add the language
                     langs.append((quality, language))
                 else:
@@ -512,7 +497,8 @@ class LanguageTool(UniqueObject, SimpleItem):
         """Setups the current language stuff."""
         if not hasattr(self, 'REQUEST'):
             return
-        settings = getMultiAdapter((getSite(), self.REQUEST), INegotiateLanguage)
+        settings = getMultiAdapter(
+            (getSite(), self.REQUEST), INegotiateLanguage)
         binding = self.REQUEST.get('LANGUAGE_TOOL', None)
         if not isinstance(binding, LanguageBinding):
             # Create new binding instance
@@ -584,10 +570,10 @@ class LanguageTool(UniqueObject, SimpleItem):
     security.declarePublic('showSelector')
     def showSelector(self):
         """Returns True if the selector viewlet should be shown."""
-        if self.always_show_selector:
+        if self.settings.display_flags:
             return True
-        if (self.use_cookie_negotiation and
-            not (self.authenticated_users_only and self.isAnonymousUser())):
+        if (self.settings.use_cookie_negotiation and
+            not (self.settings.authenticated_users_only and self.isAnonymousUser())):
             return True
         return False
 
@@ -620,16 +606,18 @@ class NegotiateLanguage(object):
     def __init__(self, site, request):
         """Setup the current language stuff."""
         tool = getToolByName(site, 'portal_languages')
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(ILanguageSchema, prefix="plone")
         langs = []
-        useContent = tool.use_content_negotiation
-        useCcTLD = tool.use_cctld_negotiation
-        useSubdomain = tool.use_subdomain_negotiation
-        usePath = tool.use_path_negotiation
-        useCookie = tool.use_cookie_negotiation
-        setCookieEverywhere = tool.set_cookie_everywhere
-        authOnly = tool.authenticated_users_only
-        useRequest = tool.use_request_negotiation
-        useDefault = 1 # This should never be disabled
+        useContent = settings.use_content_negotiation
+        useCcTLD = settings.use_cctld_negotiation
+        useSubdomain = settings.use_subdomain_negotiation
+        usePath = settings.use_path_negotiation
+        useCookie = settings.use_cookie_negotiation
+        setCookieAlways = settings.set_cookie_always
+        authOnly = settings.authenticated_users_only
+        useRequest = settings.use_request_negotiation
+        useDefault = 1  # This should never be disabled
         langsCookie = None
 
         if usePath:
@@ -638,7 +626,6 @@ class NegotiateLanguage(object):
 
         if useContent:
             langs.append(tool.getContentLanguage())
-
         if useCookie and not (authOnly and tool.isAnonymousUser()):
             # If we are using the cookie stuff we provide the setter here
             set_language = tool.REQUEST.get('set_language', None)
@@ -667,7 +654,7 @@ class NegotiateLanguage(object):
         langs = [lang for lang in langs if lang is not None]
 
         # Set cookie language to language
-        if setCookieEverywhere and useCookie and langs[0] != langsCookie:
+        if setCookieAlways and useCookie and langs[0] != langsCookie:
             tool.setLanguageCookie(langs[0], noredir=True)
 
         self.default_language = langs[-1]
