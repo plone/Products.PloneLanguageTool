@@ -1,24 +1,39 @@
+import unittest
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 from zope.interface import alsoProvides
 from Products.CMFCore.interfaces import IDublinCore
 from Products.CMFCore.utils import getToolInterface
+from Products.CMFPlone.interfaces import ILanguageSchema
 
 from Products.PloneLanguageTool import LanguageTool
 from Products.PloneLanguageTool.interfaces import ILanguageTool
-from Products.PloneLanguageTool.tests import base
+from Products.PloneLanguageTool.testing import (
+    INTEGRATION_TESTING, FUNCTIONAL_TESTING)
 
 
-class TestLanguageToolExists(base.TestCase):
+class TestLanguageToolExists(unittest.TestCase):
+    layer = INTEGRATION_TESTING
 
-    def afterSetUp(self):
+    def setUp(self):
+        self.portal = self.layer['portal']
+        registry = getUtility(IRegistry)
+        self.settings = registry.forInterface(
+            ILanguageSchema, prefix="plone")
         self.tool_id = LanguageTool.id
 
     def testLanguageToolExists(self):
         self.failUnless(self.tool_id in self.portal.objectIds())
 
 
-class TestLanguageToolSettings(base.TestCase):
+class TestLanguageToolSettings(unittest.TestCase):
+    layer = INTEGRATION_TESTING
 
-    def afterSetUp(self):
+    def setUp(self):
+        self.portal = self.layer['portal']
+        registry = getUtility(IRegistry)
+        self.settings = registry.forInterface(
+            ILanguageSchema, prefix="plone")
         self.tool_id = LanguageTool.id
         self.ltool = self.portal._getOb(self.tool_id)
 
@@ -27,44 +42,49 @@ class TestLanguageToolSettings(base.TestCase):
 
     def testSetLanguageSettings(self):
         defaultLanguage = 'de'
-        supportedLanguages = ['en','de','no']
-        self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages,
-                                   setContentN=False,
-                                   setCookieN=False, setCookieEverywhere=False,
-                                   setRequestN=False,
-                                   setPathN=False, setForcelanguageUrls=False,
-                                   setAllowContentLanguageFallback=True,
-                                   setUseCombinedLanguageCodes=True,
-                                   startNeutral=False, displayFlags=False,
-                                   setCcTLDN=True, setSubdomainN=True,
-                                   setAuthOnlyN=True)
+        supportedLanguages = ['en', 'de', 'no']
+        self.ltool.manage_setLanguageSettings(
+            defaultLanguage, supportedLanguages,
+            setContentN=False,
+            setCookieN=False, setCookieEverywhere=False,
+            setRequestN=False,
+            setPathN=False, setForcelanguageUrls=False,
+            setAllowContentLanguageFallback=True,
+            setUseCombinedLanguageCodes=True,
+            startNeutral=False,
+            displayFlags=True,
+            setCcTLDN=True, setSubdomainN=True,
+            setAuthOnlyN=True)
 
-        self.failUnless(self.ltool.getDefaultLanguage()==defaultLanguage)
-        self.failUnless(self.ltool.getSupportedLanguages()==supportedLanguages)
-        self.failUnless(self.ltool.use_content_negotiation==False)
-        self.failUnless(self.ltool.use_cookie_negotiation==False)
-        self.failUnless(self.ltool.set_cookie_everywhere==False)
-        self.failUnless(self.ltool.use_request_negotiation==False)
-        self.failUnless(self.ltool.use_path_negotiation==False)
-        self.failUnless(self.ltool.force_language_urls==False)
-        self.failUnless(self.ltool.allow_content_language_fallback==True)
-        self.failUnless(self.ltool.use_combined_language_codes==True)
-        self.failUnless(self.ltool.startNeutral()==False)
-        self.failUnless(self.ltool.showFlags()==False)
-        self.failUnless(self.ltool.use_cctld_negotiation==True)
-        self.failUnless(self.ltool.use_subdomain_negotiation==True)
-        self.failUnless(self.ltool.authenticated_users_only==True)
+        self.failUnless(self.ltool.getDefaultLanguage() == defaultLanguage)
+        self.failUnless(
+            self.ltool.getSupportedLanguages() == supportedLanguages)
+        self.failUnless(self.settings.use_content_negotiation == False)
+        self.failUnless(self.settings.use_cookie_negotiation == False)
+        self.failUnless(self.settings.set_cookie_always == False)
+        self.failUnless(self.settings.use_request_negotiation == False)
+        self.failUnless(self.settings.use_path_negotiation == False)
+        self.failUnless(self.settings.use_combined_language_codes)
+        self.failUnless(self.ltool.showFlags())
+        self.failUnless(self.settings.use_cctld_negotiation)
+        self.failUnless(self.settings.use_subdomain_negotiation)
+        self.failUnless(self.settings.authenticated_users_only)
 
 
-class TestLanguageTool(base.TestCase):
+class TestLanguageTool(unittest.TestCase):
+    layer = FUNCTIONAL_TESTING
 
-    def afterSetUp(self):
+    def setUp(self):
+        self.portal = self.layer['portal']
+        registry = getUtility(IRegistry)
+        self.settings = registry.forInterface(
+            ILanguageSchema, prefix="plone")
         self.tool_id = LanguageTool.id
         self.ltool = self.portal._getOb(self.tool_id)
 
     def testLanguageSettings(self):
         defaultLanguage = 'de'
-        supportedLanguages = ['en','de','no']
+        supportedLanguages = ['en', 'de', 'no']
         self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages,
                                               setUseCombinedLanguageCodes=False)
         self.failUnless(self.ltool.getDefaultLanguage()==defaultLanguage)
@@ -126,12 +146,3 @@ class TestLanguageTool(base.TestCase):
     def testRegisterInterface(self):
         iface = getToolInterface('portal_languages')
         self.assertEqual(iface, ILanguageTool)
-
-
-def test_suite():
-    from unittest import TestSuite, makeSuite
-    suite = TestSuite()
-    suite.addTest(makeSuite(TestLanguageToolExists))
-    suite.addTest(makeSuite(TestLanguageToolSettings))
-    suite.addTest(makeSuite(TestLanguageTool))
-    return suite

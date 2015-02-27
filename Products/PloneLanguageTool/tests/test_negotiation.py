@@ -1,18 +1,26 @@
+import unittest
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
+from Products.CMFPlone.interfaces import ILanguageSchema
+from plone.app.testing import login, TEST_USER_NAME
 from Products.PloneLanguageTool import LanguageTool
-from Products.PloneLanguageTool.tests import base
-
-from Products.CMFTestCase.ctc import default_password
-from Products.CMFTestCase.ctc import default_user
+# from Products.PloneLanguageTool.testing import INTEGRATION_TESTING
+from Products.PloneLanguageTool.testing import FUNCTIONAL_TESTING
 
 
-class LanguageNegotiationTestCase(base.FunctionalTestCase):
+class LanguageNegotiationTestCase(unittest.TestCase):
+    layer = FUNCTIONAL_TESTING
 
-    def afterSetUp(self):
-        self.basic_auth = '%s:%s' % (default_user, default_password)
+    def setUp(self):
+        self.portal = self.layer['portal']
+        login(self.portal, TEST_USER_NAME)
         self.portal_path = self.portal.absolute_url(1)
         self.tool = self.portal[LanguageTool.id]
-        self.tool.always_show_selector = 1
-        self.tool.set_cookie_everywhere = 1
+        registry = getUtility(IRegistry)
+        self.settings = registry.forInterface(
+            ILanguageSchema, prefix="plone")
+        self.settings.always_show_selector = 1
+        self.settings.set_cookie_always = 1
 
     def checkLanguage(self, response, language):
         self.assertEquals(response.getStatus(), 200)
@@ -35,10 +43,10 @@ class TestNoCombinedLanguageNegotiation(LanguageNegotiationTestCase):
         LanguageNegotiationTestCase.afterSetUp(self)
         # set some allowed languages and make sure we don't use combined
         # language codes
-        self.tool.supported_langs = ['en', 'pt', 'de']
-        self.tool.use_request_negotiation = 1
-        self.tool.use_combined_language_codes = 0
-        self.tool.display_flags = 0
+        self.settings.available_languages = ['en', 'pt', 'de']
+        self.settings.use_request_negotiation = 1
+        self.settings.use_combined_language_codes = 0
+        self.settings.display_flags = 0
 
     def testLanguageNegotiation(self):
         # Test simple supported codes
@@ -94,7 +102,7 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         LanguageNegotiationTestCase.afterSetUp(self)
         self.tool.supported_langs = ['en', 'nl', 'fr']
         self.tool.use_content_negotiation = 1
-        self.tool.display_flags = 0
+        self.settings.display_flags = 0
 
     def testContentObject(self):
         self.folder.invokeFactory('Document', 'doc')
@@ -110,7 +118,6 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         adding = self.app.manage_addProduct['SiteAccess']
         adding.manage_addVirtualHostMonster('VHM')
         vhmBasePath = "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/" % self.portal.getId()
-        vhmBaseUrl = 'http://example.org/'
 
         self.folder.invokeFactory('Folder', 'sub')
         sub = self.folder['sub']
@@ -127,7 +134,6 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         adding = self.app.manage_addProduct['SiteAccess']
         adding.manage_addVirtualHostMonster('VHM')
         vhmBasePath = "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/_vh_one/_vh_two/" % self.portal.getId()
-        vhmBaseUrl = 'http://example.org/'
 
         self.folder.invokeFactory('Folder', 'sub')
         sub = self.folder['sub']
@@ -140,14 +146,12 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         response = self.publish(vhmBasePath + docpath, self.basic_auth)
         self.checkLanguage(response, "nl")
 
-
     def testContentObjectVHMFolder(self):
         adding = self.app.manage_addProduct['SiteAccess']
         adding.manage_addVirtualHostMonster('VHM')
 
         folder_path = '/'.join(self.folder.getPhysicalPath())
         vhmBasePath = "/VirtualHostBase/http/example.org:80%s/VirtualHostRoot/" % folder_path
-        vhmBaseUrl = 'http://example.org/'
 
         self.folder.invokeFactory('Folder', 'sub')
         sub = self.folder['sub']
@@ -168,7 +172,7 @@ class TestCcTLDLanguageNegotiation(LanguageNegotiationTestCase):
         LanguageNegotiationTestCase.afterSetUp(self)
         self.tool.supported_langs = ['en', 'nl', 'fr']
         self.tool.use_cctld_negotiation = 1
-        self.tool.display_flags = 0
+        self.settings.display_flags = 0
 
     def testSimpleHostname(self):
         # For a simple hostname without ccTLD the canonical language is used
@@ -250,15 +254,3 @@ class TestSubdomainLanguageNegotiation(LanguageNegotiationTestCase):
         response = self.publish(self.portal_path, self.basic_auth,
                                 env={'HTTP_HOST': 'be.plone.org'})
         self.checkLanguage(response, "fr")
-
-
-def test_suite():
-    from unittest import TestSuite, makeSuite
-    suite = TestSuite()
-    suite.addTest(makeSuite(TestDefaultLanguageNegotiation))
-    suite.addTest(makeSuite(TestNoCombinedLanguageNegotiation))
-    suite.addTest(makeSuite(TestCombinedLanguageNegotiation))
-    suite.addTest(makeSuite(TestContentLanguageNegotiation))
-    suite.addTest(makeSuite(TestCcTLDLanguageNegotiation))
-    suite.addTest(makeSuite(TestSubdomainLanguageNegotiation))
-    return suite
