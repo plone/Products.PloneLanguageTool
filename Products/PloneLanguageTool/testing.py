@@ -3,7 +3,9 @@ from plone.app.testing import applyProfile
 # from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import FunctionalTesting
+from plone.app.testing import TEST_USER_ID
 from plone.app.contenttypes.testing import PLONE_APP_CONTENTTYPES_FIXTURE
+from plone.app.testing.bbb import _createMemberarea
 
 from plone.testing import z2
 
@@ -35,6 +37,12 @@ class PloneLanguageToolLayer(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'Products.PloneLanguageTool:PloneLanguageTool')
+        portal.invokeFactory(
+            'Folder',
+            id='Members',
+            title='Members',
+        )
+        _createMemberarea(portal, TEST_USER_ID)
 
     def tearDownZope(self, app):
         z2.uninstallProduct(app, 'Products.PloneLanguageTool')

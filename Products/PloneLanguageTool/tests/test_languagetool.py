@@ -1,15 +1,15 @@
-import unittest
-from plone.registry.interfaces import IRegistry
-from zope.component import getUtility
-from zope.interface import alsoProvides
 from Products.CMFCore.interfaces import IDublinCore
 from Products.CMFCore.utils import getToolInterface
 from Products.CMFPlone.interfaces import ILanguageSchema
-
 from Products.PloneLanguageTool import LanguageTool
 from Products.PloneLanguageTool.interfaces import ILanguageTool
 from Products.PloneLanguageTool.testing import (
     INTEGRATION_TESTING, FUNCTIONAL_TESTING)
+from plone.app.testing.bbb import PloneTestCase
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
+from zope.interface import alsoProvides
+import unittest
 
 
 class TestLanguageToolExists(unittest.TestCase):
@@ -71,11 +71,10 @@ class TestLanguageToolSettings(unittest.TestCase):
         self.failUnless(self.settings.authenticated_users_only)
 
 
-class TestLanguageTool(unittest.TestCase):
+class TestLanguageTool(PloneTestCase):
     layer = FUNCTIONAL_TESTING
 
-    def setUp(self):
-        self.portal = self.layer['portal']
+    def afterSetUp(self):
         registry = getUtility(IRegistry)
         self.settings = registry.forInterface(
             ILanguageSchema, prefix="plone")
@@ -131,6 +130,7 @@ class TestLanguageTool(unittest.TestCase):
         supportedLanguages = ['en','de','no']
         self.ltool.manage_setLanguageSettings(defaultLanguage, supportedLanguages)
         self.ltool.REQUEST.path = ['Members',]
+
         content = self.portal.Members
         content.setLanguage('de')
         alsoProvides(content, IDublinCore)

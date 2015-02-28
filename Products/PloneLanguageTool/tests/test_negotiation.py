@@ -1,19 +1,18 @@
-import unittest
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from Products.CMFPlone.interfaces import ILanguageSchema
-from plone.app.testing import login, TEST_USER_NAME
+from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 from Products.PloneLanguageTool import LanguageTool
 # from Products.PloneLanguageTool.testing import INTEGRATION_TESTING
 from Products.PloneLanguageTool.testing import FUNCTIONAL_TESTING
+from plone.app.testing.bbb import PloneTestCase
 
 
-class LanguageNegotiationTestCase(unittest.TestCase):
+class LanguageNegotiationTestCase(PloneTestCase):
     layer = FUNCTIONAL_TESTING
 
-    def setUp(self):
-        self.portal = self.layer['portal']
-        login(self.portal, TEST_USER_NAME)
+    def afterSetUp(self):
+        self.basic_auth = "%s:%s" % (TEST_USER_NAME, TEST_USER_PASSWORD)
         self.portal_path = self.portal.absolute_url(1)
         self.tool = self.portal[LanguageTool.id]
         registry = getUtility(IRegistry)
@@ -21,6 +20,7 @@ class LanguageNegotiationTestCase(unittest.TestCase):
             ILanguageSchema, prefix="plone")
         self.settings.always_show_selector = 1
         self.settings.set_cookie_always = 1
+        self.settings.use_cookie_negotiation = 1
 
     def checkLanguage(self, response, language):
         self.assertEquals(response.getStatus(), 200)
@@ -70,10 +70,10 @@ class TestCombinedLanguageNegotiation(LanguageNegotiationTestCase):
         LanguageNegotiationTestCase.afterSetUp(self)
         # set some allowed languages and make sure we don't use combined
         # language codes
-        self.tool.supported_langs = ['en', 'pt', 'de', 'pt-br']
-        self.tool.use_request_negotiation = 1
-        self.tool.use_combined_language_codes = 1
-        self.tool.display_flags = 0
+        self.settings.available_languages = ['en', 'pt', 'de', 'pt-br']
+        self.settings.use_request_negotiation = 1
+        self.settings.use_combined_language_codes = 1
+        self.settings.display_flags = 0
 
     def testLanguageNegotiation(self):
         # Test simple supported codes
@@ -100,8 +100,8 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
 
     def afterSetUp(self):
         LanguageNegotiationTestCase.afterSetUp(self)
-        self.tool.supported_langs = ['en', 'nl', 'fr']
-        self.tool.use_content_negotiation = 1
+        self.settings.available_languages = ['en', 'nl', 'fr']
+        self.settings.use_content_negotiation = 1
         self.settings.display_flags = 0
 
     def testContentObject(self):
@@ -118,7 +118,6 @@ class TestContentLanguageNegotiation(LanguageNegotiationTestCase):
         adding = self.app.manage_addProduct['SiteAccess']
         adding.manage_addVirtualHostMonster('VHM')
         vhmBasePath = "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/" % self.portal.getId()
-
         self.folder.invokeFactory('Folder', 'sub')
         sub = self.folder['sub']
         sub.setLanguage('nl')
@@ -170,8 +169,8 @@ class TestCcTLDLanguageNegotiation(LanguageNegotiationTestCase):
 
     def afterSetUp(self):
         LanguageNegotiationTestCase.afterSetUp(self)
-        self.tool.supported_langs = ['en', 'nl', 'fr']
-        self.tool.use_cctld_negotiation = 1
+        self.settings.available_languages = ['en', 'nl', 'fr']
+        self.settings.use_cctld_negotiation = 1
         self.settings.display_flags = 0
 
     def testSimpleHostname(self):
@@ -205,7 +204,7 @@ class TestCcTLDLanguageNegotiation(LanguageNegotiationTestCase):
         self.checkLanguage(response, "nl")
 
         # If we stop allowing Dutch we should now fall back to French
-        self.tool.supported_langs = ['en', 'fr']
+        self.settings.available_languages = ['en', 'fr']
         response = self.publish(self.portal_path, self.basic_auth,
                                 env={'HTTP_HOST': 'plone.be'})
         self.checkLanguage(response, "fr")
@@ -215,9 +214,9 @@ class TestSubdomainLanguageNegotiation(LanguageNegotiationTestCase):
 
     def afterSetUp(self):
         LanguageNegotiationTestCase.afterSetUp(self)
-        self.tool.supported_langs = ['en', 'nl', 'fr']
-        self.tool.use_subdomain_negotiation = 1
-        self.tool.display_flags = 0
+        self.settings.available_languages = ['en', 'nl', 'fr']
+        self.settings.use_subdomain_negotiation = 1
+        self.settings.display_flags = 0
 
     def testSimpleHostname(self):
         # For a simple hostname without ccTLD the canonical language is used
@@ -250,7 +249,7 @@ class TestSubdomainLanguageNegotiation(LanguageNegotiationTestCase):
         self.checkLanguage(response, "nl")
 
         # If we stop allowing Dutch we should now fall back to French
-        self.tool.supported_langs = ['en', 'fr']
+        self.settings.available_languages = ['en', 'fr']
         response = self.publish(self.portal_path, self.basic_auth,
                                 env={'HTTP_HOST': 'be.plone.org'})
         self.checkLanguage(response, "fr")
