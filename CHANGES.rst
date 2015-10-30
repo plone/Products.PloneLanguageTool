@@ -4,7 +4,13 @@ Changelog
 3.2.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+New:
+
+- *add item here*
+
+Fixes:
+
+- *add item here*
 
 
 3.2.7 (2013-01-17)
