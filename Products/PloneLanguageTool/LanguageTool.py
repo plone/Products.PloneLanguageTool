@@ -7,7 +7,7 @@ from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component import queryUtility
 from zope.deprecation import deprecate
-from zope.interface import implements
+from zope.interface import implementer
 
 # BBB Zope before 2.12
 try:
@@ -41,14 +41,13 @@ try:
 except ImportError:
     _hasPTS = 0
 
+@implementer(ILanguageTool)
 class LanguageTool(UniqueObject, SimpleItem):
     """Language Administration Tool For Plone."""
 
     id  = 'portal_languages'
     title = 'Manages available languages'
     meta_type = 'Plone Language Tool'
-
-    implements(ILanguageTool)
 
     security = ClassSecurityInfo()
 
@@ -616,9 +615,9 @@ class LanguageBinding:
         return (self.LANGUAGE, self.DEFAULT_LANGUAGE, self.LANGUAGE_LIST)
 
 
+@implementer(INegotiateLanguage)
 class NegotiateLanguage(object):
     """Perform default language negotiation"""
-    implements(INegotiateLanguage)
 
     def __init__(self, site, request):
         """Setup the current language stuff."""
