@@ -4,10 +4,6 @@ Changelog
 3.2.8 (unreleased)
 ------------------
 
-New:
-
-- *add item here*
-
 Fixes:
 
 - Use zope.interface decorator.
