@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '3.2.9.dev0'
+version = '3.2.9'
 
 tests_require = ['Products.CMFTestCase', ]
 
