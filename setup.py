@@ -27,7 +27,7 @@ setup(
     keywords='Zope CMF Plone i18n l10n flags',
     author='Hanno Schlichting',
     author_email='plone-developers@lists.sourceforge.net',
-    url='https://pypi.python.org/pypi/Products.PloneLanguageTool',
+    url='https://pypi.org/project/Products.PloneLanguageTool',
     license='GPL',
     packages=find_packages(exclude=['ez_setup']),
     namespace_packages=['Products'],
