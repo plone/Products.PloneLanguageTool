@@ -14,6 +14,7 @@ setup(
     long_description=(open("README.rst").read() + "\n" +
                       open("CHANGES.rst").read()),
     classifiers=[
+        "Development Status :: 6 - Mature",
         "Framework :: Plone",
         "Framework :: Plone :: 4.3",
         "Framework :: Plone :: 5.0",
